@@ -1,7 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx eslint:*)"
+      "Bash(npx eslint:*)",
+      "Read(//c/Users/david/Downloads/**)",
+      "Bash(cat:*)",
+      "WebFetch(domain:supabase.com)",
+      "Bash(npm run lint)",
+      "WebFetch(domain:github.com)",
+      "WebSearch"
     ],
     "deny": [],
     "ask": []

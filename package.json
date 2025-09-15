@@ -3,12 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "dotenv -e .env.development -- next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:migrate:dev": "dotenv -e .env.development -- npx prisma migrate dev",
+    "db:migrate:prod": "dotenv -e .env.production -- npx prisma migrate deploy",
+    "db:generate": "dotenv -e .env.development -- npx prisma generate",
+    "db:seed": "dotenv -e .env.development -- npx prisma db seed",
+    "db:reset": "dotenv -e .env.development -- npx prisma migrate reset --force",
+    "db:studio": "dotenv -e .env.development -- npx prisma studio"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"commonjs\"} prisma/seed.ts"
   },
   "dependencies": {
+    "@prisma/client": "^6.16.1",
+    "@supabase/supabase-js": "^2.57.4",
     "next": "15.5.3",
     "react": "19.1.1",
     "react-dom": "19.1.1"
@@ -16,14 +27,17 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^24",
+    "@types/node": "^24.5.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@typescript-eslint/eslint-plugin": "^8.43.0",
     "@typescript-eslint/parser": "^8.43.0",
+    "dotenv-cli": "^10.0.0",
     "eslint": "^9.35.0",
     "eslint-config-next": "15.5.3",
+    "prisma": "^6.16.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
   }
 }

@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Location {
+  id          String @id @default(cuid())
+  locationId  String @unique
+  name        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sales       Sale[]
+
+  @@map("locations")
+}
+
+model Sale {
+  id          String   @id @default(cuid())
+  date        DateTime
+  locationId  String
+  totalSales  Decimal  @db.Decimal(10, 2)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  location    Location @relation(fields: [locationId], references: [locationId])
+  saleItems   SaleItem[]
+
+  @@map("sales")
+}
+
+model Item {
+  id          String @id @default(cuid())
+  name        String @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  saleItems   SaleItem[]
+
+  @@map("items")
+}
+
+model SaleItem {
+  id          String  @id @default(cuid())
+  saleId      String
+  itemId      String
+  price       Decimal @db.Decimal(10, 2)
+  quantity    Int     @default(1)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sale        Sale @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  item        Item @relation(fields: [itemId], references: [id])
+
+  @@map("sale_items")
+}
