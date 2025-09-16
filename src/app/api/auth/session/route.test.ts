@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { GET } from './route'
+import { TEST_CONSTANTS } from '../../../../test/test-utils'
 
 // Mock the auth-api-utils module
 vi.mock('@/lib/auth-api-utils', () => ({
@@ -35,7 +36,7 @@ describe('/api/auth/session', () => {
   describe('GET', () => {
     it('should return authenticated response when session is valid', async () => {
       const mockSession = {
-        user: { id: '123', email: 'test@example.com' }
+        user: { id: TEST_CONSTANTS.USER_ID, email: TEST_CONSTANTS.EMAIL }
       }
       const mockSuccessResponse = {
         json: () => Promise.resolve({ authenticated: true, user: mockSession.user })

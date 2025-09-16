@@ -215,7 +215,7 @@ describe('auth-api-utils', () => {
   describe('parseRequestBody', () => {
     it('should parse and validate valid request body', async () => {
       const schema = createEmailPasswordSchema()
-      const testData = { email: 'test@example.com', password: 'password123' }
+      const testData = { email: TEST_CONSTANTS.EMAIL, password: 'password123' }
       const mockRequest = createMockRequest(testData)
 
       const result = await parseRequestBody(mockRequest as Request, schema)

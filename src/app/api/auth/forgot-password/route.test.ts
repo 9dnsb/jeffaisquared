@@ -1,6 +1,7 @@
 // jscpd:ignore-start - Test boilerplate patterns are inherently repetitive
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { POST } from './route'
+import { TEST_CONSTANTS } from '../../../../test/test-utils'
 
 // Mock NextRequest
 const mockRequest = (body: any): any => ({
@@ -36,7 +37,7 @@ describe('/api/auth/forgot-password', () => {
   })
 
   const validForgotPasswordData = {
-    email: 'test@example.com',
+    email: TEST_CONSTANTS.EMAIL,
     redirectTo: 'https://example.com/reset-password'
   }
 
@@ -138,7 +139,7 @@ describe('/api/auth/forgot-password', () => {
 
     it('should validate redirectTo URL in request', async () => {
       const invalidData = {
-        email: 'test@example.com',
+        email: TEST_CONSTANTS.EMAIL,
         redirectTo: 'invalid-url'
       }
       const request = mockRequest(invalidData)

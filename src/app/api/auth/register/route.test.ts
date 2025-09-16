@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach, MockedFunction } from 'vitest'
 import { NextResponse } from 'next/server'
 import { POST } from './route'
 import { handleRegistration } from '@/lib/registration-handler'
+import { TEST_CONSTANTS } from '../../../../test/test-utils'
 
 // Mock NextRequest
 const mockRequest = (body: any): any => ({
@@ -23,8 +24,8 @@ describe('/api/auth/register', () => {
   })
 
   const validRegisterData = {
-    email: 'test@example.com',
-    password: 'password123',
+    email: TEST_CONSTANTS.EMAIL,
+    password: TEST_CONSTANTS.PASSWORD,
     firstName: 'John',
     lastName: 'Doe'
   }

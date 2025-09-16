@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { ensureUserProfile } from './profile-utils'
+import { TEST_CONSTANTS } from '../test/test-utils'
 
 // Mock Prisma Client
 const mockPrismaClient = {
@@ -22,8 +23,6 @@ describe('profile-utils', () => {
     })
   })
 
-  const testUserId = '123'
-  const testEmail = 'test@example.com'
   const testFirstName = 'John'
   const testLastName = 'Doe'
 
@@ -32,33 +31,33 @@ describe('profile-utils', () => {
       // Mock that profile doesn't exist (trigger didn't run)
       mockPrismaClient.profile.findUnique.mockResolvedValue(null)
       mockPrismaClient.profile.create.mockResolvedValue({
-        id: testUserId,
-        email: testEmail,
+        id: TEST_CONSTANTS.USER_ID,
+        email: TEST_CONSTANTS.EMAIL,
         firstName: testFirstName,
         lastName: testLastName
       })
 
-      await ensureUserProfile(testUserId, testEmail, testFirstName, testLastName, mockPrismaClient)
+      await ensureUserProfile(TEST_CONSTANTS.USER_ID, TEST_CONSTANTS.EMAIL, testFirstName, testLastName, mockPrismaClient)
 
       expect(mockPrismaClient.profile.findUnique).toHaveBeenCalledWith({
-        where: { id: testUserId }
+        where: { id: TEST_CONSTANTS.USER_ID }
       })
       expect(mockPrismaClient.profile.create).toHaveBeenCalledWith({
         data: {
-          id: testUserId,
-          email: testEmail,
+          id: TEST_CONSTANTS.USER_ID,
+          email: TEST_CONSTANTS.EMAIL,
           firstName: testFirstName,
           lastName: testLastName,
         }
       })
       expect(console.log).toHaveBeenCalledWith('Trigger did not create profile, creating manually...')
-      expect(console.log).toHaveBeenCalledWith('Profile created manually for user:', testUserId)
+      expect(console.log).toHaveBeenCalledWith('Profile created manually for user:', TEST_CONSTANTS.USER_ID)
     })
 
     it('should handle case when profile already exists (created by trigger)', async () => {
       const existingProfile = {
-        id: testUserId,
-        email: testEmail,
+        id: TEST_CONSTANTS.USER_ID,
+        email: TEST_CONSTANTS.EMAIL,
         firstName: testFirstName,
         lastName: testLastName
       }
@@ -66,10 +65,10 @@ describe('profile-utils', () => {
       // Mock that profile already exists
       mockPrismaClient.profile.findUnique.mockResolvedValue(existingProfile)
 
-      await ensureUserProfile(testUserId, testEmail, testFirstName, testLastName, mockPrismaClient)
+      await ensureUserProfile(TEST_CONSTANTS.USER_ID, TEST_CONSTANTS.EMAIL, testFirstName, testLastName, mockPrismaClient)
 
       expect(mockPrismaClient.profile.findUnique).toHaveBeenCalledWith({
-        where: { id: testUserId }
+        where: { id: TEST_CONSTANTS.USER_ID }
       })
       expect(mockPrismaClient.profile.create).not.toHaveBeenCalled()
       expect(console.log).toHaveBeenCalledWith('Profile already exists (created by trigger):', existingProfile.id)
@@ -82,7 +81,7 @@ describe('profile-utils', () => {
       mockPrismaClient.profile.findUnique.mockRejectedValue(profileError)
 
       // Should not throw - errors are caught and logged
-      await expect(ensureUserProfile(testUserId, testEmail, testFirstName, testLastName, mockPrismaClient)).resolves.toBeUndefined()
+      await expect(ensureUserProfile(TEST_CONSTANTS.USER_ID, TEST_CONSTANTS.EMAIL, testFirstName, testLastName, mockPrismaClient)).resolves.toBeUndefined()
 
       expect(console.error).toHaveBeenCalledWith('Error creating profile:', profileError)
     })

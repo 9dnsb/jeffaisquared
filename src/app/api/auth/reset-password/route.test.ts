@@ -1,6 +1,7 @@
 // jscpd:ignore-start - Test boilerplate patterns are inherently repetitive
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { POST, GET } from './route'
+import { TEST_CONSTANTS } from '../../../../test/test-utils'
 
 // Mock NextRequest
 const mockRequest = (body: any): any => ({
@@ -138,7 +139,7 @@ describe('/api/auth/reset-password', () => {
   describe('GET', () => {
     it('should return valid session when user is authenticated', async () => {
       const mockSession = {
-        user: { id: '123', email: 'test@example.com' },
+        user: { id: TEST_CONSTANTS.USER_ID, email: TEST_CONSTANTS.EMAIL },
         access_token: 'token123'
       }
       const mockSuccessResponse = {

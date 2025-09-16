@@ -1,6 +1,7 @@
 // jscpd:ignore-start - Test boilerplate patterns are inherently repetitive
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { POST } from './route'
+import { TEST_CONSTANTS } from '../../../../test/test-utils'
 
 // Mock NextRequest
 const mockRequest = (body: any): any => ({
@@ -26,11 +27,7 @@ describe('/api/auth/login', () => {
   let mockSupabaseClient: any
   let mockSignInWithPassword: any
 
-  const testEmail = 'test@example.com'
-  const testPassword = 'password123'
-  const testUserId = '123'
   const loginAttemptMessage = 'Login attempt:'
-  const invalidCredentialsMessage = 'Invalid credentials'
 
   beforeEach(async () => {
     vi.clearAllMocks()
@@ -51,12 +48,12 @@ describe('/api/auth/login', () => {
   describe('POST', () => {
     it('should successfully login user with valid credentials', async () => {
       const loginData = {
-        email: testEmail,
-        password: testPassword
+        email: TEST_CONSTANTS.EMAIL,
+        password: TEST_CONSTANTS.PASSWORD
       }
       const request = mockRequest(loginData)
 
-      const mockUser = { id: testUserId, email: testEmail }
+      const mockUser = { id: TEST_CONSTANTS.USER_ID, email: TEST_CONSTANTS.EMAIL }
       const mockSession = { access_token: 'token123' }
       const mockSuccessResponse = { user: mockUser, session: mockSession }
 
@@ -112,12 +109,12 @@ describe('/api/auth/login', () => {
 
     it('should handle Supabase authentication errors', async () => {
       const loginData = {
-        email: testEmail,
+        email: TEST_CONSTANTS.EMAIL,
         password: 'wrongpassword'
       }
       const request = mockRequest(loginData)
-      const supabaseError = { message: invalidCredentialsMessage }
-      const mockErrorResponse = { error: invalidCredentialsMessage }
+      const supabaseError = { message: TEST_CONSTANTS.INVALID_CREDENTIALS_MESSAGE }
+      const mockErrorResponse = { error: TEST_CONSTANTS.INVALID_CREDENTIALS_MESSAGE }
 
       authApiUtils.parseRequestBody.mockResolvedValue({
         data: loginData,
@@ -141,7 +138,7 @@ describe('/api/auth/login', () => {
       expect(console.log).toHaveBeenCalledWith(loginAttemptMessage, {
         email: loginData.email,
         success: false,
-        error: invalidCredentialsMessage,
+        error: TEST_CONSTANTS.INVALID_CREDENTIALS_MESSAGE,
         hasUser: false,
         hasSession: false
       })
@@ -150,12 +147,12 @@ describe('/api/auth/login', () => {
 
     it('should handle successful login with user but no session', async () => {
       const loginData = {
-        email: testEmail,
-        password: testPassword
+        email: TEST_CONSTANTS.EMAIL,
+        password: TEST_CONSTANTS.PASSWORD
       }
       const request = mockRequest(loginData)
 
-      const mockUser = { id: testUserId, email: testEmail }
+      const mockUser = { id: TEST_CONSTANTS.USER_ID, email: TEST_CONSTANTS.EMAIL }
       const mockSuccessResponse = { user: mockUser, session: null }
 
       authApiUtils.parseRequestBody.mockResolvedValue({
