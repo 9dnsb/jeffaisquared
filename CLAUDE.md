@@ -253,6 +253,7 @@ const value = obj.someProperty // Without proper type checking
 - **Duplicate API call patterns** (fetch logic, error handling)
 - **Repeated React patterns** (useEffect hooks, event handlers)
 - **Copy-pasted utility functions** (formatters, converters)
+- **Duplicate constants and test values** (API endpoints, test emails, HTTP status codes)
 
 ### Required Extraction Strategies
 
@@ -285,6 +286,36 @@ export function validateAuthState(user: User | null) {
   // Common auth validation
 }
 ```
+
+### Constants and Test Values Review
+
+**🚨 CRITICAL: Before creating new constants, ALWAYS review existing centralized constants:**
+
+**MANDATORY Steps:**
+1. **Check `src/test/test-utils.ts`** - Contains `TEST_CONSTANTS` with common test values
+2. **Search existing codebase** - Use `rg "constant_value"` to find existing definitions
+3. **Use centralized constants** - Import from `TEST_CONSTANTS` instead of creating local ones
+4. **Add to centralized location** - If constant doesn't exist, add it to appropriate shared module
+
+**Examples of what to check before creating:**
+```typescript
+// ❌ DON'T create local constants that may already exist
+const TEST_EMAIL = 'test@example.com'           // Already in TEST_CONSTANTS.EMAIL
+const HTTP_500 = 500                            // Already in TEST_CONSTANTS.HTTP_500
+const LOGIN_ENDPOINT = '/api/auth/login'        // Already in TEST_CONSTANTS.LOGIN_ENDPOINT
+
+// ✅ DO use existing centralized constants
+import { TEST_CONSTANTS } from '../test/test-utils'
+const email = TEST_CONSTANTS.EMAIL
+const status = TEST_CONSTANTS.HTTP_500
+const endpoint = TEST_CONSTANTS.LOGIN_ENDPOINT
+```
+
+**Centralized Locations:**
+- **Test constants:** `src/test/test-utils.ts` → `TEST_CONSTANTS`
+- **API constants:** Consider `lib/constants/api.ts`
+- **Business constants:** Consider `lib/constants/business.ts`
+- **UI constants:** Consider `lib/constants/ui.ts`
 
 ### Detection and Enforcement
 
