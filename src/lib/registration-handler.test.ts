@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { handleRegistration } from './registration-handler'
+import { TEST_CONSTANTS } from '../test/test-utils'
 
 // Mock NextRequest
 const mockRequest = (body: any): any => ({
@@ -34,9 +35,6 @@ describe('registration-handler', () => {
   let profileUtils: any
   let mockPrismaClient: any
 
-  const HTTP_INTERNAL_SERVER_ERROR = 500
-  const TEST_EMAIL = 'test@example.com'
-  const REGISTRATION_FAILED_ERROR = 'Registration failed'
 
   beforeEach(async () => {
     vi.clearAllMocks()
@@ -60,8 +58,8 @@ describe('registration-handler', () => {
   })
 
   const validRegisterData = {
-    email: TEST_EMAIL,
-    password: 'password123',
+    email: TEST_CONSTANTS.EMAIL,
+    password: TEST_CONSTANTS.PASSWORD,
     firstName: 'John',
     lastName: 'Doe'
   }
@@ -69,7 +67,7 @@ describe('registration-handler', () => {
   describe('handleRegistration', () => {
     it('should call prisma.$disconnect in finally block on successful registration', async () => {
       const request = mockRequest(validRegisterData)
-      const mockUser = { id: '123', email: TEST_EMAIL }
+      const mockUser = { id: '123', email: TEST_CONSTANTS.EMAIL }
       const mockSession = { access_token: 'token123' }
       const mockSuccessResponse = {
         user: mockUser,
@@ -137,7 +135,7 @@ describe('registration-handler', () => {
 
     it('should call prisma.$disconnect in finally block when user is null', async () => {
       const request = mockRequest(validRegisterData)
-      const mockErrorResponse = { error: 'User creation failed', status: HTTP_INTERNAL_SERVER_ERROR }
+      const mockErrorResponse = { error: 'User creation failed', status: TEST_CONSTANTS.HTTP_500 }
 
       authApiUtils.parseRequestBody.mockResolvedValue({
         data: validRegisterData,
@@ -154,14 +152,14 @@ describe('registration-handler', () => {
       const response = await handleRegistration(request, mockPrismaClient)
 
       expect(response).toBe(mockErrorResponse)
-      expect(authApiUtils.createErrorResponse).toHaveBeenCalledWith('User creation failed', HTTP_INTERNAL_SERVER_ERROR)
+      expect(authApiUtils.createErrorResponse).toHaveBeenCalledWith('User creation failed', TEST_CONSTANTS.HTTP_500)
       expect(mockPrismaClient.$disconnect).toHaveBeenCalled()
     })
 
     it('should call prisma.$disconnect in finally block on unexpected error', async () => {
       const request = mockRequest(validRegisterData)
       const testError = new Error('Unexpected error')
-      const mockErrorResponse = { error: REGISTRATION_FAILED_ERROR, status: HTTP_INTERNAL_SERVER_ERROR }
+      const mockErrorResponse = { error: TEST_CONSTANTS.REGISTRATION_FAILED_MESSAGE, status: TEST_CONSTANTS.HTTP_500 }
 
       authApiUtils.parseRequestBody.mockResolvedValue({
         data: validRegisterData,
@@ -177,16 +175,16 @@ describe('registration-handler', () => {
 
       expect(response).toBe(mockErrorResponse)
       expect(console.error).toHaveBeenCalledWith('Registration error:', testError)
-      expect(authApiUtils.createErrorResponse).toHaveBeenCalledWith(REGISTRATION_FAILED_ERROR, HTTP_INTERNAL_SERVER_ERROR)
+      expect(authApiUtils.createErrorResponse).toHaveBeenCalledWith(TEST_CONSTANTS.REGISTRATION_FAILED_MESSAGE, TEST_CONSTANTS.HTTP_500)
       expect(mockPrismaClient.$disconnect).toHaveBeenCalled()
     })
 
     it('should call prisma.$disconnect in finally block when ensureUserProfile throws error', async () => {
       const request = mockRequest(validRegisterData)
-      const mockUser = { id: '123', email: TEST_EMAIL }
+      const mockUser = { id: '123', email: TEST_CONSTANTS.EMAIL }
       const mockSession = { access_token: 'token123' }
       const profileError = new Error('Profile creation failed')
-      const mockErrorResponse = { error: REGISTRATION_FAILED_ERROR, status: HTTP_INTERNAL_SERVER_ERROR }
+      const mockErrorResponse = { error: TEST_CONSTANTS.REGISTRATION_FAILED_MESSAGE, status: TEST_CONSTANTS.HTTP_500 }
 
       authApiUtils.parseRequestBody.mockResolvedValue({
         data: validRegisterData,

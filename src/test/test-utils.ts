@@ -59,6 +59,7 @@ export const TEST_CONSTANTS = {
   INVALID_INPUT_MESSAGE: 'Invalid input',
   INTERNAL_SERVER_ERROR_MESSAGE: 'Internal server error',
   INVALID_CREDENTIALS_MESSAGE: 'Invalid credentials',
+  REGISTRATION_FAILED_MESSAGE: 'Registration failed',
   // Supabase test constants
   TEST_SUPABASE_URL: 'https://test.supabase.co',
   TEST_ANON_KEY: 'test-anon-key',
