@@ -24,7 +24,7 @@ vi.mock('next/server', () => ({
 // Mock supabase-server
 const mockSupabaseClient = {
   auth: {
-    getSession: vi.fn()
+    getUser: vi.fn()
   }
 }
 
@@ -52,9 +52,8 @@ const expectErrorResponse = (message: string, status: number) => {
   )
 }
 
-const expectSessionLog = (hasSession: boolean, hasUser: boolean, error?: string) => {
+const expectSessionLog = (hasUser: boolean, error?: string) => {
   expect(consoleSpy).toHaveBeenCalledWith('Session validation:', {
-    hasSession,
     hasUser,
     error,
     supabaseUrl: 'https://kdarhqrcdrmuolswqfwi.supabase.co'
@@ -75,7 +74,7 @@ const expectParseRequestResult = (result: { data: object; error?: object }, expe
   }
 }
 
-const expectValidSessionResult = (result: { session: object | null; error?: object }, mockSession: object) => {
+const expectValidSessionResult = (result: { session: object | null; error?: object }, mockSession: object | null) => {
   expect(result.session).toEqual(mockSession)
   expect(result.error).toBeUndefined()
 }
@@ -85,19 +84,20 @@ const expectInvalidSessionResult = (result: { session: object | null; error?: ob
   expect(result.error).toBeDefined()
 }
 
-const mockSupabaseSession = (session: object | null, error: object | null = null) => {
-  mockSupabaseClient.auth.getSession.mockResolvedValue({
-    data: { session },
+const mockSupabaseSession = (user: object | null, error: object | null = null) => {
+  mockSupabaseClient.auth.getUser.mockResolvedValue({
+    data: { user },
     error
   })
 }
 
-const testValidSessionScenario = async (mockSession: { user?: { id: string } | null }, requireUser = false, expectLog = true) => {
-  mockSupabaseSession(mockSession)
+const testValidSessionScenario = async (mockUser: { id: string } | null, requireUser = false, expectLog = true) => {
+  mockSupabaseSession(mockUser)
   const result = await validateSession(requireUser)
-  expectValidSessionResult(result, mockSession)
+  const expectedSession = mockUser ? { user: { id: mockUser.id } } : null
+  expectValidSessionResult(result, expectedSession)
   if (expectLog) {
-    expectSessionLog(true, !!mockSession.user, undefined)
+    expectSessionLog(!!mockUser, undefined)
   }
   return result
 }
@@ -247,62 +247,61 @@ describe('auth-api-utils', () => {
 
   describe('validateSession', () => {
     it('should return session when valid session exists', async () => {
-      const mockSession = { user: { id: 'user-123' } }
-      await testValidSessionScenario(mockSession, false, true)
+      const mockUser = { id: 'user-123' }
+      await testValidSessionScenario(mockUser, false, true)
     })
 
     it('should return session when valid session exists and requireUser is true', async () => {
-      const mockSession = { user: { id: 'user-123' } }
-      await testValidSessionScenario(mockSession, true, false)
+      const mockUser = { id: 'user-123' }
+      await testValidSessionScenario(mockUser, true, false)
     })
 
     it('should return error when Supabase returns error', async () => {
       const supabaseError = { message: 'Token expired' }
 
-      mockSupabaseClient.auth.getSession.mockResolvedValue({
-        data: { session: null },
+      mockSupabaseClient.auth.getUser.mockResolvedValue({
+        data: { user: null },
         error: supabaseError
       })
 
       const result = await validateSession()
 
       expectInvalidSessionResult(result)
-      expect(consoleErrorSpy).toHaveBeenCalledWith('Supabase session error:', supabaseError)
+      expect(consoleErrorSpy).toHaveBeenCalledWith('Supabase auth error:', supabaseError)
       expectErrorResponse('Token expired', TEST_CONSTANTS.HTTP_401)
     })
 
     it('should return error when no session exists', async () => {
-      mockSupabaseClient.auth.getSession.mockResolvedValue({
-        data: { session: null },
+      mockSupabaseClient.auth.getUser.mockResolvedValue({
+        data: { user: null },
         error: null
       })
 
       const result = await validateSession()
 
       expectInvalidSessionResult(result)
-      expectErrorResponse('No active session', TEST_CONSTANTS.HTTP_401)
-      expectSessionLog(false, false, undefined)
+      expectErrorResponse(TEST_CONSTANTS.NO_ACTIVE_SESSION_MESSAGE, TEST_CONSTANTS.HTTP_401)
+      expectSessionLog(false, undefined)
     })
 
     it('should return error when session exists but no user and requireUser is true', async () => {
-      const mockSession = {
-        user: null
-      }
-
-      mockSupabaseClient.auth.getSession.mockResolvedValue({
-        data: { session: mockSession },
+      mockSupabaseClient.auth.getUser.mockResolvedValue({
+        data: { user: null },
         error: null
       })
 
       const result = await validateSession(true)
 
       expectInvalidSessionResult(result)
-      expectErrorResponse('No active session', TEST_CONSTANTS.HTTP_401)
+      expectErrorResponse(TEST_CONSTANTS.NO_ACTIVE_SESSION_MESSAGE, TEST_CONSTANTS.HTTP_401)
     })
 
-    it('should return session when session exists with null user and requireUser is false', async () => {
-      const mockSession = { user: null }
-      await testValidSessionScenario(mockSession, false, true)
+    it('should return error when session exists with null user and requireUser is false', async () => {
+      mockSupabaseSession(null)
+      const result = await validateSession(false)
+      expectInvalidSessionResult(result)
+      expectErrorResponse(TEST_CONSTANTS.NO_ACTIVE_SESSION_MESSAGE, TEST_CONSTANTS.HTTP_401)
+      expectSessionLog(false, undefined)
     })
   })
 })
