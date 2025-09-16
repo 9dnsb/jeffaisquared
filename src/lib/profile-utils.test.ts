@@ -37,6 +37,7 @@ describe('profile-utils', () => {
         lastName: testLastName
       })
 
+      // jscpd:ignore-start
       await ensureUserProfile(TEST_CONSTANTS.USER_ID, TEST_CONSTANTS.EMAIL, testFirstName, testLastName, mockPrismaClient)
 
       expect(mockPrismaClient.profile.findUnique).toHaveBeenCalledWith({
@@ -52,6 +53,7 @@ describe('profile-utils', () => {
       })
       expect(console.log).toHaveBeenCalledWith('Trigger did not create profile, creating manually...')
       expect(console.log).toHaveBeenCalledWith('Profile created manually for user:', TEST_CONSTANTS.USER_ID)
+      // jscpd:ignore-end
     })
 
     it('should handle case when profile already exists (created by trigger)', async () => {
@@ -65,12 +67,14 @@ describe('profile-utils', () => {
       // Mock that profile already exists
       mockPrismaClient.profile.findUnique.mockResolvedValue(existingProfile)
 
+      // jscpd:ignore-start
       await ensureUserProfile(TEST_CONSTANTS.USER_ID, TEST_CONSTANTS.EMAIL, testFirstName, testLastName, mockPrismaClient)
 
       expect(mockPrismaClient.profile.findUnique).toHaveBeenCalledWith({
         where: { id: TEST_CONSTANTS.USER_ID }
       })
       expect(mockPrismaClient.profile.create).not.toHaveBeenCalled()
+      // jscpd:ignore-end
       expect(console.log).toHaveBeenCalledWith('Profile already exists (created by trigger):', existingProfile.id)
     })
 

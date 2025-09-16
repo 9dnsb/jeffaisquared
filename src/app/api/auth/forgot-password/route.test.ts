@@ -1,18 +1,13 @@
 // jscpd:ignore-start - Test boilerplate patterns are inherently repetitive
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { POST } from './route'
-import { TEST_CONSTANTS } from '../../../../test/test-utils'
-
-// Mock NextRequest
-const mockRequest = (body: any): any => ({
-  json: vi.fn().mockResolvedValue(body)
-})
+import { TEST_CONSTANTS, authApiPatterns } from '../../../../test/test-utils'
 
 // Mock auth-api-utils
 vi.mock('@/lib/auth-api-utils', () => ({
   parseRequestBody: vi.fn(),
   handleSupabaseError: vi.fn(),
-  createSuccessResponse: vi.fn()
+  createSuccessResponse: vi.fn(),
 }))
 // jscpd:ignore-end
 
@@ -20,9 +15,9 @@ vi.mock('@/lib/auth-api-utils', () => ({
 vi.mock('../../../../../lib/supabase', () => ({
   default: {
     auth: {
-      resetPasswordForEmail: vi.fn()
-    }
-  }
+      resetPasswordForEmail: vi.fn(),
+    },
+  },
 }))
 
 describe('/api/auth/forgot-password', () => {
@@ -38,70 +33,68 @@ describe('/api/auth/forgot-password', () => {
 
   const validForgotPasswordData = {
     email: TEST_CONSTANTS.EMAIL,
-    redirectTo: 'https://example.com/reset-password'
+    redirectTo: 'https://example.com/reset-password',
   }
 
   describe('POST', () => {
     it('should successfully send password reset email', async () => {
-      const request = mockRequest(validForgotPasswordData)
+      const request = authApiPatterns.createMockRequest(validForgotPasswordData)
       const mockSuccessResponse = {
-        message: 'Check your email for the password reset link!'
+        message: 'Check your email for the password reset link!',
       }
 
       authApiUtils.parseRequestBody.mockResolvedValue({
         data: validForgotPasswordData,
-        error: null
+        error: null,
       })
 
       supabase.auth.resetPasswordForEmail.mockResolvedValue({
-        error: null
+        error: null,
       })
 
       authApiUtils.createSuccessResponse.mockReturnValue(mockSuccessResponse)
 
       const response = await POST(request)
 
-      expect(authApiUtils.parseRequestBody).toHaveBeenCalledWith(request, expect.any(Object))
+      expect(authApiUtils.parseRequestBody).toHaveBeenCalledWith(
+        request,
+        expect.any(Object)
+      )
       expect(supabase.auth.resetPasswordForEmail).toHaveBeenCalledWith(
         validForgotPasswordData.email,
         {
-          redirectTo: validForgotPasswordData.redirectTo
+          redirectTo: validForgotPasswordData.redirectTo,
         }
       )
       expect(authApiUtils.createSuccessResponse).toHaveBeenCalledWith({
-        message: 'Check your email for the password reset link!'
+        message: 'Check your email for the password reset link!',
       })
       expect(response).toBe(mockSuccessResponse)
     })
 
     it('should return error when request parsing fails', async () => {
-      const request = mockRequest({})
-      const mockParseError = { error: 'Invalid email format' }
+      const request = authApiPatterns.createMockRequest({})
 
-      authApiUtils.parseRequestBody.mockResolvedValue({
-        data: null,
-        error: mockParseError
-      })
-
-      const response = await POST(request)
-
-      expect(authApiUtils.parseRequestBody).toHaveBeenCalledWith(request, expect.any(Object))
-      expect(supabase.auth.resetPasswordForEmail).not.toHaveBeenCalled()
-      expect(response).toBe(mockParseError)
+      await authApiPatterns.testRequestParsingFailure(
+        POST,
+        request,
+        authApiUtils,
+        supabase
+      )
     })
 
     it('should handle Supabase resetPasswordForEmail errors', async () => {
-      const request = mockRequest(validForgotPasswordData)
+      const request = authApiPatterns.createMockRequest(validForgotPasswordData)
       const supabaseError = { message: 'Email not found' }
       const mockErrorResponse = { error: 'Email not found' }
 
       authApiUtils.parseRequestBody.mockResolvedValue({
         data: validForgotPasswordData,
-        error: null
+        error: null,
       })
 
       supabase.auth.resetPasswordForEmail.mockResolvedValue({
-        error: supabaseError
+        error: supabaseError,
       })
 
       authApiUtils.handleSupabaseError.mockReturnValue(mockErrorResponse)
@@ -111,49 +104,41 @@ describe('/api/auth/forgot-password', () => {
       expect(supabase.auth.resetPasswordForEmail).toHaveBeenCalledWith(
         validForgotPasswordData.email,
         {
-          redirectTo: validForgotPasswordData.redirectTo
+          redirectTo: validForgotPasswordData.redirectTo,
         }
       )
-      expect(authApiUtils.handleSupabaseError).toHaveBeenCalledWith(supabaseError)
+      expect(authApiUtils.handleSupabaseError).toHaveBeenCalledWith(
+        supabaseError
+      )
       expect(response).toBe(mockErrorResponse)
     })
 
     it('should validate email format in request', async () => {
       const invalidData = {
         email: 'invalid-email',
-        redirectTo: 'https://example.com/reset-password'
+        redirectTo: 'https://example.com/reset-password',
       }
-      const request = mockRequest(invalidData)
-      const mockParseError = { error: 'Invalid email format' }
 
-      authApiUtils.parseRequestBody.mockResolvedValue({
-        data: null,
-        error: mockParseError
-      })
-
-      const response = await POST(request)
-
-      expect(authApiUtils.parseRequestBody).toHaveBeenCalledWith(request, expect.any(Object))
-      expect(response).toBe(mockParseError)
+      await authApiPatterns.testValidationFailure(
+        POST,
+        invalidData,
+        authApiUtils,
+        'Invalid email format'
+      )
     })
 
     it('should validate redirectTo URL in request', async () => {
       const invalidData = {
         email: TEST_CONSTANTS.EMAIL,
-        redirectTo: 'invalid-url'
+        redirectTo: 'invalid-url',
       }
-      const request = mockRequest(invalidData)
-      const mockParseError = { error: 'Invalid URL format' }
 
-      authApiUtils.parseRequestBody.mockResolvedValue({
-        data: null,
-        error: mockParseError
-      })
-
-      const response = await POST(request)
-
-      expect(authApiUtils.parseRequestBody).toHaveBeenCalledWith(request, expect.any(Object))
-      expect(response).toBe(mockParseError)
+      await authApiPatterns.testValidationFailure(
+        POST,
+        invalidData,
+        authApiUtils,
+        'Invalid URL format'
+      )
     })
   })
 })

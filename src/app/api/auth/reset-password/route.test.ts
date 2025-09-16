@@ -1,4 +1,4 @@
-// jscpd:ignore-start - Test boilerplate patterns are inherently repetitive
+// jscpd:ignore-start
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { POST, GET } from './route'
 import { TEST_CONSTANTS } from '../../../../test/test-utils'

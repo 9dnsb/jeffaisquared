@@ -1,12 +1,7 @@
-// jscpd:ignore-start - Test boilerplate patterns are inherently repetitive
+// jscpd:ignore-start
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { POST } from './route'
-import { TEST_CONSTANTS } from '../../../../test/test-utils'
-
-// Mock NextRequest
-const mockRequest = (body: any): any => ({
-  json: vi.fn().mockResolvedValue(body)
-})
+import { TEST_CONSTANTS, authApiPatterns } from '../../../../test/test-utils'
 
 // Mock auth-api-utils
 vi.mock('@/lib/auth-api-utils', () => ({
@@ -51,7 +46,7 @@ describe('/api/auth/login', () => {
         email: TEST_CONSTANTS.EMAIL,
         password: TEST_CONSTANTS.PASSWORD
       }
-      const request = mockRequest(loginData)
+      const request = authApiPatterns.createMockRequest(loginData)
 
       const mockUser = { id: TEST_CONSTANTS.USER_ID, email: TEST_CONSTANTS.EMAIL }
       const mockSession = { access_token: 'token123' }
@@ -92,19 +87,23 @@ describe('/api/auth/login', () => {
     })
 
     it('should return error when request parsing fails', async () => {
-      const request = mockRequest({})
-      const mockParseError = { error: 'Invalid email format' }
+      const request = authApiPatterns.createMockRequest({})
 
-      authApiUtils.parseRequestBody.mockResolvedValue({
-        data: null,
-        error: mockParseError
-      })
+      // Mock supabaseServer to not be called
+      const mockSupabaseClient = {
+        auth: {
+          signInWithPassword: vi.fn()
+        }
+      }
 
-      const response = await POST(request)
+      await authApiPatterns.testRequestParsingFailure(
+        POST,
+        request,
+        authApiUtils,
+        mockSupabaseClient
+      )
 
-      expect(authApiUtils.parseRequestBody).toHaveBeenCalledWith(request, expect.any(Object))
       expect(supabaseServer.createSupabaseServerClient).not.toHaveBeenCalled()
-      expect(response).toBe(mockParseError)
     })
 
     it('should handle Supabase authentication errors', async () => {
@@ -112,7 +111,7 @@ describe('/api/auth/login', () => {
         email: TEST_CONSTANTS.EMAIL,
         password: 'wrongpassword'
       }
-      const request = mockRequest(loginData)
+      const request = authApiPatterns.createMockRequest(loginData)
       const supabaseError = { message: TEST_CONSTANTS.INVALID_CREDENTIALS_MESSAGE }
       const mockErrorResponse = { error: TEST_CONSTANTS.INVALID_CREDENTIALS_MESSAGE }
 
@@ -150,7 +149,7 @@ describe('/api/auth/login', () => {
         email: TEST_CONSTANTS.EMAIL,
         password: TEST_CONSTANTS.PASSWORD
       }
-      const request = mockRequest(loginData)
+      const request = authApiPatterns.createMockRequest(loginData)
 
       const mockUser = { id: TEST_CONSTANTS.USER_ID, email: TEST_CONSTANTS.EMAIL }
       const mockSuccessResponse = { user: mockUser, session: null }

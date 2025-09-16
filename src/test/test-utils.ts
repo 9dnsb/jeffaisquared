@@ -398,6 +398,75 @@ export const asyncTestPatterns = {
   }
 }
 
+// Auth API route test utilities
+export const authApiPatterns = {
+  // Mock NextRequest factory
+  createMockRequest: (body: any): any => ({
+    json: vi.fn().mockResolvedValue(body),
+  }),
+
+  // Common test pattern for request parsing failures
+  testRequestParsingFailure: async (
+    handler: (request: any) => Promise<any>,
+    mockRequest: any,
+    authApiUtils: any,
+    supabaseClient?: any
+  ) => {
+    const mockParseError = { error: 'Invalid email format' }
+
+    authApiUtils.parseRequestBody.mockResolvedValue({
+      data: null,
+      error: mockParseError,
+    })
+
+    const response = await handler(mockRequest)
+
+    expect(authApiUtils.parseRequestBody).toHaveBeenCalledWith(
+      mockRequest,
+      expect.any(Object)
+    )
+
+    // Ensure Supabase method wasn't called when request parsing fails
+    if (supabaseClient) {
+      if (supabaseClient.auth.signInWithPassword) {
+        expect(supabaseClient.auth.signInWithPassword).not.toHaveBeenCalled()
+      }
+      if (supabaseClient.auth.signUp) {
+        expect(supabaseClient.auth.signUp).not.toHaveBeenCalled()
+      }
+      if (supabaseClient.auth.resetPasswordForEmail) {
+        expect(supabaseClient.auth.resetPasswordForEmail).not.toHaveBeenCalled()
+      }
+    }
+
+    expect(response).toBe(mockParseError)
+  },
+
+  // Common test pattern for validation failures (specific error types)
+  testValidationFailure: async (
+    handler: (request: any) => Promise<any>,
+    invalidData: any,
+    authApiUtils: any,
+    expectedErrorMessage: string = 'Invalid email format'
+  ) => {
+    const mockRequest = authApiPatterns.createMockRequest(invalidData)
+    const mockParseError = { error: expectedErrorMessage }
+
+    authApiUtils.parseRequestBody.mockResolvedValue({
+      data: null,
+      error: mockParseError,
+    })
+
+    const response = await handler(mockRequest)
+
+    expect(authApiUtils.parseRequestBody).toHaveBeenCalledWith(
+      mockRequest,
+      expect.any(Object)
+    )
+    expect(response).toBe(mockParseError)
+  }
+}
+
 // Shared describe blocks and test structures
 export const testStructures = {
   // Future test structures can be added here when needed

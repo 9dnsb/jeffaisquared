@@ -362,6 +362,47 @@ const specificTestPattern = () => {
 - Generated code or third-party code snippets
 - Boilerplate code where abstraction would obscure intent
 
+### JSCPD Ignore Comment Guidelines
+
+**🚨 CRITICAL: Correct ignore comment format:**
+
+```typescript
+// ✅ CORRECT - No additional text after ignore directive
+// jscpd:ignore-start
+duplicated code here
+// jscpd:ignore-end
+
+// ❌ INCORRECT - Additional text breaks the ignore functionality
+// jscpd:ignore-start - Test boilerplate patterns are inherently repetitive
+duplicated code here
+// jscpd:ignore-end
+```
+
+**Rules for jscpd ignore comments:**
+- **Exact format only:** `// jscpd:ignore-start` and `// jscpd:ignore-end`
+- **No additional text:** Comments or explanations break the ignore functionality
+- **Use sparingly:** Only for unavoidable duplicates after exhausting abstraction options
+- **Document separately:** Add explanation comments on separate lines if needed
+
+**Example usage:**
+```typescript
+// This test pattern is inherently repetitive due to test isolation requirements
+// jscpd:ignore-start
+it('should handle error case', async () => {
+  const request = mockRequest({})
+  const mockError = { error: 'Invalid input' }
+
+  mockParser.mockResolvedValue({
+    data: null,
+    error: mockError
+  })
+
+  const response = await handler(request)
+  expect(response).toBe(mockError)
+})
+// jscpd:ignore-end
+```
+
 ### Shared Module Organization
 
 **Required directory structure:**
