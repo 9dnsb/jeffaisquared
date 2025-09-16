@@ -10,7 +10,7 @@
     "test": "dotenv -e .env.development -- vitest",
     "test:ui": "dotenv -e .env.development -- vitest --ui",
     "test:run": "dotenv -e .env.development -- vitest run",
-    "check": "npx tsc --noEmit && npm run lint && npx jscpd src && npm run test:run -- --coverage && npm run build",
+    "check": "npx tsc --noEmit && npm run lint && npx jscpd src && npm run test:run -- --coverage && set PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION=yes && npx playwright test && npm run build",
     "db:migrate:dev": "dotenv -e .env.development -- npx prisma migrate dev",
     "db:migrate:prod": "dotenv -e .env.production -- npx prisma migrate deploy",
     "db:generate": "dotenv -e .env.development -- npx prisma generate",
@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.55.0",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",

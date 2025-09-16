@@ -19,6 +19,7 @@ export default function RegisterPage() {
   const isCheckingSession = useAuthRedirect()
   const { loading, error, message, submitForm } = useAuthForm({
     endpoint: '/api/auth/register',
+    redirectTo: '/auth/login',
   })
 
   const handleRegister = async (e: React.FormEvent) => {

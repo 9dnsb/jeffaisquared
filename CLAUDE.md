@@ -110,6 +110,11 @@ Before tests, run:
 - `npx tsc --noEmit && npm run lint && npx jscpd src && npm run test:run -- --coverage` - Full code quality check (ALWAYS RUN AFTER CODING)
 - `npm run build` - Build for production
 
+**Testing:**
+
+- `npm run test:run` - Run unit tests with Vitest
+- `npx cross-env PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION=yes npx playwright test` - Run E2E tests with Playwright
+
 **Notes:**
 
 - All database commands use `.env.development` by default

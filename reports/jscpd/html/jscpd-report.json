@@ -1,6 +1,6 @@
 {
   "statistics": {
-    "detectionDate": "2025-09-16T18:07:55.184Z",
+    "detectionDate": "2025-09-16T23:30:13.466Z",
     "formats": {
       "typescript": {
         "sources": {
@@ -149,8 +149,8 @@
             "newClones": 0
           },
           "src/test/test-utils.ts": {
-            "lines": 472,
-            "tokens": 4035,
+            "lines": 473,
+            "tokens": 4042,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -222,7 +222,7 @@
           },
           "src/lib/auth-api-utils.ts": {
             "lines": 92,
-            "tokens": 856,
+            "tokens": 864,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -233,7 +233,7 @@
             "newClones": 0
           },
           "src/lib/auth-api-utils.test.ts": {
-            "lines": 307,
+            "lines": 306,
             "tokens": 2847,
             "sources": 1,
             "clones": 0,
@@ -295,7 +295,7 @@
         },
         "total": {
           "lines": 2528,
-          "tokens": 20262,
+          "tokens": 20277,
           "sources": 24,
           "clones": 0,
           "duplicatedLines": 0,
@@ -529,8 +529,8 @@
             "newClones": 0
           },
           "src/app/auth/register/page.tsx": {
-            "lines": 80,
-            "tokens": 664,
+            "lines": 81,
+            "tokens": 672,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -794,8 +794,8 @@
           }
         },
         "total": {
-          "lines": 1789,
-          "tokens": 14321,
+          "lines": 1790,
+          "tokens": 14329,
           "sources": 23,
           "clones": 0,
           "duplicatedLines": 0,
@@ -808,8 +808,8 @@
       }
     },
     "total": {
-      "lines": 4790,
-      "tokens": 38402,
+      "lines": 4791,
+      "tokens": 38425,
       "sources": 63,
       "clones": 0,
       "duplicatedLines": 0,

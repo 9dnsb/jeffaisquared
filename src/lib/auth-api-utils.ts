@@ -70,24 +70,24 @@ export async function validateSession(requireUser = false): Promise<{
   error?: NextResponse;
 }> {
   const supabase = await createSupabaseServerClient()
-  const { data: { session }, error } = await supabase.auth.getSession()
+  const { data: { user }, error } = await supabase.auth.getUser()
 
-  // Debug logging to understand the cookie mismatch
+  // Debug logging to understand the authentication state
   console.log('Session validation:', {
-    hasSession: !!session,
-    hasUser: !!session?.user,
+    hasUser: !!user,
     error: error?.message,
     supabaseUrl: process.env['NEXT_PUBLIC_SUPABASE_URL'],
   })
 
   if (error) {
-    console.error('Supabase session error:', error)
+    console.error('Supabase auth error:', error)
     return { session: null, error: createErrorResponse(error.message, HTTP_UNAUTHORIZED) }
   }
 
-  if (!session || (requireUser && !session.user)) {
+  if (!user || (requireUser && !user)) {
     return { session: null, error: createErrorResponse(NO_ACTIVE_SESSION_MESSAGE, HTTP_UNAUTHORIZED) }
   }
 
-  return { session }
+  // Return user in session format for compatibility
+  return { session: { user: { id: user.id } } }
 }

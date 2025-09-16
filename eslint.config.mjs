@@ -23,6 +23,7 @@ const eslintConfig = [
       'coverage/**',
       'prisma/**',
       'src/app/**/page.tsx',
+      'playwright.config.ts',
     ],
   },
   {

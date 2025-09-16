@@ -15,7 +15,14 @@
       "Read(//c/Users/david/Documents/ShareX/Screenshots/2025-09-15/**)",
       "Bash(curl:*)",
       "Bash(npm test)",
-      "Bash(npm test:*)"
+      "Bash(npm test:*)",
+      "Bash(npx playwright:*)",
+      "WebFetch(domain:playwright.dev)",
+      "Bash(set PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION=yes)",
+      "Bash(set \"PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION=yes\")",
+      "Bash(cmd /c \"set PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION=yes && npx playwright test\")",
+      "Bash(npx cross-env:*)",
+      "WebFetch(domain:docs.claude.com)"
     ],
     "deny": [],
     "ask": []

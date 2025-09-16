@@ -3,7 +3,7 @@ import { TEST_CONSTANTS } from '../src/test/test-utils'
 
 // Mock dependencies
 const mockServerClient = {
-  auth: { getSession: vi.fn() },
+  auth: { getUser: vi.fn() },
   from: vi.fn()
 }
 
