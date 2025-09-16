@@ -107,7 +107,7 @@ Before tests, run:
 - `npm run lint` - Run ESLint
 - `npx tsc --noEmit` - TypeScript type checking without compilation
 - `npx jscpd src` - No duplicates
-- `npx tsc --noEmit && npm run lint && npx jscpd src` - Full code quality check (ALWAYS RUN AFTER CODING)
+- `npx tsc --noEmit && npm run lint && npx jscpd src && npm run test:run -- --coverage` - Full code quality check (ALWAYS RUN AFTER CODING)
 - `npm run build` - Build for production
 
 **Notes:**
@@ -122,7 +122,7 @@ Before tests, run:
 **MANDATORY: Always run after creating/modifying code:**
 
 ```bash
-npx tsc --noEmit && npm run lint && npx jscpd src
+npx tsc --noEmit && npm run lint && npx jscpd src && npm run test:run -- --coverage
 ```
 
 This ensures:
@@ -131,6 +131,7 @@ This ensures:
 - ✅ No type errors or unsafe operations
 - ✅ ESLint rules pass (no-any, strict TypeScript rules)
 - ✅ No code duplication (jscpd detects duplicate code blocks)
+- ✅ All tests pass with coverage reporting
 - ✅ Code follows project standards
 
 **Failure to run these checks will result in broken builds and deployment failures.**

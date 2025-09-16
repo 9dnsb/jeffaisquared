@@ -4,17 +4,14 @@
   "ignore": [
     "**/node_modules/**",
     "**/*.d.ts",
-    "**/__tests__/**",
-    "**/*.spec.ts",
-    "**/*.test.ts",
     "**/src/generated/**",
     "**/.next/**",
     "**/dist/**",
     "**/build/**"
   ],
   "format": ["typescript", "javascript", "tsx"],
-  "minTokens": 45,
-  "minLines": 5,
+  "minTokens": 35,
+  "minLines": 4,
   "mode": "mild",
   "output": "./reports/jscpd"
 }

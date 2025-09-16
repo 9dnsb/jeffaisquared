@@ -1,12 +1,12 @@
 {
   "statistics": {
-    "detectionDate": "2025-09-16T00:43:55.450Z",
+    "detectionDate": "2025-09-16T13:22:28.057Z",
     "formats": {
       "typescript": {
         "sources": {
           "src/app/api/auth/session/route.ts": {
             "lines": 14,
-            "tokens": 107,
+            "tokens": 121,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -18,7 +18,7 @@
           },
           "src/app/api/auth/reset-password/route.ts": {
             "lines": 40,
-            "tokens": 303,
+            "tokens": 343,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -29,8 +29,8 @@
             "newClones": 0
           },
           "src/app/api/auth/register/route.ts": {
-            "lines": 39,
-            "tokens": 331,
+            "lines": 87,
+            "tokens": 776,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -42,7 +42,7 @@
           },
           "src/app/api/auth/logout/route.ts": {
             "lines": 30,
-            "tokens": 234,
+            "tokens": 264,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -54,7 +54,7 @@
           },
           "src/app/api/auth/login/route.ts": {
             "lines": 39,
-            "tokens": 337,
+            "tokens": 376,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -66,7 +66,19 @@
           },
           "src/app/api/auth/forgot-password/route.ts": {
             "lines": 31,
-            "tokens": 238,
+            "tokens": 269,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/test/setup.ts": {
+            "lines": 8,
+            "tokens": 63,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -78,7 +90,19 @@
           },
           "src/lib/auth-api-utils.ts": {
             "lines": 83,
-            "tokens": 718,
+            "tokens": 789,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/auth-api-utils.test.ts": {
+            "lines": 306,
+            "tokens": 2777,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -90,7 +114,7 @@
           },
           "src/hooks/useAuthRedirect.ts": {
             "lines": 32,
-            "tokens": 222,
+            "tokens": 251,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -102,7 +126,7 @@
           },
           "src/hooks/useAuthForm.ts": {
             "lines": 68,
-            "tokens": 573,
+            "tokens": 641,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -126,9 +150,9 @@
           }
         },
         "total": {
-          "lines": 406,
-          "tokens": 3352,
-          "sources": 10,
+          "lines": 768,
+          "tokens": 6959,
+          "sources": 12,
           "clones": 0,
           "duplicatedLines": 0,
           "duplicatedTokens": 0,
@@ -142,7 +166,7 @@
         "sources": {
           "src/app/auth/reset-password/page.tsx": {
             "lines": 51,
-            "tokens": 337,
+            "tokens": 366,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -154,7 +178,7 @@
           },
           "src/app/auth/register/page.tsx": {
             "lines": 36,
-            "tokens": 228,
+            "tokens": 239,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -166,7 +190,7 @@
           },
           "src/app/auth/login/page.tsx": {
             "lines": 18,
-            "tokens": 102,
+            "tokens": 107,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -178,7 +202,7 @@
           },
           "src/app/auth/forgot-password/page.tsx": {
             "lines": 17,
-            "tokens": 112,
+            "tokens": 120,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -214,7 +238,7 @@
           },
           "src/components/auth/AuthFormFooter.tsx": {
             "lines": 7,
-            "tokens": 47,
+            "tokens": 53,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -263,7 +287,7 @@
         },
         "total": {
           "lines": 138,
-          "tokens": 913,
+          "tokens": 972,
           "sources": 10,
           "clones": 0,
           "duplicatedLines": 0,
@@ -278,7 +302,7 @@
         "sources": {
           "src/app/auth/reset-password/page.tsx": {
             "lines": 143,
-            "tokens": 1111,
+            "tokens": 1231,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -290,7 +314,7 @@
           },
           "src/app/auth/register/page.tsx": {
             "lines": 80,
-            "tokens": 614,
+            "tokens": 664,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -302,7 +326,7 @@
           },
           "src/app/auth/login/page.tsx": {
             "lines": 56,
-            "tokens": 416,
+            "tokens": 458,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -314,7 +338,7 @@
           },
           "src/app/auth/forgot-password/page.tsx": {
             "lines": 65,
-            "tokens": 498,
+            "tokens": 551,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -326,7 +350,7 @@
           },
           "src/components/common/LoadingSpinner.tsx": {
             "lines": 10,
-            "tokens": 80,
+            "tokens": 90,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -338,7 +362,7 @@
           },
           "src/components/auth/AuthMessages.tsx": {
             "lines": 20,
-            "tokens": 127,
+            "tokens": 147,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -350,7 +374,7 @@
           },
           "src/components/auth/AuthLayout.tsx": {
             "lines": 18,
-            "tokens": 120,
+            "tokens": 138,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -362,7 +386,7 @@
           },
           "src/components/auth/AuthInput.tsx": {
             "lines": 39,
-            "tokens": 224,
+            "tokens": 252,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -374,7 +398,7 @@
           },
           "src/components/auth/AuthFormFooter.tsx": {
             "lines": 49,
-            "tokens": 270,
+            "tokens": 313,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -386,7 +410,7 @@
           },
           "src/components/auth/AuthEmailPasswordInputs.tsx": {
             "lines": 70,
-            "tokens": 526,
+            "tokens": 596,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -398,7 +422,7 @@
           },
           "src/components/auth/AuthButton.tsx": {
             "lines": 17,
-            "tokens": 115,
+            "tokens": 128,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -410,7 +434,7 @@
           },
           "src/app/dashboard/page.tsx": {
             "lines": 92,
-            "tokens": 731,
+            "tokens": 820,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -447,7 +471,7 @@
         },
         "total": {
           "lines": 727,
-          "tokens": 5285,
+          "tokens": 5841,
           "sources": 14,
           "clones": 0,
           "duplicatedLines": 0,
@@ -460,9 +484,9 @@
       }
     },
     "total": {
-      "lines": 1271,
-      "tokens": 9550,
-      "sources": 34,
+      "lines": 1633,
+      "tokens": 13772,
+      "sources": 36,
       "clones": 0,
       "duplicatedLines": 0,
       "duplicatedTokens": 0,

@@ -12,7 +12,8 @@
       "Bash(npx tsc:*)",
       "Bash(npx jscpd:*)",
       "Bash(npm run:*)",
-      "Read(//c/Users/david/Documents/ShareX/Screenshots/2025-09-15/**)"
+      "Read(//c/Users/david/Documents/ShareX/Screenshots/2025-09-15/**)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []

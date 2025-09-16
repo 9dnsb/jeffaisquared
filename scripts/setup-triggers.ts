@@ -6,12 +6,30 @@ async function setupTriggers() {
   console.log('Setting up database triggers...')
 
   try {
-    // Function to handle new user registration
+    // Grant necessary permissions for custom prisma user
+    await prisma.$executeRaw`
+      GRANT USAGE ON SCHEMA auth TO prisma;
+    `
+
+    await prisma.$executeRaw`
+      GRANT SELECT ON auth.users TO prisma;
+    `
+
+    await prisma.$executeRaw`
+      GRANT USAGE ON SCHEMA public TO postgres, anon, authenticated, service_role, prisma;
+    `
+
+    await prisma.$executeRaw`
+      GRANT ALL ON ALL TABLES IN SCHEMA public TO postgres, anon, authenticated, service_role, prisma;
+    `
+
+    // Function to handle new user registration with proper security context
     await prisma.$executeRaw`
       CREATE OR REPLACE FUNCTION public.handle_new_user()
       RETURNS TRIGGER
       LANGUAGE plpgsql
-      SECURITY DEFINER SET search_path = ''
+      SECURITY DEFINER
+      SET search_path = public, auth
       AS $$
       BEGIN
         INSERT INTO public.profiles (id, email, first_name, last_name)
@@ -22,6 +40,10 @@ async function setupTriggers() {
           NEW.raw_user_meta_data ->> 'last_name'
         );
         RETURN NEW;
+      EXCEPTION
+        WHEN OTHERS THEN
+          RAISE LOG 'Error in handle_new_user trigger: %', SQLERRM;
+          RETURN NEW;
       END;
       $$;
     `
@@ -52,6 +74,10 @@ async function setupTriggers() {
       DROP POLICY IF EXISTS "Users can update own profile" ON public.profiles;
     `
 
+    await prisma.$executeRaw`
+      DROP POLICY IF EXISTS "System can insert profiles" ON public.profiles;
+    `
+
     // Create RLS policies
     await prisma.$executeRaw`
       CREATE POLICY "Users can view own profile" ON public.profiles
@@ -61,6 +87,11 @@ async function setupTriggers() {
     await prisma.$executeRaw`
       CREATE POLICY "Users can update own profile" ON public.profiles
         FOR UPDATE USING (auth.uid() = id);
+    `
+
+    await prisma.$executeRaw`
+      CREATE POLICY "System can insert profiles" ON public.profiles
+        FOR INSERT WITH CHECK (true);
     `
 
     console.log('Database triggers set up successfully!')

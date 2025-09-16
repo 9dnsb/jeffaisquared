@@ -1,0 +1,307 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { NextResponse } from 'next/server'
+import { z } from 'zod'
+import {
+  createErrorResponse,
+  createSuccessResponse,
+  handleAuthApiError,
+  handleSupabaseError,
+  parseRequestBody,
+  validateSession
+} from './auth-api-utils'
+
+// Mock Next.js
+vi.mock('next/server', () => ({
+  NextResponse: {
+    json: vi.fn((data: Record<string, string | object>, options?: { status: number }) => ({
+      json: data,
+      status: options?.status || 200
+    }))
+  }
+}))
+
+// Mock supabase-server
+const mockSupabaseClient = {
+  auth: {
+    getSession: vi.fn()
+  }
+}
+
+vi.mock('../../lib/supabase-server', () => ({
+  createSupabaseServerClient: vi.fn(() => Promise.resolve(mockSupabaseClient))
+}))
+
+// Mock console methods to avoid noise in tests
+const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+// Helper functions to reduce duplication
+const createMockRequest = (data: object) => ({
+  json: vi.fn().mockResolvedValue(data)
+} as Pick<Request, 'json'>)
+
+const createMockRequestWithError = (error: Error) => ({
+  json: vi.fn().mockRejectedValue(error)
+} as Pick<Request, 'json'>)
+
+const expectErrorResponse = (message: string, status: number) => {
+  expect(NextResponse.json).toHaveBeenCalledWith(
+    { error: message },
+    { status }
+  )
+}
+
+const expectSessionLog = (hasSession: boolean, hasUser: boolean, error?: string) => {
+  expect(consoleSpy).toHaveBeenCalledWith('Session validation:', {
+    hasSession,
+    hasUser,
+    error,
+    supabaseUrl: 'https://kdarhqrcdrmuolswqfwi.supabase.co'
+  })
+}
+
+const createEmailPasswordSchema = () => z.object({
+  email: z.string().email(),
+  password: z.string().min(6)
+})
+
+const expectParseRequestResult = (result: { data: object; error?: object }, expectedData: object, hasError = false) => {
+  expect(result.data).toEqual(expectedData)
+  if (hasError) {
+    expect(result.error).toBeDefined()
+  } else {
+    expect(result.error).toBeUndefined()
+  }
+}
+
+const expectValidSessionResult = (result: { session: object | null; error?: object }, mockSession: object) => {
+  expect(result.session).toEqual(mockSession)
+  expect(result.error).toBeUndefined()
+}
+
+const expectInvalidSessionResult = (result: { session: object | null; error?: object }) => {
+  expect(result.session).toBeNull()
+  expect(result.error).toBeDefined()
+}
+
+const mockSupabaseSession = (session: object | null, error: object | null = null) => {
+  mockSupabaseClient.auth.getSession.mockResolvedValue({
+    data: { session },
+    error
+  })
+}
+
+const testValidSessionScenario = async (mockSession: { user?: { id: string } | null }, requireUser = false, expectLog = true) => {
+  mockSupabaseSession(mockSession)
+  const result = await validateSession(requireUser)
+  expectValidSessionResult(result, mockSession)
+  if (expectLog) {
+    expectSessionLog(true, !!mockSession.user, undefined)
+  }
+  return result
+}
+
+const testAuthApiErrorResponse = (error: Error | object, expectedMessage: string, expectedStatus: number) => {
+  const result = handleAuthApiError(error)
+  expectErrorResponse(expectedMessage, expectedStatus)
+  expect(result).toEqual({
+    json: { error: expectedMessage },
+    status: expectedStatus
+  })
+  return result
+}
+
+// Don't mock process.env - use actual environment variables
+
+describe('auth-api-utils', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  describe('createErrorResponse', () => {
+    it('should create error response with message and status', () => {
+      const result = createErrorResponse('Test error', 400)
+
+      expect(NextResponse.json).toHaveBeenCalledWith(
+        { error: 'Test error' },
+        { status: 400 }
+      )
+      expect(result).toEqual({
+        json: { error: 'Test error' },
+        status: 400
+      })
+    })
+
+    it('should create error response with different status codes', () => {
+      createErrorResponse('Server error', 500)
+      expectErrorResponse('Server error', 500)
+    })
+  })
+
+  describe('createSuccessResponse', () => {
+    it('should create success response with data and default status 200', () => {
+      const data = { message: 'Success', user: { id: '123' } }
+      const result = createSuccessResponse(data)
+
+      expect(NextResponse.json).toHaveBeenCalledWith(data, { status: 200 })
+      expect(result).toEqual({
+        json: data,
+        status: 200
+      })
+    })
+
+    it('should create success response with custom status', () => {
+      const data = { created: true }
+      createSuccessResponse(data, 201)
+
+      expect(NextResponse.json).toHaveBeenCalledWith(data, { status: 201 })
+    })
+
+    it('should handle various data types', () => {
+      const data = {
+        string: 'test',
+        boolean: true,
+        number: 42,
+        nullValue: null,
+        object: { nested: 'value' }
+      }
+      createSuccessResponse(data)
+
+      expect(NextResponse.json).toHaveBeenCalledWith(data, { status: 200 })
+    })
+  })
+
+  describe('handleAuthApiError', () => {
+    it('should handle ZodError and return 400 status', () => {
+      const schema = z.object({ email: z.string().email() })
+      try {
+        schema.parse({ email: 'invalid-email' })
+      } catch (zodError) {
+        const result = handleAuthApiError(zodError as z.ZodError)
+
+        expectErrorResponse('Invalid input', 400)
+        expect(result).toEqual({
+          json: { error: 'Invalid input' },
+          status: 400
+        })
+      }
+    })
+
+    it('should handle regular Error and return 500 status', () => {
+      const error = new Error('Something went wrong')
+      testAuthApiErrorResponse(error, 'Internal server error', 500)
+    })
+
+    it('should handle generic object error and return 500 status', () => {
+      const error = { message: 'Generic error object' }
+      testAuthApiErrorResponse(error, 'Internal server error', 500)
+    })
+  })
+
+  describe('handleSupabaseError', () => {
+    it('should handle supabase error and return 400 status', () => {
+      const error = { message: 'Invalid credentials' }
+      const result = handleSupabaseError(error)
+
+      expectErrorResponse('Invalid credentials', 400)
+      expect(result).toEqual({
+        json: { error: 'Invalid credentials' },
+        status: 400
+      })
+    })
+  })
+
+  describe('parseRequestBody', () => {
+    it('should parse and validate valid request body', async () => {
+      const schema = createEmailPasswordSchema()
+      const testData = { email: 'test@example.com', password: 'password123' }
+      const mockRequest = createMockRequest(testData)
+
+      const result = await parseRequestBody(mockRequest as Request, schema)
+
+      expectParseRequestResult(result, testData, false)
+    })
+
+    it('should handle invalid request body with validation error', async () => {
+      const schema = createEmailPasswordSchema()
+      const invalidData = { email: 'invalid-email', password: '123' }
+      const mockRequest = createMockRequest(invalidData)
+
+      const result = await parseRequestBody(mockRequest as Request, schema)
+
+      expectParseRequestResult(result, {}, true)
+      expectErrorResponse('Invalid input', 400)
+    })
+
+    it('should handle JSON parsing error', async () => {
+      const schema = z.object({ test: z.string() })
+      const mockRequest = createMockRequestWithError(new Error('Invalid JSON'))
+
+      const result = await parseRequestBody(mockRequest as Request, schema)
+
+      expectParseRequestResult(result, {}, true)
+      expectErrorResponse('Internal server error', 500)
+    })
+  })
+
+  describe('validateSession', () => {
+    it('should return session when valid session exists', async () => {
+      const mockSession = { user: { id: 'user-123' } }
+      await testValidSessionScenario(mockSession, false, true)
+    })
+
+    it('should return session when valid session exists and requireUser is true', async () => {
+      const mockSession = { user: { id: 'user-123' } }
+      await testValidSessionScenario(mockSession, true, false)
+    })
+
+    it('should return error when Supabase returns error', async () => {
+      const supabaseError = { message: 'Token expired' }
+
+      mockSupabaseClient.auth.getSession.mockResolvedValue({
+        data: { session: null },
+        error: supabaseError
+      })
+
+      const result = await validateSession()
+
+      expectInvalidSessionResult(result)
+      expect(consoleErrorSpy).toHaveBeenCalledWith('Supabase session error:', supabaseError)
+      expectErrorResponse('Token expired', 401)
+    })
+
+    it('should return error when no session exists', async () => {
+      mockSupabaseClient.auth.getSession.mockResolvedValue({
+        data: { session: null },
+        error: null
+      })
+
+      const result = await validateSession()
+
+      expectInvalidSessionResult(result)
+      expectErrorResponse('No active session', 401)
+      expectSessionLog(false, false, undefined)
+    })
+
+    it('should return error when session exists but no user and requireUser is true', async () => {
+      const mockSession = {
+        user: null
+      }
+
+      mockSupabaseClient.auth.getSession.mockResolvedValue({
+        data: { session: mockSession },
+        error: null
+      })
+
+      const result = await validateSession(true)
+
+      expectInvalidSessionResult(result)
+      expectErrorResponse('No active session', 401)
+    })
+
+    it('should return session when session exists with null user and requireUser is false', async () => {
+      const mockSession = { user: null }
+      await testValidSessionScenario(mockSession, false, true)
+    })
+  })
+})
