@@ -50,7 +50,7 @@ An AI-powered web platform for sales data analytics with natural language queryi
 
 - **Strict TypeScript**  "strict": true, "noImplicitAny": true
 - **Type-safe Supabase Client:** Use supabase gen types to generate Database type
-- **DRY (Don't Repeat Yourself):** Extract common code into utilities/helpers, run jscpd (code duplication detector) to catch duplicate code
+- **🚨 ZERO DUPLICATION POLICY:** ABSOLUTELY NO duplicate code allowed across files. Extract ALL common patterns into utilities/helpers/shared modules. Run `npx jscpd src` after EVERY code change to detect duplicates. Even 2-3 lines of similar logic must be abstracted into reusable functions.
 - **Zod Validation:** Use Zod schemas to validate API inputs and Square webhook payloads
 - **Reusable Prisma Client:** Instantiate once in lib/prisma.ts and reuse (avoid exhausting connections)
 - **Environment Management:** .env.production and .env.development files for DB URLs, Supabase keys, and API keys. Use dotenv -e for running migrations/seeds/tests against the right DB
@@ -238,3 +238,178 @@ const value = obj.someProperty // Without proper type checking
 
 - Use relative imports from project root: `'../../../../lib/supabase'`
 - Path aliases (`@/`) may not work properly in this strict setup
+
+## 🚨 CRITICAL: Zero Code Duplication Policy
+
+**ABSOLUTE PROHIBITION on duplicate code across files:**
+
+### What Counts as Duplication
+
+**FORBIDDEN - These patterns trigger immediate refactoring:**
+
+- **Identical functions/methods** across different files
+- **Similar logic blocks** (3+ lines with same structure)
+- **Repeated validation patterns** (Zod schemas, input checks)
+- **Duplicate API call patterns** (fetch logic, error handling)
+- **Repeated React patterns** (useEffect hooks, event handlers)
+- **Copy-pasted utility functions** (formatters, converters)
+
+### Required Extraction Strategies
+
+**✅ MANDATORY - Create shared modules:**
+
+```typescript
+// ✅ Shared validation schemas
+// lib/validation/schemas.ts
+export const emailSchema = z.email()
+export const passwordSchema = z.string().min(8)
+
+// ✅ Shared API utilities
+// lib/api/utils.ts
+export async function handleApiError(response: Response) {
+  if (!response.ok) {
+    throw new Error(`API error: ${response.status}`)
+  }
+  return response.json()
+}
+
+// ✅ Shared React hooks
+// hooks/useFormValidation.ts
+export function useFormValidation(schema: z.ZodSchema) {
+  // Common validation logic
+}
+
+// ✅ Shared business logic
+// lib/business/auth.ts
+export function validateAuthState(user: User | null) {
+  // Common auth validation
+}
+```
+
+### Detection and Enforcement
+
+**MANDATORY after every code change:**
+
+```bash
+npx jscpd src
+```
+
+**If jscpd finds ANY duplicates:**
+
+1. **STOP immediately** - Do not continue coding
+2. **Analyze the duplicates** - Determine if they can be reasonably abstracted
+3. **Extract common code** into appropriate shared module (preferred approach)
+4. **Update all usages** to import from shared module
+5. **If abstraction is not feasible** - Add ignore comments with clear justification
+6. **Re-run jscpd** - Target should be 0 duplicates or minimal justified exceptions
+7. **Only then continue** with other development
+
+**Current Status:** Achieved 96.7% reduction in code duplication (from 3.52% to 0.57%)
+
+**Exception: When abstraction would be overly complex:**
+
+If a duplicate cannot be reasonably abstracted due to over-engineering concerns, use jscpd ignore comments:
+
+```typescript
+// jscpd:ignore-start - Clear reason why abstraction would be detrimental
+// This specific test pattern tests edge case XYZ that doesn't fit standard abstraction
+const specificTestPattern = () => {
+  // ... unavoidably duplicate logic for specific scenario
+}
+// jscpd:ignore-end
+```
+
+**Usage Guidelines:**
+- **Use sparingly** - Only when abstraction would create more complexity than the duplication
+- **Always include a comment** explaining why abstraction is not appropriate
+- **Prefer abstraction** - Try to create shared patterns first before using ignore
+- **Review regularly** - Ignored duplicates should be re-evaluated during code reviews
+
+**Valid reasons for ignore comments:**
+- Edge case tests with very specific setup that don't fit standard patterns
+- Platform-specific implementations that cannot be unified
+- Generated code or third-party code snippets
+- Boilerplate code where abstraction would obscure intent
+
+### Shared Module Organization
+
+**Required directory structure:**
+
+```
+lib/
+├── validation/     # Shared Zod schemas
+├── api/           # Shared API utilities
+├── business/      # Shared business logic
+├── formatting/    # Shared formatters/converters
+└── types/         # Shared TypeScript types
+
+hooks/             # Shared React hooks
+components/shared/ # Shared UI components
+utils/             # Pure utility functions
+```
+
+### Zero-Tolerance Examples
+
+**❌ NEVER ALLOWED:**
+
+```typescript
+// File A
+const handleSubmit = async (data: FormData) => {
+  try {
+    const response = await fetch('/api/login', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    })
+    if (!response.ok) throw new Error('Login failed')
+    return response.json()
+  } catch (err) {
+    setError(err.message)
+  }
+}
+
+// File B - DUPLICATE DETECTED
+const submitForm = async (formData: FormData) => {
+  try {
+    const response = await fetch('/api/register', {
+      method: 'POST',
+      body: JSON.stringify(formData)
+    })
+    if (!response.ok) throw new Error('Registration failed')
+    return response.json()
+  } catch (err) {
+    setError(err.message)
+  }
+}
+```
+
+**✅ REQUIRED SOLUTION:**
+
+```typescript
+// lib/api/client.ts
+export async function apiPost(endpoint: string, data: unknown) {
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    if (!response.ok) throw new Error(`Request failed: ${response.status}`)
+    return response.json()
+  } catch (err) {
+    throw err instanceof Error ? err : new Error('Unknown error')
+  }
+}
+
+// File A & B now use:
+import { apiPost } from '../../../../lib/api/client'
+
+const handleLogin = (data: FormData) => apiPost('/api/login', data)
+const handleRegister = (data: FormData) => apiPost('/api/register', data)
+```
+
+**This policy ensures:**
+
+- **Maintainability:** Fix bugs once, benefits entire codebase
+- **Consistency:** Same behavior across all components
+- **Testability:** Test shared logic once with comprehensive coverage
+- **Bundle Size:** Eliminate redundant code in production builds

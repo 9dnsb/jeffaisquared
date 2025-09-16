@@ -12,26 +12,35 @@ export function createErrorResponse(message: string, status: number) {
 /**
  * Standard success response utility for auth API routes
  */
-export function createSuccessResponse(data: Record<string, string | boolean | number | null | object>, status = 200) {
+const HTTP_OK = 200
+
+export function createSuccessResponse(data: Record<string, string | boolean | number | null | object>, status = HTTP_OK) {
   return NextResponse.json(data, { status })
 }
 
 /**
  * Centralized error handling for auth API routes
  */
+const HTTP_BAD_REQUEST = 400
+const HTTP_INTERNAL_SERVER_ERROR = 500
+const HTTP_UNAUTHORIZED = 401
+const INVALID_INPUT_MESSAGE = 'Invalid input'
+const INTERNAL_SERVER_ERROR_MESSAGE = 'Internal server error'
+const NO_ACTIVE_SESSION_MESSAGE = 'No active session'
+
 export function handleAuthApiError(err: Error | z.ZodError | object): NextResponse {
   if (err instanceof z.ZodError) {
-    return createErrorResponse('Invalid input', 400)
+    return createErrorResponse(INVALID_INPUT_MESSAGE, HTTP_BAD_REQUEST)
   }
 
-  return createErrorResponse('Internal server error', 500)
+  return createErrorResponse(INTERNAL_SERVER_ERROR_MESSAGE, HTTP_INTERNAL_SERVER_ERROR)
 }
 
 /**
  * Handle Supabase auth errors consistently
  */
 export function handleSupabaseError(error: { message: string }): NextResponse {
-  return createErrorResponse(error.message, 400)
+  return createErrorResponse(error.message, HTTP_BAD_REQUEST)
 }
 
 /**
@@ -73,11 +82,11 @@ export async function validateSession(requireUser = false): Promise<{
 
   if (error) {
     console.error('Supabase session error:', error)
-    return { session: null, error: createErrorResponse(error.message, 401) }
+    return { session: null, error: createErrorResponse(error.message, HTTP_UNAUTHORIZED) }
   }
 
   if (!session || (requireUser && !session.user)) {
-    return { session: null, error: createErrorResponse('No active session', 401) }
+    return { session: null, error: createErrorResponse(NO_ACTIVE_SESSION_MESSAGE, HTTP_UNAUTHORIZED) }
   }
 
   return { session }

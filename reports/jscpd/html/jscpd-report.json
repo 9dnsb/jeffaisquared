@@ -1,6 +1,6 @@
 {
   "statistics": {
-    "detectionDate": "2025-09-16T13:22:28.057Z",
+    "detectionDate": "2025-09-16T17:25:27.788Z",
     "formats": {
       "typescript": {
         "sources": {
@@ -16,9 +16,9 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
-          "src/app/api/auth/reset-password/route.ts": {
-            "lines": 40,
-            "tokens": 343,
+          "src/app/api/auth/session/route.test.ts": {
+            "lines": 84,
+            "tokens": 683,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -28,9 +28,45 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
+          "src/app/api/auth/reset-password/route.ts": {
+            "lines": 43,
+            "tokens": 363,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/api/auth/reset-password/route.test.ts": {
+            "lines": 200,
+            "tokens": 1334,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 12,
+            "duplicatedTokens": 98,
+            "percentage": 6,
+            "percentageTokens": 7.35,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/app/api/auth/register/route.ts": {
-            "lines": 87,
-            "tokens": 776,
+            "lines": 8,
+            "tokens": 85,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/api/auth/register/route.test.ts": {
+            "lines": 44,
+            "tokens": 359,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -52,6 +88,18 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
+          "src/app/api/auth/logout/route.test.ts": {
+            "lines": 118,
+            "tokens": 975,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/app/api/auth/login/route.ts": {
             "lines": 39,
             "tokens": 376,
@@ -61,6 +109,18 @@
             "duplicatedTokens": 0,
             "percentage": 0,
             "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/api/auth/login/route.test.ts": {
+            "lines": 188,
+            "tokens": 1473,
+            "sources": 1,
+            "clones": 4,
+            "duplicatedLines": 54,
+            "duplicatedTokens": 447,
+            "percentage": 28.72,
+            "percentageTokens": 30.35,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -76,9 +136,81 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
+          "src/app/api/auth/forgot-password/route.test.ts": {
+            "lines": 157,
+            "tokens": 1171,
+            "sources": 1,
+            "clones": 5,
+            "duplicatedLines": 66,
+            "duplicatedTokens": 513,
+            "percentage": 42.04,
+            "percentageTokens": 43.81,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/test/test-utils.ts": {
+            "lines": 402,
+            "tokens": 3521,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/test/setup.ts": {
-            "lines": 8,
-            "tokens": 63,
+            "lines": 28,
+            "tokens": 215,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/registration-handler.ts": {
+            "lines": 64,
+            "tokens": 547,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/registration-handler.test.ts": {
+            "lines": 211,
+            "tokens": 1722,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/profile-utils.ts": {
+            "lines": 40,
+            "tokens": 271,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/profile-utils.test.ts": {
+            "lines": 89,
+            "tokens": 721,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -89,8 +221,8 @@
             "newClones": 0
           },
           "src/lib/auth-api-utils.ts": {
-            "lines": 83,
-            "tokens": 789,
+            "lines": 92,
+            "tokens": 856,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -101,8 +233,8 @@
             "newClones": 0
           },
           "src/lib/auth-api-utils.test.ts": {
-            "lines": 306,
-            "tokens": 2777,
+            "lines": 307,
+            "tokens": 2845,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -137,8 +269,20 @@
             "newClones": 0
           },
           "src/middleware.ts": {
-            "lines": 30,
-            "tokens": 289,
+            "lines": 33,
+            "tokens": 306,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/middleware.test.ts": {
+            "lines": 150,
+            "tokens": 1254,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -150,14 +294,14 @@
           }
         },
         "total": {
-          "lines": 768,
-          "tokens": 6959,
-          "sources": 12,
-          "clones": 0,
-          "duplicatedLines": 0,
-          "duplicatedTokens": 0,
-          "percentage": 0,
-          "percentageTokens": 0,
+          "lines": 2472,
+          "tokens": 20623,
+          "sources": 24,
+          "clones": 5,
+          "duplicatedLines": 66,
+          "duplicatedTokens": 529,
+          "percentage": 2.67,
+          "percentageTokens": 2.57,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -224,9 +368,45 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
+          "src/components/auth/AuthMessages.test.tsx": {
+            "lines": 100,
+            "tokens": 839,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthLayout.test.tsx": {
+            "lines": 0,
+            "tokens": 3,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/components/auth/AuthInput.tsx": {
             "lines": 9,
             "tokens": 57,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthInput.test.tsx": {
+            "lines": 40,
+            "tokens": 353,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -248,9 +428,45 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
+          "src/components/auth/AuthFormFooter.test.tsx": {
+            "lines": 96,
+            "tokens": 826,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthEmailPasswordInputs.test.tsx": {
+            "lines": 89,
+            "tokens": 749,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/components/auth/AuthButton.tsx": {
             "lines": 0,
             "tokens": 5,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthButton.test.tsx": {
+            "lines": 10,
+            "tokens": 77,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -286,9 +502,9 @@
           }
         },
         "total": {
-          "lines": 138,
-          "tokens": 972,
-          "sources": 10,
+          "lines": 473,
+          "tokens": 3819,
+          "sources": 16,
           "clones": 0,
           "duplicatedLines": 0,
           "duplicatedTokens": 0,
@@ -360,9 +576,33 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
+          "src/components/common/LoadingSpinner.test.tsx": {
+            "lines": 28,
+            "tokens": 325,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/components/auth/AuthMessages.tsx": {
             "lines": 20,
             "tokens": 147,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthMessages.test.tsx": {
+            "lines": 117,
+            "tokens": 1005,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -384,9 +624,33 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
+          "src/components/auth/AuthLayout.test.tsx": {
+            "lines": 148,
+            "tokens": 1191,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/components/auth/AuthInput.tsx": {
             "lines": 39,
             "tokens": 252,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthInput.test.tsx": {
+            "lines": 95,
+            "tokens": 874,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -408,9 +672,33 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
+          "src/components/auth/AuthFormFooter.test.tsx": {
+            "lines": 129,
+            "tokens": 1138,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/components/auth/AuthEmailPasswordInputs.tsx": {
             "lines": 70,
             "tokens": 596,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthEmailPasswordInputs.test.tsx": {
+            "lines": 144,
+            "tokens": 1218,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -432,9 +720,45 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
+          "src/components/auth/AuthButton.test.tsx": {
+            "lines": 99,
+            "tokens": 682,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/app/dashboard/page.tsx": {
             "lines": 92,
             "tokens": 820,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/hooks/useAuthRedirect.test.tsx": {
+            "lines": 118,
+            "tokens": 562,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/hooks/useAuthForm.test.tsx": {
+            "lines": 184,
+            "tokens": 1485,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -470,9 +794,9 @@
           }
         },
         "total": {
-          "lines": 727,
-          "tokens": 5841,
-          "sources": 14,
+          "lines": 1789,
+          "tokens": 14321,
+          "sources": 23,
           "clones": 0,
           "duplicatedLines": 0,
           "duplicatedTokens": 0,
@@ -484,18 +808,199 @@
       }
     },
     "total": {
-      "lines": 1633,
-      "tokens": 13772,
-      "sources": 36,
-      "clones": 0,
-      "duplicatedLines": 0,
-      "duplicatedTokens": 0,
-      "percentage": 0,
-      "percentageTokens": 0,
+      "lines": 4734,
+      "tokens": 38763,
+      "sources": 63,
+      "clones": 5,
+      "duplicatedLines": 66,
+      "duplicatedTokens": 529,
+      "percentage": 1.39,
+      "percentageTokens": 1.36,
       "newDuplicatedLines": 0,
       "newClones": 0
     }
   },
-  "duplicates": [],
+  "duplicates": [
+    {
+      "format": "typescript",
+      "lines": 13,
+      "fragment": "} from './route'\n\n// Mock NextRequest\nconst mockRequest = (body: any): any => ({\n  json: vi.fn().mockResolvedValue(body)\n})\n\n// Mock auth-api-utils\nvi.mock('@/lib/auth-api-utils', () => ({\n  parseRequestBody: vi.fn(),\n  handleSupabaseError: vi.fn(),\n  createSuccessResponse: vi.fn()\n}",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\app\\api\\auth\\login\\route.test.ts",
+        "start": 3,
+        "end": 15,
+        "startLoc": {
+          "line": 3,
+          "column": 2,
+          "position": 32
+        },
+        "endLoc": {
+          "line": 15,
+          "column": 2,
+          "position": 130
+        }
+      },
+      "secondFile": {
+        "name": "src\\app\\api\\auth\\reset-password\\route.test.ts",
+        "start": 3,
+        "end": 14,
+        "startLoc": {
+          "line": 3,
+          "column": 2,
+          "position": 35
+        },
+        "endLoc": {
+          "line": 14,
+          "column": 2,
+          "position": 132
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 16,
+      "fragment": "// jscpd:ignore-start - Test boilerplate patterns are inherently repetitive\nimport { describe, it, expect, vi, beforeEach } from 'vitest'\nimport { POST } from './route'\n\n// Mock NextRequest\nconst mockRequest = (body: any): any => ({\n  json: vi.fn().mockResolvedValue(body)\n})\n\n// Mock auth-api-utils\nvi.mock('@/lib/auth-api-utils', () => ({\n  parseRequestBody: vi.fn(),\n  handleSupabaseError: vi.fn(),\n  createSuccessResponse: vi.fn()\n}))\n// jscpd:ignore-end",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\app\\api\\auth\\forgot-password\\route.test.ts",
+        "start": 1,
+        "end": 16,
+        "startLoc": {
+          "line": 1,
+          "column": 1,
+          "position": 0
+        },
+        "endLoc": {
+          "line": 16,
+          "column": 20,
+          "position": 134
+        }
+      },
+      "secondFile": {
+        "name": "src\\app\\api\\auth\\login\\route.test.ts",
+        "start": 1,
+        "end": 17,
+        "startLoc": {
+          "line": 1,
+          "column": 1,
+          "position": 0
+        },
+        "endLoc": {
+          "line": 17,
+          "column": 31,
+          "position": 135
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 17,
+      "fragment": "})\n      expect(response).toBe(mockSuccessResponse)\n    })\n\n    it('should return error when request parsing fails', async () => {\n      const request = mockRequest({})\n      const mockParseError = { error: 'Invalid email format' }\n\n      authApiUtils.parseRequestBody.mockResolvedValue({\n        data: null,\n        error: mockParseError\n      })\n\n      const response = await POST(request)\n\n      expect(authApiUtils.parseRequestBody).toHaveBeenCalledWith(request, expect.any(Object))\n      expect(supabase",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\app\\api\\auth\\forgot-password\\route.test.ts",
+        "start": 72,
+        "end": 88,
+        "startLoc": {
+          "line": 72,
+          "column": 7,
+          "position": 512
+        },
+        "endLoc": {
+          "line": 88,
+          "column": 9,
+          "position": 642
+        }
+      },
+      "secondFile": {
+        "name": "src\\app\\api\\auth\\login\\route.test.ts",
+        "start": 93,
+        "end": 109,
+        "startLoc": {
+          "line": 93,
+          "column": 7,
+          "position": 732
+        },
+        "endLoc": {
+          "line": 109,
+          "column": 15,
+          "position": 862
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 12,
+      "fragment": ")\n      const mockParseError = { error: 'Invalid email format' }\n\n      authApiUtils.parseRequestBody.mockResolvedValue({\n        data: null,\n        error: mockParseError\n      })\n\n      const response = await POST(request)\n\n      expect(authApiUtils.parseRequestBody).toHaveBeenCalledWith(request, expect.any(Object))\n      expect(response",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\app\\api\\auth\\forgot-password\\route.test.ts",
+        "start": 125,
+        "end": 136,
+        "startLoc": {
+          "line": 125,
+          "column": 12,
+          "position": 921
+        },
+        "endLoc": {
+          "line": 136,
+          "column": 9,
+          "position": 1006
+        }
+      },
+      "secondFile": {
+        "name": "src\\app\\api\\auth\\login\\route.test.ts",
+        "start": 98,
+        "end": 109,
+        "startLoc": {
+          "line": 98,
+          "column": 2,
+          "position": 777
+        },
+        "endLoc": {
+          "line": 109,
+          "column": 15,
+          "position": 862
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 13,
+      "fragment": "}\n\n      authApiUtils.parseRequestBody.mockResolvedValue({\n        data: null,\n        error: mockParseError\n      })\n\n      const response = await POST(request)\n\n      expect(authApiUtils.parseRequestBody).toHaveBeenCalledWith(request, expect.any(Object))\n      expect(response).toBe(mockParseError)\n    })\n  }",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\app\\api\\auth\\forgot-password\\route.test.ts",
+        "start": 145,
+        "end": 157,
+        "startLoc": {
+          "line": 145,
+          "column": 2,
+          "position": 1085
+        },
+        "endLoc": {
+          "line": 157,
+          "column": 2,
+          "position": 1167
+        }
+      },
+      "secondFile": {
+        "name": "src\\app\\api\\auth\\forgot-password\\route.test.ts",
+        "start": 126,
+        "end": 139,
+        "startLoc": {
+          "line": 126,
+          "column": 2,
+          "position": 937
+        },
+        "endLoc": {
+          "line": 139,
+          "column": 3,
+          "position": 1020
+        }
+      }
+    }
+  ],
   "filename": "C:\\Users\\david\\Documents\\jeffaisquared\\node_modules\\@jscpd\\html-reporter\\dist\\templates\\main.pug"
 }

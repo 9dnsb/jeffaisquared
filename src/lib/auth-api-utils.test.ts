@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
+import { TEST_CONSTANTS } from '../test/test-utils'
 import {
   createErrorResponse,
   createSuccessResponse,
@@ -15,7 +16,7 @@ vi.mock('next/server', () => ({
   NextResponse: {
     json: vi.fn((data: Record<string, string | object>, options?: { status: number }) => ({
       json: data,
-      status: options?.status || 200
+      status: options?.status || TEST_CONSTANTS.HTTP_200
     }))
   }
 }))
@@ -61,8 +62,8 @@ const expectSessionLog = (hasSession: boolean, hasUser: boolean, error?: string)
 }
 
 const createEmailPasswordSchema = () => z.object({
-  email: z.string().email(),
-  password: z.string().min(6)
+  email: z.email(),
+  password: z.string().min(TEST_CONSTANTS.MIN_PASSWORD_LENGTH)
 })
 
 const expectParseRequestResult = (result: { data: object; error?: object }, expectedData: object, hasError = false) => {
@@ -120,21 +121,21 @@ describe('auth-api-utils', () => {
 
   describe('createErrorResponse', () => {
     it('should create error response with message and status', () => {
-      const result = createErrorResponse('Test error', 400)
+      const result = createErrorResponse(TEST_CONSTANTS.TEST_ERROR_MESSAGE, TEST_CONSTANTS.HTTP_400)
 
       expect(NextResponse.json).toHaveBeenCalledWith(
-        { error: 'Test error' },
-        { status: 400 }
+        { error: TEST_CONSTANTS.TEST_ERROR_MESSAGE },
+        { status: TEST_CONSTANTS.HTTP_400 }
       )
       expect(result).toEqual({
-        json: { error: 'Test error' },
-        status: 400
+        json: { error: TEST_CONSTANTS.TEST_ERROR_MESSAGE },
+        status: TEST_CONSTANTS.HTTP_400
       })
     })
 
     it('should create error response with different status codes', () => {
-      createErrorResponse('Server error', 500)
-      expectErrorResponse('Server error', 500)
+      createErrorResponse('Server error', TEST_CONSTANTS.HTTP_500)
+      expectErrorResponse('Server error', TEST_CONSTANTS.HTTP_500)
     })
   })
 
@@ -152,9 +153,9 @@ describe('auth-api-utils', () => {
 
     it('should create success response with custom status', () => {
       const data = { created: true }
-      createSuccessResponse(data, 201)
+      createSuccessResponse(data, TEST_CONSTANTS.HTTP_201)
 
-      expect(NextResponse.json).toHaveBeenCalledWith(data, { status: 201 })
+      expect(NextResponse.json).toHaveBeenCalledWith(data, { status: TEST_CONSTANTS.HTTP_201 })
     })
 
     it('should handle various data types', () => {
@@ -173,40 +174,40 @@ describe('auth-api-utils', () => {
 
   describe('handleAuthApiError', () => {
     it('should handle ZodError and return 400 status', () => {
-      const schema = z.object({ email: z.string().email() })
+      const schema = z.object({ email: z.email() })
       try {
         schema.parse({ email: 'invalid-email' })
       } catch (zodError) {
         const result = handleAuthApiError(zodError as z.ZodError)
 
-        expectErrorResponse('Invalid input', 400)
+        expectErrorResponse(TEST_CONSTANTS.INVALID_INPUT_MESSAGE, TEST_CONSTANTS.HTTP_400)
         expect(result).toEqual({
-          json: { error: 'Invalid input' },
-          status: 400
+          json: { error: TEST_CONSTANTS.INVALID_INPUT_MESSAGE },
+          status: TEST_CONSTANTS.HTTP_400
         })
       }
     })
 
     it('should handle regular Error and return 500 status', () => {
       const error = new Error('Something went wrong')
-      testAuthApiErrorResponse(error, 'Internal server error', 500)
+      testAuthApiErrorResponse(error, TEST_CONSTANTS.INTERNAL_SERVER_ERROR_MESSAGE, TEST_CONSTANTS.HTTP_500)
     })
 
     it('should handle generic object error and return 500 status', () => {
       const error = { message: 'Generic error object' }
-      testAuthApiErrorResponse(error, 'Internal server error', 500)
+      testAuthApiErrorResponse(error, TEST_CONSTANTS.INTERNAL_SERVER_ERROR_MESSAGE, TEST_CONSTANTS.HTTP_500)
     })
   })
 
   describe('handleSupabaseError', () => {
     it('should handle supabase error and return 400 status', () => {
-      const error = { message: 'Invalid credentials' }
+      const error = { message: TEST_CONSTANTS.INVALID_CREDENTIALS_MESSAGE }
       const result = handleSupabaseError(error)
 
-      expectErrorResponse('Invalid credentials', 400)
+      expectErrorResponse(TEST_CONSTANTS.INVALID_CREDENTIALS_MESSAGE, TEST_CONSTANTS.HTTP_400)
       expect(result).toEqual({
-        json: { error: 'Invalid credentials' },
-        status: 400
+        json: { error: TEST_CONSTANTS.INVALID_CREDENTIALS_MESSAGE },
+        status: TEST_CONSTANTS.HTTP_400
       })
     })
   })
@@ -230,7 +231,7 @@ describe('auth-api-utils', () => {
       const result = await parseRequestBody(mockRequest as Request, schema)
 
       expectParseRequestResult(result, {}, true)
-      expectErrorResponse('Invalid input', 400)
+      expectErrorResponse(TEST_CONSTANTS.INVALID_INPUT_MESSAGE, TEST_CONSTANTS.HTTP_400)
     })
 
     it('should handle JSON parsing error', async () => {
@@ -240,7 +241,7 @@ describe('auth-api-utils', () => {
       const result = await parseRequestBody(mockRequest as Request, schema)
 
       expectParseRequestResult(result, {}, true)
-      expectErrorResponse('Internal server error', 500)
+      expectErrorResponse(TEST_CONSTANTS.INTERNAL_SERVER_ERROR_MESSAGE, TEST_CONSTANTS.HTTP_500)
     })
   })
 
@@ -267,7 +268,7 @@ describe('auth-api-utils', () => {
 
       expectInvalidSessionResult(result)
       expect(consoleErrorSpy).toHaveBeenCalledWith('Supabase session error:', supabaseError)
-      expectErrorResponse('Token expired', 401)
+      expectErrorResponse('Token expired', TEST_CONSTANTS.HTTP_401)
     })
 
     it('should return error when no session exists', async () => {
@@ -279,7 +280,7 @@ describe('auth-api-utils', () => {
       const result = await validateSession()
 
       expectInvalidSessionResult(result)
-      expectErrorResponse('No active session', 401)
+      expectErrorResponse('No active session', TEST_CONSTANTS.HTTP_401)
       expectSessionLog(false, false, undefined)
     })
 
@@ -296,7 +297,7 @@ describe('auth-api-utils', () => {
       const result = await validateSession(true)
 
       expectInvalidSessionResult(result)
-      expectErrorResponse('No active session', 401)
+      expectErrorResponse('No active session', TEST_CONSTANTS.HTTP_401)
     })
 
     it('should return session when session exists with null user and requireUser is false', async () => {

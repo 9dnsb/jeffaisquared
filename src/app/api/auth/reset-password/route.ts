@@ -3,8 +3,11 @@ import { z } from 'zod'
 import supabase from '../../../../../lib/supabase'
 import { parseRequestBody, handleSupabaseError, createSuccessResponse, validateSession } from '@/lib/auth-api-utils'
 
+const MIN_PASSWORD_LENGTH = 6
+const PASSWORD_UPDATED_MESSAGE = 'Password updated successfully!'
+
 const ResetPasswordSchema = z.object({
-  password: z.string().min(6),
+  password: z.string().min(MIN_PASSWORD_LENGTH),
 })
 
 export async function POST(request: NextRequest) {
@@ -23,7 +26,7 @@ export async function POST(request: NextRequest) {
   }
 
   return createSuccessResponse({
-    message: 'Password updated successfully!',
+    message: PASSWORD_UPDATED_MESSAGE,
   })
 }
 
