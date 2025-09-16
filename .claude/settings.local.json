@@ -7,7 +7,12 @@
       "WebFetch(domain:supabase.com)",
       "Bash(npm run lint)",
       "WebFetch(domain:github.com)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx jscpd:*)",
+      "Bash(npm run:*)",
+      "Read(//c/Users/david/Documents/ShareX/Screenshots/2025-09-15/**)"
     ],
     "deny": [],
     "ask": []

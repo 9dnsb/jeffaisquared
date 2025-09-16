@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
-import supabase from '@/root-lib/supabase'
+import supabase from '../../../../../lib/supabase'
 import { parseRequestBody, handleSupabaseError, createSuccessResponse, validateSession } from '@/lib/auth-api-utils'
 
 const ResetPasswordSchema = z.object({

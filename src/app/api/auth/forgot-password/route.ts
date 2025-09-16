@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
-import supabase from '@/root-lib/supabase'
+import supabase from '../../../../../lib/supabase'
 import { parseRequestBody, handleSupabaseError, createSuccessResponse } from '@/lib/auth-api-utils'
 
 const ForgotPasswordSchema = z.object({

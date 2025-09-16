@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Jeff AI Square',
-  description: 'Sqaure AI Tester',
+  title: 'Sales Analytics Platform',
+  description: 'AI-powered sales data analytics with natural language querying',
 }
 
 export default function RootLayout({
