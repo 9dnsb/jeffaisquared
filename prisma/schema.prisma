@@ -21,79 +21,73 @@ model Profile {
 }
 
 model Location {
-  id          String @id @default(cuid())
-  locationId  String @unique
-  name        String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  sales       Sale[]
+  id         String   @id @default(cuid())
+  locationId String   @unique
+  name       String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  sales      Sale[]
 
   @@map("locations")
 }
 
 model Sale {
-  id          String   @id @default(cuid())
-  date        DateTime
-  locationId  String
-  totalSales  Decimal  @db.Decimal(10, 2)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  location    Location @relation(fields: [locationId], references: [locationId])
-  saleItems   SaleItem[]
+  id         String     @id @default(cuid())
+  date       DateTime
+  locationId String
+  totalSales Decimal    @db.Decimal(10, 2)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  saleItems  SaleItem[]
+  location   Location   @relation(fields: [locationId], references: [locationId])
 
   @@map("sales")
 }
 
 model Item {
-  id          String @id @default(cuid())
-  name        String @unique
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  saleItems   SaleItem[]
+  id        String     @id @default(cuid())
+  name      String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  saleItems SaleItem[]
 
   @@map("items")
 }
 
 model SaleItem {
-  id          String  @id @default(cuid())
-  saleId      String
-  itemId      String
-  price       Decimal @db.Decimal(10, 2)
-  quantity    Int     @default(1)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  sale        Sale @relation(fields: [saleId], references: [id], onDelete: Cascade)
-  item        Item @relation(fields: [itemId], references: [id])
+  id        String   @id @default(cuid())
+  saleId    String
+  itemId    String
+  price     Decimal  @db.Decimal(10, 2)
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  item      Item     @relation(fields: [itemId], references: [id])
+  sale      Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
 
   @@map("sale_items")
 }
 
 model Conversation {
-  id          String   @id @default(cuid())
-  userId      String   @map("user_id")
-  title       String?
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-
-  messages    ChatMessage[]
+  id        String        @id @default(cuid())
+  userId    String        @map("user_id")
+  title     String?
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+  messages  ChatMessage[]
 
   @@map("conversations")
 }
 
 model ChatMessage {
-  id              String   @id @default(cuid())
-  conversationId  String   @map("conversation_id")
-  role            String   // 'user' or 'assistant'
-  content         String
-  metadata        Json?    // Store intent classification, query plans, processing times, AI model used, token usage, etc.
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
-
-  conversation    Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  id             String       @id @default(cuid())
+  conversationId String       @map("conversation_id")
+  role           String
+  content        String
+  metadata       Json?
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 
   @@map("chat_messages")
 }

@@ -1,6 +1,6 @@
 {
   "statistics": {
-    "detectionDate": "2025-09-18T02:17:31.102Z",
+    "detectionDate": "2025-09-18T11:50:38.217Z",
     "formats": {
       "typescript": {
         "sources": {
@@ -17,8 +17,8 @@
             "newClones": 0
           },
           "src/app/api/auth/session/route.ts": {
-            "lines": 14,
-            "tokens": 121,
+            "lines": 33,
+            "tokens": 342,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -114,7 +114,7 @@
           },
           "src/app/api/auth/login/route.ts": {
             "lines": 39,
-            "tokens": 380,
+            "tokens": 400,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -173,8 +173,8 @@
             "newClones": 0
           },
           "src/app/api/chat/route.ts": {
-            "lines": 521,
-            "tokens": 3963,
+            "lines": 524,
+            "tokens": 3993,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -185,8 +185,8 @@
             "newClones": 0
           },
           "src/lib/validation/schemas.ts": {
-            "lines": 270,
-            "tokens": 3480,
+            "lines": 267,
+            "tokens": 3112,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -245,14 +245,14 @@
             "newClones": 0
           },
           "src/lib/prisma/safeQueryBuilder.ts": {
-            "lines": 383,
-            "tokens": 2694,
+            "lines": 420,
+            "tokens": 3333,
             "sources": 1,
             "clones": 5,
-            "duplicatedLines": 71,
-            "duplicatedTokens": 620,
-            "percentage": 18.54,
-            "percentageTokens": 23.01,
+            "duplicatedLines": 69,
+            "duplicatedTokens": 664,
+            "percentage": 16.43,
+            "percentageTokens": 19.92,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -293,8 +293,8 @@
             "newClones": 0
           },
           "src/lib/ai/intentClassifier.ts": {
-            "lines": 564,
-            "tokens": 3813,
+            "lines": 574,
+            "tokens": 3745,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -305,38 +305,38 @@
             "newClones": 0
           },
           "src/lib/ai/generalChatHandler.ts": {
-            "lines": 605,
-            "tokens": 4499,
+            "lines": 663,
+            "tokens": 4864,
             "sources": 1,
             "clones": 2,
             "duplicatedLines": 23,
             "duplicatedTokens": 201,
-            "percentage": 3.8,
-            "percentageTokens": 4.47,
+            "percentage": 3.47,
+            "percentageTokens": 4.13,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
           "src/lib/ai/dataQueryHandler.ts": {
-            "lines": 666,
-            "tokens": 4838,
+            "lines": 801,
+            "tokens": 6056,
             "sources": 1,
             "clones": 1,
             "duplicatedLines": 9,
             "duplicatedTokens": 154,
-            "percentage": 1.35,
-            "percentageTokens": 3.18,
+            "percentage": 1.12,
+            "percentageTokens": 2.54,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
           "src/lib/ai/clarificationHandler.ts": {
             "lines": 584,
-            "tokens": 4160,
+            "tokens": 4155,
             "sources": 1,
             "clones": 2,
             "duplicatedLines": 23,
             "duplicatedTokens": 201,
             "percentage": 3.94,
-            "percentageTokens": 4.83,
+            "percentageTokens": 4.84,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -365,8 +365,8 @@
             "newClones": 0
           },
           "src/types/chat.ts": {
-            "lines": 345,
-            "tokens": 2233,
+            "lines": 346,
+            "tokens": 2585,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -449,8 +449,8 @@
             "newClones": 0
           },
           "src/lib/auth-api-utils.ts": {
-            "lines": 92,
-            "tokens": 864,
+            "lines": 102,
+            "tokens": 942,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -473,8 +473,8 @@
             "newClones": 0
           },
           "src/hooks/useAuthRedirect.ts": {
-            "lines": 32,
-            "tokens": 251,
+            "lines": 34,
+            "tokens": 265,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -485,8 +485,8 @@
             "newClones": 0
           },
           "src/hooks/useAuthForm.ts": {
-            "lines": 68,
-            "tokens": 641,
+            "lines": 69,
+            "tokens": 649,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -497,8 +497,8 @@
             "newClones": 0
           },
           "src/middleware.ts": {
-            "lines": 33,
-            "tokens": 306,
+            "lines": 71,
+            "tokens": 439,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -522,14 +522,14 @@
           }
         },
         "total": {
-          "lines": 8834,
-          "tokens": 68214,
+          "lines": 9145,
+          "tokens": 70851,
           "sources": 43,
           "clones": 10,
-          "duplicatedLines": 128,
-          "duplicatedTokens": 1126,
-          "percentage": 1.45,
-          "percentageTokens": 1.65,
+          "duplicatedLines": 127,
+          "duplicatedTokens": 1148,
+          "percentage": 1.39,
+          "percentageTokens": 1.62,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -728,6 +728,18 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
+          "src/components/MarkdownMessage.tsx": {
+            "lines": 19,
+            "tokens": 285,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/components/ConversationList.tsx": {
             "lines": 130,
             "tokens": 974,
@@ -741,8 +753,8 @@
             "newClones": 0
           },
           "src/components/ChatInterface.tsx": {
-            "lines": 100,
-            "tokens": 794,
+            "lines": 104,
+            "tokens": 833,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -753,8 +765,8 @@
             "newClones": 0
           },
           "src/components/ChatGPTInterface.tsx": {
-            "lines": 201,
-            "tokens": 1742,
+            "lines": 205,
+            "tokens": 1787,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -778,9 +790,9 @@
           }
         },
         "total": {
-          "lines": 916,
-          "tokens": 7419,
-          "sources": 20,
+          "lines": 943,
+          "tokens": 7788,
+          "sources": 21,
           "clones": 0,
           "duplicatedLines": 0,
           "duplicatedTokens": 0,
@@ -1009,8 +1021,8 @@
             "newClones": 0
           },
           "src/app/dashboard/page.tsx": {
-            "lines": 84,
-            "tokens": 745,
+            "lines": 87,
+            "tokens": 766,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -1056,6 +1068,18 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
+          "src/components/MarkdownMessage.tsx": {
+            "lines": 59,
+            "tokens": 593,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/components/ConversationList.tsx": {
             "lines": 378,
             "tokens": 2946,
@@ -1069,8 +1093,8 @@
             "newClones": 0
           },
           "src/components/ChatInterface.tsx": {
-            "lines": 394,
-            "tokens": 3147,
+            "lines": 399,
+            "tokens": 3194,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -1081,8 +1105,8 @@
             "newClones": 0
           },
           "src/components/ChatGPTInterface.tsx": {
-            "lines": 292,
-            "tokens": 2507,
+            "lines": 297,
+            "tokens": 2560,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -1118,9 +1142,9 @@
           }
         },
         "total": {
-          "lines": 2859,
-          "tokens": 22946,
-          "sources": 27,
+          "lines": 2931,
+          "tokens": 23660,
+          "sources": 28,
           "clones": 0,
           "duplicatedLines": 0,
           "duplicatedTokens": 0,
@@ -1132,14 +1156,14 @@
       }
     },
     "total": {
-      "lines": 12609,
-      "tokens": 98579,
-      "sources": 90,
+      "lines": 13019,
+      "tokens": 102299,
+      "sources": 92,
       "clones": 10,
-      "duplicatedLines": 128,
-      "duplicatedTokens": 1126,
-      "percentage": 1.02,
-      "percentageTokens": 1.14,
+      "duplicatedLines": 127,
+      "duplicatedTokens": 1148,
+      "percentage": 0.98,
+      "percentageTokens": 1.12,
       "newDuplicatedLines": 0,
       "newClones": 0
     }
@@ -1328,72 +1352,72 @@
     {
       "format": "typescript",
       "lines": 14,
-      "fragment": "if (filters?.dateRange) {\n      where.date = {\n        gte: filters.dateRange.start,\n        lte: filters.dateRange.end\n      }\n    }\n\n    if (filters?.locationIds && filters.locationIds.length > 0) {\n      where.locationId = {\n        in: filters.locationIds\n      }\n    }\n\n    return",
+      "fragment": "if (filters?.dateRange) {\r\n      where.date = {\r\n        gte: filters.dateRange.start,\r\n        lte: filters.dateRange.end\r\n      }\r\n    }\r\n\r\n    if (filters?.locationIds && filters.locationIds.length > 0) {\r\n      where.locationId = {\r\n        in: filters.locationIds\r\n      }\r\n    }\r\n\r\n    // Add item filtering - if specific items are requested, filter by those items",
       "tokens": 0,
       "firstFile": {
         "name": "src\\lib\\prisma\\safeQueryBuilder.ts",
-        "start": 223,
-        "end": 236,
+        "start": 239,
+        "end": 252,
         "startLoc": {
-          "line": 223,
+          "line": 239,
           "column": 5,
-          "position": 1601
+          "position": 1933
         },
         "endLoc": {
-          "line": 236,
-          "column": 7,
-          "position": 1698
+          "line": 252,
+          "column": 79,
+          "position": 2043
         }
       },
       "secondFile": {
         "name": "src\\lib\\prisma\\safeQueryBuilder.ts",
-        "start": 166,
-        "end": 179,
+        "start": 169,
+        "end": 182,
         "startLoc": {
-          "line": 166,
+          "line": 169,
           "column": 5,
-          "position": 1146
+          "position": 1332
         },
         "endLoc": {
-          "line": 179,
+          "line": 182,
           "column": 3,
-          "position": 1243
+          "position": 1442
         }
       }
     },
     {
       "format": "typescript",
-      "lines": 19,
-      "fragment": ", undefined, this.serializeFilters(filters))\n\n    const where: Prisma.SaleWhereInput = {}\n\n    if (filters?.dateRange) {\n      where.date = {\n        gte: filters.dateRange.start,\n        lte: filters.dateRange.end\n      }\n    }\n\n    if (filters?.locationIds && filters.locationIds.length > 0) {\n      where.locationId = {\n        in: filters.locationIds\n      }\n    }\n\n    return this.executeWithLogging(\n      'GET_SALES_COUNT'",
+      "lines": 18,
+      "fragment": ", undefined, this.serializeFilters(filters))\r\n\r\n    const where: Prisma.SaleWhereInput = {}\r\n\r\n    if (filters?.dateRange) {\r\n      where.date = {\r\n        gte: filters.dateRange.start,\r\n        lte: filters.dateRange.end\r\n      }\r\n    }\r\n\r\n    if (filters?.locationIds && filters.locationIds.length > 0) {\r\n      where.locationId = {\r\n        in: filters.locationIds\r\n      }\r\n    }\r\n\r\n    return",
       "tokens": 0,
       "firstFile": {
         "name": "src\\lib\\prisma\\safeQueryBuilder.ts",
-        "start": 326,
-        "end": 344,
+        "start": 363,
+        "end": 380,
         "startLoc": {
-          "line": 326,
+          "line": 363,
           "column": 29,
-          "position": 2313
+          "position": 2898
         },
         "endLoc": {
-          "line": 344,
-          "column": 18,
-          "position": 2449
+          "line": 380,
+          "column": 7,
+          "position": 3043
         }
       },
       "secondFile": {
         "name": "src\\lib\\prisma\\safeQueryBuilder.ts",
-        "start": 219,
-        "end": 237,
+        "start": 235,
+        "end": 182,
         "startLoc": {
-          "line": 219,
+          "line": 235,
           "column": 31,
-          "position": 1570
+          "position": 1898
         },
         "endLoc": {
-          "line": 237,
-          "column": 20,
-          "position": 1706
+          "line": 182,
+          "column": 3,
+          "position": 1442
         }
       }
     },
@@ -1404,32 +1428,32 @@
       "tokens": 0,
       "firstFile": {
         "name": "src\\lib\\ai\\dataQueryHandler.ts",
-        "start": 64,
-        "end": 73,
+        "start": 65,
+        "end": 74,
         "startLoc": {
-          "line": 64,
+          "line": 65,
           "column": 8,
-          "position": 469
+          "position": 477
         },
         "endLoc": {
-          "line": 73,
+          "line": 74,
           "column": 3,
-          "position": 623
+          "position": 631
         }
       },
       "secondFile": {
         "name": "src\\lib\\prisma\\safeQueryBuilder.ts",
-        "start": 64,
-        "end": 73,
+        "start": 67,
+        "end": 76,
         "startLoc": {
-          "line": 64,
+          "line": 67,
           "column": 2,
-          "position": 423
+          "position": 511
         },
         "endLoc": {
-          "line": 73,
+          "line": 76,
           "column": 2,
-          "position": 577
+          "position": 674
         }
       }
     },
@@ -1445,27 +1469,27 @@
         "startLoc": {
           "line": 141,
           "column": 17,
-          "position": 891
+          "position": 886
         },
         "endLoc": {
           "line": 152,
           "column": 34,
-          "position": 987
+          "position": 982
         }
       },
       "secondFile": {
         "name": "src\\lib\\ai\\generalChatHandler.ts",
-        "start": 152,
-        "end": 163,
+        "start": 153,
+        "end": 164,
         "startLoc": {
-          "line": 152,
+          "line": 153,
           "column": 2,
-          "position": 1088
+          "position": 1097
         },
         "endLoc": {
-          "line": 163,
+          "line": 164,
           "column": 35,
-          "position": 1184
+          "position": 1193
         }
       }
     },
@@ -1481,27 +1505,27 @@
         "startLoc": {
           "line": 408,
           "column": 2,
-          "position": 3013
+          "position": 3008
         },
         "endLoc": {
           "line": 420,
           "column": 41,
-          "position": 3118
+          "position": 3113
         }
       },
       "secondFile": {
         "name": "src\\lib\\ai\\generalChatHandler.ts",
-        "start": 464,
-        "end": 476,
+        "start": 465,
+        "end": 477,
         "startLoc": {
-          "line": 464,
+          "line": 465,
           "column": 12,
-          "position": 3681
+          "position": 3690
         },
         "endLoc": {
-          "line": 476,
+          "line": 477,
           "column": 36,
-          "position": 3786
+          "position": 3795
         }
       }
     }

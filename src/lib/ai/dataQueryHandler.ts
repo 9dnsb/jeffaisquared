@@ -2,6 +2,7 @@ import { logger } from '../utils/logger'
 import { prismaSafeQueryBuilder } from '../prisma/safeQueryBuilder'
 import { OpenAIClient } from './intentClassifier'
 import { validateDataQueryResult } from '../validation/schemas'
+import prisma from '../../../lib/prisma'
 import {
   CONTEXT_PREVIEW_LENGTH,
   MESSAGE_SLICE_LENGTH,
@@ -296,16 +297,26 @@ class DataQueryHandler {
       // Extract item names from user message for filtering
       const extractedItemNames = userMessage ? this.extractItemNamesFromQuery(userMessage) : []
 
+      // Extract location IDs from user message for filtering
+      const extractedLocationIds = userMessage ? await this.extractLocationIdsFromQuery(userMessage) : []
+
       if (extractedItemNames.length > 0) {
         logger.data('Extracted item names from query', userMessage?.slice(0, MESSAGE_SLICE_LENGTH), {
           extractedItems: extractedItemNames.join(', ')
         })
       }
 
-      // Merge existing filters with extracted item names
+      if (extractedLocationIds.length > 0) {
+        logger.data('Extracted location IDs from query', userMessage?.slice(0, MESSAGE_SLICE_LENGTH), {
+          extractedLocations: extractedLocationIds.join(', ')
+        })
+      }
+
+      // Merge existing filters with extracted item names and location IDs
       const enhancedFilters = {
         ...filters,
-        ...(extractedItemNames.length > 0 && { itemNames: extractedItemNames })
+        ...(extractedItemNames.length > 0 && { itemNames: extractedItemNames }),
+        ...(extractedLocationIds.length > 0 && { locationIds: extractedLocationIds })
       }
 
       // Determine query type and execute appropriate method
@@ -530,6 +541,72 @@ Focus on what specific data the user is asking for. Consider time periods, locat
     }
 
     return itemNames
+  }
+
+  /**
+   * Extract location IDs from user query for filtering
+   */
+  private async extractLocationIdsFromQuery(userMessage: string): Promise<string[]> {
+    const message = userMessage.toLowerCase()
+    const locationIds: string[] = []
+
+    try {
+      // Get all locations from database
+      const locations = await prisma.location.findMany()
+
+      // Location name patterns and their variations
+      const locationPatterns = [
+        { keywords: ['hq', 'main', 'head office', 'headquarters'], locationId: 'LZEVY2P88KZA8' },
+        { keywords: ['yonge', 'yonge street'], locationId: 'LAH170A0KK47P' },
+        { keywords: ['bloor', 'bloor street'], locationId: 'LPSSMJYZX8X7P' },
+        { keywords: ['well', 'the well', 'spadina'], locationId: 'LT8YK4FBNGH17' },
+        { keywords: ['broadway'], locationId: 'LDPNNFWBTFB26' },
+        { keywords: ['kingston', 'brock street'], locationId: 'LYJ3TVBQ23F5V' }
+      ]
+
+      // Check for direct matches in patterns
+      for (const pattern of locationPatterns) {
+        for (const keyword of pattern.keywords) {
+          if (message.includes(keyword)) {
+            locationIds.push(pattern.locationId)
+            break // Only add each location once
+          }
+        }
+      }
+
+      // Also check if user mentions full location names from database
+      for (const location of locations) {
+        if (location.name) {
+          const locationNameLower = location.name.toLowerCase()
+          // Check for partial matches of location name in user message
+          if (message.includes(locationNameLower) ||
+              locationNameLower.includes(message.trim()) ||
+              this.checkLocationNameVariations(message, locationNameLower)) {
+            if (!locationIds.includes(location.locationId)) {
+              locationIds.push(location.locationId)
+            }
+          }
+        }
+      }
+
+    } catch (err) {
+      logger.error('Failed to extract location IDs from query', err instanceof Error ? err : new Error(String(err)))
+    }
+
+    return locationIds
+  }
+
+  /**
+   * Check for location name variations and partial matches
+   */
+  private checkLocationNameVariations(userMessage: string, locationName: string): boolean {
+    const message = userMessage.toLowerCase()
+    const name = locationName.toLowerCase()
+
+    // Check for key parts of the location name
+    const nameParts = name.split(' ').filter(part => part.length > 2) // Ignore short words like "de", "&"
+
+    return nameParts.some(part => message.includes(part))
   }
 
   /**

@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useRef, useCallback } from 'react'
+import MarkdownMessage from './MarkdownMessage'
 
 interface Message {
   id: string
@@ -209,9 +210,13 @@ export default function ChatGPTInterface({ userId }: ChatGPTInterfaceProps) {
                     {/* Message Content */}
                     <div className="flex-1 min-w-0">
                       <div className="prose prose-gray max-w-none">
-                        <div className="whitespace-pre-wrap text-gray-900 leading-relaxed">
-                          {message.content}
-                        </div>
+                        {message.role === 'assistant' ? (
+                          <MarkdownMessage content={message.content} className="text-gray-900 leading-relaxed" />
+                        ) : (
+                          <div className="whitespace-pre-wrap text-gray-900 leading-relaxed">
+                            {message.content}
+                          </div>
+                        )}
                       </div>
 
                       {/* Timestamp */}

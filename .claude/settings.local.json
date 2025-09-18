@@ -34,7 +34,8 @@
       "Bash(npx dotenv -e .env.development -- npx prisma db pull:*)",
       "Bash(npx dotenv -e .env.development -- npx prisma db seed:*)",
       "Bash(npx dotenv -e .env.development -- npx prisma generate:*)",
-      "Bash(npx dotenv -e .env.development:*)"
+      "Bash(npx dotenv -e .env.development:*)",
+      "Read(//c/Users/david/Documents/ShareX/Screenshots/2025-09-18/**)"
     ],
     "deny": [],
     "ask": []

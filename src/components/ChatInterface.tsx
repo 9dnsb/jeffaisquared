@@ -7,6 +7,7 @@ import type {
   ConversationWithMessages,
   ChatResponse
 } from '../types/chat'
+import MarkdownMessage from './MarkdownMessage'
 
 // Component constants
 const AUTO_SCROLL_DELAY = 120
@@ -331,7 +332,11 @@ export default function ChatInterface({ userId, initialConversationId }: ChatInt
                   : 'bg-gray-100 text-gray-900 border'
               }`}
             >
-              <div className="whitespace-pre-wrap">{message.content}</div>
+              {message.role === 'assistant' ? (
+                <MarkdownMessage content={message.content} />
+              ) : (
+                <div className="whitespace-pre-wrap">{message.content}</div>
+              )}
               <div className="flex items-center justify-between mt-2">
                 <span className={`text-xs ${
                   message.role === 'user' ? 'text-blue-100' : 'text-gray-500'
