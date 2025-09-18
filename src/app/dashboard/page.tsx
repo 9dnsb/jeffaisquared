@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { User } from '@supabase/supabase-js'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
+import ChatInterface from '@/components/ChatInterface'
 
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null)
@@ -13,7 +14,9 @@ export default function DashboardPage() {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await fetch('/api/auth/session')
+        const response = await fetch('/api/auth/session', {
+          credentials: 'include'
+        })
         const data = await response.json() as { authenticated: boolean; user?: User; error?: string }
 
         if (!response.ok || !data.authenticated) {
@@ -38,6 +41,7 @@ export default function DashboardPage() {
     try {
       const response = await fetch('/api/auth/logout', {
         method: 'POST',
+        credentials: 'include'
       })
 
       if (response.ok) {
@@ -54,7 +58,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <nav className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
@@ -74,18 +78,9 @@ export default function DashboardPage() {
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <div className="border-4 border-dashed border-gray-200 rounded-lg h-96 flex items-center justify-center">
-            <div className="text-center">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                Dashboard Coming Soon
-              </h2>
-              <p className="text-gray-600">
-                Sales analytics and AI chat features will be implemented here.
-              </p>
-            </div>
-          </div>
+      <main className="flex-1 overflow-hidden">
+        <div className="h-full">
+          <ChatInterface userId={user?.id || ''} />
         </div>
       </main>
     </div>

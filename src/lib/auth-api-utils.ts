@@ -64,30 +64,40 @@ export async function parseRequestBody<T>(
 
 /**
  * Validate session and return appropriate response
+ * Note: This is deprecated - use the new pattern with NextRequest/NextResponse
  */
 export async function validateSession(requireUser = false): Promise<{
   session: { user: { id: string } } | null;
   error?: NextResponse;
 }> {
-  const supabase = await createSupabaseServerClient()
-  const { data: { user }, error } = await supabase.auth.getUser()
+  // This is a fallback for routes that haven't been updated yet
+  console.warn('validateSession is deprecated, update to use createSupabaseServerClient with request/response')
 
-  // Debug logging to understand the authentication state
-  console.log('Session validation:', {
-    hasUser: !!user,
-    error: error?.message,
-    supabaseUrl: process.env['NEXT_PUBLIC_SUPABASE_URL'],
-  })
+  try {
+    // Try to get user without proper cookie handling (will likely fail)
+    const supabase = await createSupabaseServerClient()
+    const { data: { user }, error } = await supabase.auth.getUser()
 
-  if (error) {
-    console.error('Supabase auth error:', error)
-    return { session: null, error: createErrorResponse(error.message, HTTP_UNAUTHORIZED) }
+    // Debug logging to understand the authentication state
+    console.log('Session validation (deprecated):', {
+      hasUser: !!user,
+      error: error?.message,
+      supabaseUrl: process.env['NEXT_PUBLIC_SUPABASE_URL'],
+    })
+
+    if (error) {
+      console.error('Supabase auth error:', error)
+      return { session: null, error: createErrorResponse(error.message, HTTP_UNAUTHORIZED) }
+    }
+
+    if (!user || (requireUser && !user)) {
+      return { session: null, error: createErrorResponse(NO_ACTIVE_SESSION_MESSAGE, HTTP_UNAUTHORIZED) }
+    }
+
+    // Return user in session format for compatibility
+    return { session: { user: { id: user.id } } }
+  } catch (err) {
+    console.error('Session validation error:', err)
+    return { session: null, error: createErrorResponse('Auth session missing!', HTTP_UNAUTHORIZED) }
   }
-
-  if (!user || (requireUser && !user)) {
-    return { session: null, error: createErrorResponse(NO_ACTIVE_SESSION_MESSAGE, HTTP_UNAUTHORIZED) }
-  }
-
-  // Return user in session format for compatibility
-  return { session: { user: { id: user.id } } }
 }

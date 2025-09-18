@@ -1,10 +1,10 @@
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createSupabaseServerClient } from '../../../../../lib/supabase-server'
-import { parseRequestBody, handleSupabaseError, createSuccessResponse } from '@/lib/auth-api-utils'
+import { parseRequestBody } from '@/lib/auth-api-utils'
 
 const LoginSchema = z.object({
-  email: z.email(),
+  email: z.string().email(),
   password: z.string().min(1),
 })
 
@@ -30,10 +30,10 @@ export async function POST(request: NextRequest) {
   })
 
   if (error) {
-    return handleSupabaseError(error)
+    return NextResponse.json({ error: error.message }, { status: 400 })
   }
 
-  return createSuccessResponse({
+  return NextResponse.json({
     user: data.user,
     session: data.session,
   })

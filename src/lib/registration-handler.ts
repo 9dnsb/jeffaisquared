@@ -13,7 +13,7 @@ const REGISTRATION_FAILED_MESSAGE = 'Registration failed'
 const EMAIL_CONFIRMATION_MESSAGE = 'Check your email for the confirmation link!'
 
 const RegisterSchema = z.object({
-  email: z.email(),
+  email: z.string().email(),
   password: z.string().min(MIN_PASSWORD_LENGTH),
   firstName: z.string().min(MIN_NAME_LENGTH),
   lastName: z.string().min(MIN_NAME_LENGTH),

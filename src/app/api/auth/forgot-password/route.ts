@@ -4,8 +4,8 @@ import supabase from '../../../../../lib/supabase'
 import { parseRequestBody, handleSupabaseError, createSuccessResponse } from '@/lib/auth-api-utils'
 
 const ForgotPasswordSchema = z.object({
-  email: z.email(),
-  redirectTo: z.url(),
+  email: z.string().email(),
+  redirectTo: z.string().url(),
 })
 
 export async function POST(request: NextRequest) {

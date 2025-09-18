@@ -30,6 +30,7 @@ export function useAuthForm({ endpoint, redirectTo, onSuccess }: UseAuthFormOpti
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify(formData),
       })
 

@@ -28,8 +28,9 @@ export default defineConfig({
         '**/src/app/**/page.tsx',
         '**/src/app/**/layout.tsx',
         // Type definition files
-        '**/*.d.ts'
-      ]
+        '**/*.d.ts',
+        '**/tests/**',
+      ],
     },
     exclude: [
       '**/node_modules/**',
@@ -38,7 +39,7 @@ export default defineConfig({
       '**/.{idea,git,cache,output,temp}/**',
       '**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build}.config.*',
       '**/src/generated/prisma/**',
-      '**/tests/**'
+      '**/tests/**',
     ],
   },
   resolve: {

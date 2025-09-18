@@ -61,7 +61,7 @@ const expectSessionLog = (hasUser: boolean, error?: string) => {
 }
 
 const createEmailPasswordSchema = () => z.object({
-  email: z.email(),
+  email: z.string().email(),
   password: z.string().min(TEST_CONSTANTS.MIN_PASSWORD_LENGTH)
 })
 
@@ -174,7 +174,7 @@ describe('auth-api-utils', () => {
 
   describe('handleAuthApiError', () => {
     it('should handle ZodError and return 400 status', () => {
-      const schema = z.object({ email: z.email() })
+      const schema = z.object({ email: z.string().email() })
       try {
         schema.parse({ email: 'invalid-email' })
       } catch (zodError) {

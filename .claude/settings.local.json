@@ -22,7 +22,19 @@
       "Bash(set \"PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION=yes\")",
       "Bash(cmd /c \"set PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION=yes && npx playwright test\")",
       "Bash(npx cross-env:*)",
-      "WebFetch(domain:docs.claude.com)"
+      "WebFetch(domain:docs.claude.com)",
+      "Bash(npx prisma migrate:*)",
+      "Bash(npx dotenv -e .env.development -- npx prisma migrate:*)",
+      "Bash(sed:*)",
+      "WebFetch(domain:www.prisma.io)",
+      "WebFetch(domain:pris.ly)",
+      "Bash(node:*)",
+      "Bash(taskkill:*)",
+      "Bash(dotenv -e .env.development -- npx prisma migrate:*)",
+      "Bash(npx dotenv -e .env.development -- npx prisma db pull:*)",
+      "Bash(npx dotenv -e .env.development -- npx prisma db seed:*)",
+      "Bash(npx dotenv -e .env.development -- npx prisma generate:*)",
+      "Bash(npx dotenv -e .env.development:*)"
     ],
     "deny": [],
     "ask": []

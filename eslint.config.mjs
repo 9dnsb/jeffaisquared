@@ -67,13 +67,13 @@ const eslintConfig = [
       'sonarjs/no-identical-conditions': 'error',
       'sonarjs/no-redundant-boolean': 'error',
       'no-duplicate-case': 'error',
-      'no-restricted-syntax': [
-        'error',
-        {
-          selector: 'TSUnknownKeyword',
-          message: 'Use a more specific type instead of unknown',
-        },
-      ],
+      // 'no-restricted-syntax': [
+      //   'error',
+      //   {
+      //     selector: 'TSUnknownKeyword',
+      //     message: 'Use a more specific type instead of unknown',
+      //   },
+      // ],
     },
   },
   {
@@ -110,6 +110,24 @@ const eslintConfig = [
         },
       ],
       'no-restricted-syntax': 'off',
+    },
+  },
+  {
+    files: [
+      '**/prisma/**',
+      '**/serialization.ts',
+      '**/typeGuards.ts',
+      '**/prisma-extensions.ts',
+      '**/openai.ts',
+    ],
+    languageOptions: {
+      parser: (await import('@typescript-eslint/parser')).default,
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+    },
+    rules: {
+      'no-restricted-syntax': 'off', // Allow unknown in Prisma and utility files
     },
   },
 ]

@@ -12,7 +12,9 @@ export function useAuthRedirect() {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const response = await fetch('/api/auth/session')
+        const response = await fetch('/api/auth/session', {
+          credentials: 'include'
+        })
         const data = await response.json() as { authenticated: boolean }
 
         if (response.ok && data.authenticated) {
