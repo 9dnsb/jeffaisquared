@@ -13,7 +13,6 @@ import {
   OPENAI_GENERAL_ADVICE_TEMPERATURE,
   RECORD_SLICE_LIMIT,
   SAMPLE_RECORDS_LIMIT,
-  QUERY_RESULT_SLICE_COUNT,
   DECIMAL_PLACES,
   UNKNOWN_ERROR_MESSAGE
 } from '../constants/ai'
@@ -503,7 +502,6 @@ Focus on what specific data the user is asking for. Consider time periods, locat
 
     if (request.conversationHistory.length > 0) {
       const context = request.conversationHistory
-        .slice(QUERY_RESULT_SLICE_COUNT)
         .map(msg => `${msg.role}: ${msg.content.slice(0, CONTENT_SLICE_LENGTH)}`)
         .join('\n')
       prompt += `\n\nRecent conversation:\n${context}`

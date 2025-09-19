@@ -9,6 +9,10 @@ interface MarkdownMessageProps {
 
 export const MarkdownMessage: React.FC<MarkdownMessageProps> = ({ content, className }) => {
   if (!content) return null
+
+  // Convert bullet characters to proper markdown syntax
+  const processedContent = content.replace(/^•\s+/gm, '- ')
+
   return (
     <div className={className}>
       <ReactMarkdown
@@ -51,7 +55,7 @@ export const MarkdownMessage: React.FC<MarkdownMessageProps> = ({ content, class
           ),
         }}
       >
-        {content}
+        {processedContent}
       </ReactMarkdown>
     </div>
   )

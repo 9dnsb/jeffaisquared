@@ -1,14 +1,27 @@
+'use client'
+
 import Link from 'next/link'
+import { useAuthRedirect } from '../hooks/useAuthRedirect'
+import { LoadingSpinner } from '../components/common/LoadingSpinner'
+import Navbar from '../components/navbar/Navbar'
 
 export default function Home() {
+  const isCheckingSession = useAuthRedirect()
+
+  if (isCheckingSession) {
+    return <LoadingSpinner />
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <Navbar />
+      <div className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h1 className="mt-6 text-center text-4xl font-display text-primary">
             Sales Analytics Platform
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          </h1>
+          <p className="mt-2 text-center text-base font-sans text-text-gray">
             AI-powered sales data analytics
           </p>
         </div>
@@ -16,7 +29,7 @@ export default function Home() {
           <div className="rounded-md shadow-sm -space-y-px">
             <Link
               href="/auth/login"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-heading font-medium rounded-md text-white bg-accent hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent"
             >
               Sign In
             </Link>
@@ -24,11 +37,12 @@ export default function Home() {
           <div className="text-center">
             <Link
               href="/auth/register"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
+              className="font-heading font-medium text-secondary hover:text-secondary/80"
             >
               Don&apos;t have an account? Sign up
             </Link>
           </div>
+        </div>
         </div>
       </div>
     </div>

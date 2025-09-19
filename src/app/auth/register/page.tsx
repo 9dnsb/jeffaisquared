@@ -17,9 +17,13 @@ export default function RegisterPage() {
   const [lastName, setLastName] = useState('')
 
   const isCheckingSession = useAuthRedirect()
+
+  // In production, don't redirect after registration - show confirmation message instead
+  const isProduction = process.env['NODE_ENV'] === 'production'
+
   const { loading, error, message, submitForm } = useAuthForm({
     endpoint: '/api/auth/register',
-    redirectTo: '/auth/login',
+    redirectTo: isProduction ? undefined : '/auth/login',
   })
 
   const handleRegister = async (e: React.FormEvent) => {

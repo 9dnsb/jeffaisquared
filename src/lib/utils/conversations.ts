@@ -522,7 +522,7 @@ export async function validateConversationOwnership(
  */
 export async function getConversationContext(
   conversationId: string,
-  messageLimit = CONVERSATION_CONSTANTS.DEFAULT_MESSAGE_LIMIT
+  messageLimit: number = CONVERSATION_CONSTANTS.DEFAULT_MESSAGE_LIMIT
 ): Promise<{ success: boolean; context?: ChatMessage[]; error?: string }> {
   const timer = logger.startTimer('Get Conversation Context')
 

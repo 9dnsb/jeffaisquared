@@ -26,7 +26,7 @@ export default function ForgotPasswordPage() {
   return (
     <AuthLayout title="Reset your password">
       <div>
-        <p className="mt-2 text-center text-sm text-gray-600">
+        <p className="mt-2 text-center text-sm text-text-gray">
           Enter your email address and we&apos;ll send you a link to reset your password.
         </p>
       </div>
@@ -55,7 +55,7 @@ export default function ForgotPasswordPage() {
         <div className="text-center">
           <Link
             href="/auth/login"
-            className="font-medium text-indigo-600 hover:text-indigo-500"
+            className="font-heading font-medium text-secondary hover:text-secondary/80"
           >
             Back to sign in
           </Link>

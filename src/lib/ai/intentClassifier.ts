@@ -24,7 +24,6 @@ const HIGH_CONFIDENCE = 0.7
 const VERY_HIGH_CONFIDENCE = 0.8
 const SHORT_MESSAGE_THRESHOLD = 10
 const MESSAGE_PREVIEW_LENGTH = 100
-const CONTEXT_MESSAGE_COUNT = -4
 const CONTEXT_CONTENT_LENGTH = 200
 
 /**
@@ -416,8 +415,8 @@ Be very precise. Data queries ask for specific business data. General advice inc
   private buildConversationContext(messages: ChatMessage[]): string {
     if (messages.length === 0) return ''
 
-    // Get last few messages for context
-    const recentMessages = messages.slice(CONTEXT_MESSAGE_COUNT)
+    // Use all messages for context
+    const recentMessages = messages
 
     return recentMessages
       .map(

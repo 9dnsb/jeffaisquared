@@ -50,11 +50,21 @@ export async function handleRegistration(request: NextRequest, prismaClient: Pri
     // Step 2: Ensure profile is created (fallback if trigger fails)
     await ensureUserProfile(data.user.id, validatedData.email, validatedData.firstName, validatedData.lastName, prismaClient)
 
-    return createSuccessResponse({
+    // In production, email confirmation is required, so show confirmation message
+    // In development, user is immediately confirmed, so no message needed
+    const isProduction = process.env['NODE_ENV'] === 'production'
+    const needsEmailConfirmation = !data.session && isProduction
+
+    const responseData: Record<string, string | boolean | number | null | object> = {
       user: data.user,
       session: data.session,
-      message: EMAIL_CONFIRMATION_MESSAGE,
-    })
+    }
+
+    if (needsEmailConfirmation) {
+      responseData['message'] = EMAIL_CONFIRMATION_MESSAGE
+    }
+
+    return createSuccessResponse(responseData)
 
   } catch (err) {
     console.error('Registration error:', err)

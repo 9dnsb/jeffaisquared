@@ -272,21 +272,21 @@ export default function ChatInterface({ userId, initialConversationId }: ChatInt
   return (
     <div className="flex flex-col h-full bg-white">
       {/* Header */}
-      <div className="border-b border-gray-200 p-4">
+      <div className="border-b border-gray-200 p-3 sm:p-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-heading font-semibold text-primary">
               {currentConversation?.title || 'New Conversation'}
             </h2>
             {currentConversation && (
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-text-gray">
                 ID: {currentConversation.id.slice(CONVERSATION_ID_DISPLAY_LENGTH)}
               </p>
             )}
           </div>
           <button
             onClick={createNewConversation}
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+            className="bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors font-heading font-medium"
           >
             New Chat
           </button>
@@ -294,11 +294,11 @@ export default function ChatInterface({ userId, initialConversationId }: ChatInt
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-4">
         {isLoadingConversation && (
           <div className="flex justify-center items-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <span className="ml-2 text-gray-600">Loading conversation...</span>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent"></div>
+            <span className="ml-2 text-text-gray">Loading conversation...</span>
           </div>
         )}
 
@@ -328,7 +328,7 @@ export default function ChatInterface({ userId, initialConversationId }: ChatInt
             <div
               className={`max-w-xs lg:max-w-md xl:max-w-lg px-4 py-2 rounded-lg ${
                 message.role === 'user'
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-primary text-white'
                   : 'bg-gray-100 text-gray-900 border'
               }`}
             >
@@ -339,7 +339,7 @@ export default function ChatInterface({ userId, initialConversationId }: ChatInt
               )}
               <div className="flex items-center justify-between mt-2">
                 <span className={`text-xs ${
-                  message.role === 'user' ? 'text-blue-100' : 'text-gray-500'
+                  message.role === 'user' ? 'text-white/70' : 'text-gray-500'
                 }`}>
                   {formatTimestamp(message.createdAt)}
                 </span>
@@ -359,7 +359,7 @@ export default function ChatInterface({ userId, initialConversationId }: ChatInt
           <div className="flex justify-start">
             <div className="bg-gray-100 text-gray-900 border max-w-xs lg:max-w-md xl:max-w-lg px-4 py-2 rounded-lg">
               <div className="flex items-center space-x-2">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600"></div>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-accent"></div>
                 <span>Thinking...</span>
               </div>
             </div>
@@ -370,7 +370,7 @@ export default function ChatInterface({ userId, initialConversationId }: ChatInt
       </div>
 
       {/* Input */}
-      <div className="border-t border-gray-200 p-4">
+      <div className="border-t border-gray-200 p-3 sm:p-4">
         <div className="flex space-x-2">
           <textarea
             ref={textareaRef}
@@ -378,17 +378,17 @@ export default function ChatInterface({ userId, initialConversationId }: ChatInt
             onChange={handleInputChange}
             onKeyPress={handleKeyPress}
             placeholder="Type your message..."
-            className="flex-1 resize-none border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 placeholder-gray-500"
+            className="flex-1 resize-none border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-secondary/50 focus:border-secondary/70 bg-white text-gray-900 placeholder-text-gray"
             rows={1}
             disabled={isLoading}
           />
           <button
             onClick={sendMessage}
             disabled={!inputMessage.trim() || isLoading}
-            className={`px-4 py-2 rounded-md font-medium transition-colors ${
+            className={`px-4 py-2 rounded-md font-heading font-medium transition-colors ${
               !inputMessage.trim() || isLoading
                 ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-blue-600 text-white hover:bg-blue-700'
+                : 'bg-accent text-white hover:bg-accent/90'
             }`}
           >
             {isLoading ? 'Sending...' : 'Send'}

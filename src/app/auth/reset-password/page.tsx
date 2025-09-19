@@ -69,7 +69,7 @@ export default function ResetPasswordPage() {
   if (!isValidSession && !error) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div>
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
       </div>
     )
   }
@@ -78,13 +78,13 @@ export default function ResetPasswordPage() {
     return (
       <AuthLayout title="Invalid Reset Link">
         <div className="text-center">
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm text-text-gray">
             This password reset link is invalid or has expired.
           </p>
           <div className="mt-4">
             <button
               onClick={() => router.push('/auth/forgot-password')}
-              className="font-medium text-indigo-600 hover:text-indigo-500"
+              className="font-heading font-medium text-secondary hover:text-secondary/80"
             >
               Request a new password reset
             </button>
@@ -97,7 +97,7 @@ export default function ResetPasswordPage() {
   return (
     <AuthLayout title="Set new password">
       <div>
-        <p className="mt-2 text-center text-sm text-gray-600">
+        <p className="mt-2 text-center text-sm text-text-gray">
           Enter your new password below
         </p>
       </div>

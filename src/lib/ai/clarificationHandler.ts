@@ -8,8 +8,6 @@ import {
   SHORT_HELP_MESSAGE_LENGTH,
   LONG_CONVERSATION_THRESHOLD,
   SHORT_CONVERSATION_THRESHOLD,
-  RECENT_MESSAGE_SLICE_COUNT,
-  RECENT_CONTEXT_SLICE_COUNT,
   MAX_QUESTIONS_COUNT,
   OPENAI_MAX_TOKENS,
   OPENAI_TEMPERATURE,
@@ -298,8 +296,8 @@ class ClarificationHandler {
       return contextualFactors
     }
 
-    // Look for patterns in recent conversation
-    const recentMessages = messages.slice(RECENT_MESSAGE_SLICE_COUNT)
+    // Look for patterns in all conversation messages
+    const recentMessages = messages
 
     // Check for repeated topics
     const topics = new Set<string>()
@@ -476,7 +474,6 @@ Make questions natural and conversational.`
 
     if (request.conversationHistory.length > 0) {
       const recentContext = request.conversationHistory
-        .slice(RECENT_CONTEXT_SLICE_COUNT)
         .map(msg => `${msg.role}: ${msg.content.slice(0, MESSAGE_SLICE_LENGTH)}`)
         .join('\n')
       prompt += `\n\nRecent conversation:\n${recentContext}`

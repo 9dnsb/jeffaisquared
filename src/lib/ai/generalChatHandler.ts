@@ -14,7 +14,6 @@ const SHORT_MESSAGE_PREVIEW = 100
 const CONTEXT_DAYS_BACK = 30
 const SALES_LIMIT = 10
 const MAX_TOP_ITEMS = 3
-const MAX_RECENT_MESSAGES = -6
 const MAX_USER_CONCERNS = -2
 const MIN_ACTION_ITEM_LENGTH = 10
 const MAX_ACTION_ITEMS = 5
@@ -334,8 +333,8 @@ class GeneralChatHandler {
   private buildConversationContext(messages: ChatMessage[]): string {
     if (messages.length === 0) return ''
 
-    // Get recent messages for context
-    const recentMessages = messages.slice(MAX_RECENT_MESSAGES)
+    // Get all messages for context
+    const recentMessages = messages
 
     // Extract key themes and topics from conversation
     const conversationTopics = new Set<string>()

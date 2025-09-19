@@ -23,9 +23,9 @@ import type {
 } from '../../../types/chat'
 
 // Constants for chat processing
-const CONVERSATION_CONTEXT_LIMIT = 10
 const PERFORMANCE_METRICS_LIMIT = 100
 const TITLE_GENERATION_MESSAGE_LIMIT = 100
+const FULL_CONVERSATION_LIMIT = 1000 // High limit to get all conversation messages
 const UNKNOWN_ERROR_MESSAGE = 'Unknown error'
 
 /**
@@ -102,8 +102,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const conversationId = conversationResult.conversationId
 
-    // Step 4: Get conversation context
-    const contextResult = await getConversationContext(conversationId, CONVERSATION_CONTEXT_LIMIT)
+    // Step 4: Get conversation context (all messages)
+    const contextResult = await getConversationContext(conversationId, FULL_CONVERSATION_LIMIT)
     const conversationHistory = contextResult.success ? (contextResult.context || []) : []
 
     // Step 5: Persist user message

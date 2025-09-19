@@ -1,15 +1,32 @@
 @import "tailwindcss";
 
 :root {
+  /* HelloDemello Color Scheme */
+  --primary-blue: #1a3354;
+  --golden-yellow: #F8B33A;
+  --bright-blue: #005ca4;
+  --dark-gray: #312c23;
+  --soft-gray: #b2b2be;
+  --light-gray: #f0f0f0;
+  --text-gray: #595959;
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #000000;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary-blue);
+  --color-accent: var(--golden-yellow);
+  --color-secondary: var(--bright-blue);
+  --color-dark: var(--dark-gray);
+  --color-gray: var(--soft-gray);
+  --color-light-gray: var(--light-gray);
+  --color-text-gray: var(--text-gray);
+  --font-sans: var(--font-roboto);
+  --font-mono: var(--font-source-code-pro);
+  --font-display: var(--font-black-han-sans);
+  --font-heading: var(--font-montserrat);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,7 +39,24 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-roboto), Arial, Helvetica, sans-serif;
+}
+
+/* Typography following HelloDemello pattern */
+h1 {
+  font-family: var(--font-black-han-sans), sans-serif;
+}
+
+h2, h3, h4 {
+  font-family: var(--font-montserrat), sans-serif;
+}
+
+h5, h6 {
+  font-family: var(--font-roboto), sans-serif;
+}
+
+code, pre {
+  font-family: var(--font-source-code-pro), monospace;
 }
 
 /* Custom animations for ChatGPT-style interface */

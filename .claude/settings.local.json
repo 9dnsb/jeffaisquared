@@ -35,7 +35,12 @@
       "Bash(npx dotenv -e .env.development -- npx prisma db seed:*)",
       "Bash(npx dotenv -e .env.development -- npx prisma generate:*)",
       "Bash(npx dotenv -e .env.development:*)",
-      "Read(//c/Users/david/Documents/ShareX/Screenshots/2025-09-18/**)"
+      "Read(//c/Users/david/Documents/ShareX/Screenshots/2025-09-18/**)",
+      "Read(//c/Users/david/Documents/ShareX/Screenshots/2025-09-19/**)",
+      "Read(//c/Users/david/Documents/evawebgood/src/components/navbar/**)",
+      "Read(//c/Users/david/Documents/evawebgood/src/types/**)",
+      "WebFetch(domain:hellodemello.com)",
+      "Read(//c/Users/david/Pictures/Screenshots/**)"
     ],
     "deny": [],
     "ask": []

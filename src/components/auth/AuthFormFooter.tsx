@@ -24,7 +24,7 @@ export function AuthFormFooter({
         <div className="flex items-center justify-between">
           <Link
             href="/auth/forgot-password"
-            className="text-sm text-indigo-600 hover:text-indigo-500"
+            className="text-sm font-heading text-secondary hover:text-secondary/80"
           >
             Forgot your password?
           </Link>
@@ -40,7 +40,7 @@ export function AuthFormFooter({
       <div className="text-center">
         <Link
           href={linkHref}
-          className="font-medium text-indigo-600 hover:text-indigo-500"
+          className="font-heading font-medium text-secondary hover:text-secondary/80"
         >
           {linkText}
         </Link>
