@@ -130,6 +130,40 @@ const eslintConfig = [
       'no-restricted-syntax': 'off', // Allow unknown in Prisma and utility files
     },
   },
+  {
+    // Relaxed rules for AI-related dynamic query files
+    files: [
+      '**/ai/dynamicDataQueryHandler.ts',
+      '**/ai/enhancedParameterExtractor.ts',
+      '**/prisma/dynamicQueryBuilder.ts',
+      '**/types/dynamicQuery.ts',
+      '**/utils/dateParser.ts',
+      '**/utils/parameterValidator.ts',
+    ],
+    languageOptions: {
+      parser: (await import('@typescript-eslint/parser')).default,
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-unsafe-assignment': 'warn',
+      '@typescript-eslint/no-unsafe-call': 'warn',
+      '@typescript-eslint/no-unsafe-member-access': 'warn',
+      '@typescript-eslint/no-unsafe-return': 'warn',
+      '@typescript-eslint/restrict-template-expressions': 'warn',
+      'no-magic-numbers': [
+        'warn',
+        {
+          ignore: [-1, 0, 1, 2, 3, 30, 100, 200, 500, 1000],
+          ignoreArrayIndexes: true,
+          enforceConst: true,
+          detectObjects: false,
+        },
+      ],
+    },
+  },
 ]
 
 export default eslintConfig

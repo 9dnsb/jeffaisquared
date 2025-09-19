@@ -108,8 +108,8 @@ async function main() {
   // Generate optimized sample data (6 months worth, batch processed)
   console.log('💰 Generating 6 months of sample sales data...')
 
-  const startDate = new Date('2024-07-01')
-  const endDate = new Date('2024-12-31')
+  const startDate = new Date('2024-03-01')
+  const endDate = new Date('2025-09-19')
   const salesBatch: any[] = []
   const saleItemsBatch: any[] = []
 

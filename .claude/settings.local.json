@@ -40,7 +40,8 @@
       "Read(//c/Users/david/Documents/evawebgood/src/components/navbar/**)",
       "Read(//c/Users/david/Documents/evawebgood/src/types/**)",
       "WebFetch(domain:hellodemello.com)",
-      "Read(//c/Users/david/Pictures/Screenshots/**)"
+      "Read(//c/Users/david/Pictures/Screenshots/**)",
+      "Bash(dotenv -e .env.development -- node test-database-queries.js)"
     ],
     "deny": [],
     "ask": []
