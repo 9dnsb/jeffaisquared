@@ -41,7 +41,11 @@
       "Read(//c/Users/david/Documents/evawebgood/src/types/**)",
       "WebFetch(domain:hellodemello.com)",
       "Read(//c/Users/david/Pictures/Screenshots/**)",
-      "Bash(dotenv -e .env.development -- node test-database-queries.js)"
+      "Bash(dotenv -e .env.development -- node test-database-queries.js)",
+      "Bash(dotenv:*)",
+      "Read(//c/Users/david/Documents/**)",
+      "Bash(npx dotenv -e:*)",
+      "Bash(timeout:*)"
     ],
     "deny": [],
     "ask": []

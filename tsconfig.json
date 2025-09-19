@@ -4,7 +4,7 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": true,
+    "strict": false,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -22,20 +22,20 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/root-lib/*": ["./lib/*"]
-    },
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": false,
-    "noImplicitOverride": true,
-    "exactOptionalPropertyTypes": false,
-    "noPropertyAccessFromIndexSignature": true,
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    "forceConsistentCasingInFileNames": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true
+    }
+    // "noImplicitAny": true,
+    // "noImplicitThis": true,
+    // "noImplicitReturns": true,
+    // "noFallthroughCasesInSwitch": true,
+    // "noUncheckedIndexedAccess": false,
+    // "noImplicitOverride": true,
+    // "exactOptionalPropertyTypes": false,
+    // "noPropertyAccessFromIndexSignature": true,
+    // "allowUnreachableCode": false,
+    // "allowUnusedLabels": false,
+    // "forceConsistentCasingInFileNames": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]

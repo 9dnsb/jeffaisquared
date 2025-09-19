@@ -96,7 +96,7 @@ Before tests, run:
 - `npm run db:migrate:dev -- --name <migration_name>` - Create and apply development migration
 - `npm run db:migrate:prod` - Deploy migrations to production
 - `npm run db:generate` - Generate Prisma client
-- `npm run db:seed` - Seed database with sample data
+- `npm run db:seed` - Seed database with sample data (requires 5m timeout)
 - `npm run db:reset` - Reset database and re-seed
 - `npm run db:studio` - Open Prisma Studio (database GUI) - **DO NOT RUN IN CLAUDE CODE**
 - `npm run db:setup-triggers` - Set up database triggers for user profile creation

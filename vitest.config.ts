@@ -9,6 +9,7 @@ export default defineConfig({
     globals: true,
     css: true,
     coverage: {
+      provider: 'v8',
       exclude: [
         '**/node_modules/**',
         '**/dist/**',

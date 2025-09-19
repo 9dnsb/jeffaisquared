@@ -24,13 +24,41 @@ const MENU_ITEMS = [
   { name: 'Spinach Feta Danish', basePrice: 6.25, weight: 4 },
 ]
 
-// Helper functions for realistic data generation
-function getRandomFloat(min: number, max: number): number {
-  return Math.random() * (max - min) + min
-}
+// Deterministic random number generator using Linear Congruential Generator (LCG)
+class DeterministicRandom {
+  private seed: number
 
-function getRandomInt(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min
+  constructor(seed: number) {
+    this.seed = seed
+  }
+
+  // LCG parameters (from Numerical Recipes)
+  next(): number {
+    this.seed = (this.seed * 1664525 + 1013904223) % Math.pow(2, 32)
+    return this.seed / Math.pow(2, 32)
+  }
+
+  float(min: number, max: number): number {
+    return this.next() * (max - min) + min
+  }
+
+  int(min: number, max: number): number {
+    return Math.floor(this.float(min, max + 1))
+  }
+
+  // Weighted random selection
+  weightedChoice<T>(items: T[], weights: number[]): T {
+    const totalWeight = weights.reduce((sum, weight) => sum + weight, 0)
+    let random = this.next() * totalWeight
+
+    for (let i = 0; i < items.length; i++) {
+      random -= weights[i]
+      if (random <= 0) {
+        return items[i]
+      }
+    }
+    return items[items.length - 1]
+  }
 }
 
 function getSeasonalMultiplier(date: Date): number {
@@ -53,8 +81,16 @@ function getDayOfWeekMultiplier(date: Date): number {
   return 1.0
 }
 
+// Create a deterministic seed based on date
+function createDateSeed(date: Date): number {
+  const year = date.getFullYear()
+  const month = date.getMonth()
+  const day = date.getDate()
+  return year * 10000 + month * 100 + day
+}
+
 async function main() {
-  console.log('🌱 Starting optimized seed data generation...')
+  console.log('🌱 Starting deterministic seed data generation...')
 
   // Clean existing data (preserves database structure, much faster than reset)
   console.log('🧹 Cleaning existing data...')
@@ -105,24 +141,27 @@ async function main() {
     console.log(`   ✅ ${item.name} - $${item.basePrice}`)
   }
 
-  // Generate optimized sample data (6 months worth, batch processed)
-  console.log('💰 Generating 6 months of sample sales data...')
+  // Generate deterministic sample data (6 months worth, batch processed)
+  console.log('💰 Generating deterministic sales data...')
 
   const startDate = new Date('2024-03-01')
-  const endDate = new Date('2025-09-19')
+  const endDate = new Date('2025-09-21')
   const salesBatch: any[] = []
   const saleItemsBatch: any[] = []
 
   let totalSales = 0
   let totalTransactions = 0
 
-  // Generate all sales data in memory first (much faster)
+  // Generate all sales data deterministically
   const currentDate = new Date(startDate)
   while (currentDate <= endDate) {
+    const dateSeed = createDateSeed(currentDate)
+    const dayRng = new DeterministicRandom(dateSeed)
+
     const isWeekend = currentDate.getDay() === 0 || currentDate.getDay() === 6
 
-    // Skip some random days (10% weekend, 2% weekday)
-    if (Math.random() < (isWeekend ? 0.1 : 0.02)) {
+    // Deterministic day skipping (using the same logic but with deterministic random)
+    if (dayRng.next() < (isWeekend ? 0.1 : 0.02)) {
       currentDate.setDate(currentDate.getDate() + 1)
       continue
     }
@@ -131,38 +170,53 @@ async function main() {
     const dayMultiplier = getDayOfWeekMultiplier(currentDate)
 
     // Generate sales for each location on this day
-    for (const location of createdLocations) {
-      // Simplified: 3-12 transactions per location per day
+    for (let locationIndex = 0; locationIndex < createdLocations.length; locationIndex++) {
+      const location = createdLocations[locationIndex]
+
+      // Create a unique seed for each location on each day
+      const locationSeed = dateSeed + (locationIndex + 1) * 1000
+      const locationRng = new DeterministicRandom(locationSeed)
+
+      // Deterministic transaction count: 3-12 transactions per location per day
       const dailyTransactions = Math.round(
-        getRandomFloat(3, 12) *
+        locationRng.float(3, 12) *
           seasonalMultiplier *
           dayMultiplier *
           location.multiplier
       )
 
       for (let i = 0; i < dailyTransactions; i++) {
-        const hour = getRandomInt(7, 20)
-        const minute = getRandomInt(0, 59)
+        // Create unique seed for each transaction
+        const transactionSeed = locationSeed + i * 100
+        const transactionRng = new DeterministicRandom(transactionSeed)
+
+        const hour = transactionRng.int(7, 20)
+        const minute = transactionRng.int(0, 59)
         const saleDate = new Date(currentDate)
         saleDate.setHours(hour, minute)
 
-        // Quick item selection (1-3 items per sale)
-        const itemCount = getRandomInt(1, 3)
+        // Deterministic item selection (1-3 items per sale)
+        const itemCount = transactionRng.int(1, 3)
         let saleTotal = 0
         const tempSaleId = `temp_${totalTransactions}`
 
         for (let j = 0; j < itemCount; j++) {
-          const randomItem =
-            createdItems[getRandomInt(0, createdItems.length - 1)]
-          const quantity = getRandomInt(1, 2)
-          const price =
-            randomItem.basePrice * getRandomFloat(0.9, 1.1) * quantity
+          // Create unique seed for each item in transaction
+          const itemSeed = transactionSeed + j * 10
+          const itemRng = new DeterministicRandom(itemSeed)
+
+          // Use weighted selection for items
+          const weights = createdItems.map(item => item.weight)
+          const selectedItem = itemRng.weightedChoice(createdItems, weights)
+
+          const quantity = itemRng.int(1, 2)
+          const price = selectedItem.basePrice * itemRng.float(0.9, 1.1) * quantity
 
           saleTotal += price
 
           saleItemsBatch.push({
             tempSaleId,
-            itemId: randomItem.id,
+            itemId: selectedItem.id,
             price: Math.round(price * 100) / 100,
             quantity,
           })
@@ -187,7 +241,7 @@ async function main() {
   }
 
   console.log(
-    `💾 Generated ${totalTransactions} transactions in memory. Now bulk inserting...`
+    `💾 Generated ${totalTransactions} transactions deterministically. Now bulk inserting...`
   )
 
   // Batch insert sales (much faster than individual creates)
@@ -249,7 +303,7 @@ async function main() {
     )
   }
 
-  console.log('\n🎉 Optimized seeding completed!')
+  console.log('\n🎉 Deterministic seeding completed!')
   console.log(
     `📊 Generated ${totalTransactions} transactions across ${LOCATIONS.length} locations`
   )
@@ -258,10 +312,10 @@ async function main() {
     `📈 Average transaction: $${(totalSales / totalTransactions).toFixed(2)}`
   )
   console.log(
-    `⚡ Performance: Data cleaning + batched inserts for maximum speed`
+    `🔒 Deterministic: This seed will generate identical data every time`
   )
   console.log(
-    `🚀 Next time: Just run 'npm run db:seed' - no database reset needed!`
+    `🚀 Next time: Just run 'npm run db:seed' - same data guaranteed!`
   )
 }
 
@@ -274,6 +328,3 @@ main()
     await prisma.$disconnect()
     process.exit(1)
   })
-
-//  💵 Total sales: $131957.50
-//  📈 Average transaction: $19.21

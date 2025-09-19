@@ -3,7 +3,7 @@ import { logger } from '../../../lib/utils/logger'
 import { validateChatRequest } from '../../../lib/validation/schemas'
 import { createSupabaseServerClient } from '../../../../lib/supabase-server'
 import { intentClassifier } from '../../../lib/ai/intentClassifier'
-import { dynamicDataQueryHandler } from '../../../lib/ai/dynamicDataQueryHandler'
+import { dataQueryHandler } from '../../../lib/ai-v2/dataQueryHandler'
 import { generalChatHandler } from '../../../lib/ai/generalChatHandler'
 import { clarificationHandler } from '../../../lib/ai/clarificationHandler'
 import {
@@ -354,7 +354,7 @@ async function processMessageThroughTiers(
 
     switch (intentResult.intent) {
       case 'data_query':
-        const dataResult = await dynamicDataQueryHandler.processDataQuery({
+        const dataResult = await dataQueryHandler.processDataQuery({
           userMessage,
           conversationHistory,
           intent: 'data_query'

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '../../../lib/utils/logger'
-import { dynamicDataQueryHandler } from '../../../lib/ai/dynamicDataQueryHandler'
+import { dataQueryHandler } from '../../../lib/ai-v2/dataQueryHandler'
 import type { ChatMessage } from '../../../types/chat'
 
 /**
@@ -27,8 +27,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // eslint-disable-next-line no-magic-numbers
     logger.chat('🧪 Test query request', message.slice(0, 100))
 
-    // Process as data query
-    const result = await dynamicDataQueryHandler.processDataQuery({
+    // Process as data query using new AI-v2 system
+    const result = await dataQueryHandler.processDataQuery({
       userMessage: message,
       conversationHistory: conversationHistory as ChatMessage[],
       intent: 'data_query',
