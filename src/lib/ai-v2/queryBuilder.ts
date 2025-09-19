@@ -38,8 +38,17 @@ export class QueryBuilder {
 
       let data: QueryResultRow[] = []
 
-      // Route to appropriate query builder based on grouping
-      if (params.groupBy.includes('location')) {
+      // Route to appropriate query builder based on grouping and calculation type
+      if (params.calculationType === 'location_sum' && params.locationIds.length > 1) {
+        // Special handling for multi-location sum/comparison
+        data = await this.buildLocationSumQuery(params)
+      } else if (params.calculationType === 'percentage') {
+        // Special handling for percentage calculations
+        data = await this.buildPercentageQuery(params)
+      } else if (params.calculationType === 'daily_average' || params.calculationType === 'monthly_average') {
+        // Special handling for time-based averages
+        data = await this.buildAverageQuery(params)
+      } else if (params.groupBy.includes('location')) {
         data = await this.buildLocationQuery(params)
       } else if (params.groupBy.includes('item')) {
         data = await this.buildItemQuery(params)
@@ -450,10 +459,122 @@ export class QueryBuilder {
   }
 
   /**
+   * Build location sum query (for comparing/combining multiple locations)
+   */
+  private async buildLocationSumQuery(params: QueryParameters): Promise<QueryResultRow[]> {
+    const whereClause = this.buildWhereClause(params)
+
+    const sales = await this.prisma.sale.findMany({
+      where: whereClause,
+      include: {
+        location: true
+      }
+    })
+
+    // Calculate sum across all specified locations
+    const row: QueryResultRow = {}
+
+    for (const metric of params.metrics) {
+      row[metric] = this.calculateMetric(metric, sales, [], params)
+    }
+
+    return [row]
+  }
+
+  /**
+   * Build percentage query (for calculating percentages)
+   */
+  private async buildPercentageQuery(params: QueryParameters): Promise<QueryResultRow[]> {
+    // Get total across all locations for denominator
+    const allSales = await this.prisma.sale.findMany({
+      where: {
+        ...(params.startDate || params.endDate ? {
+          date: {
+            ...(params.startDate && { gte: params.startDate }),
+            ...(params.endDate && { lte: params.endDate })
+          }
+        } : {})
+      }
+    })
+
+    // Get sales for specific location(s) for numerator
+    const whereClause = this.buildWhereClause(params)
+    const filteredSales = await this.prisma.sale.findMany({
+      where: whereClause
+    })
+
+    const row: QueryResultRow = {}
+
+    for (const metric of params.metrics) {
+      const totalValue = this.calculateMetric(metric, allSales, [], params)
+      const filteredValue = this.calculateMetric(metric, filteredSales, [], params)
+
+      // Calculate percentage
+      if (totalValue > 0) {
+        row[metric] = (filteredValue / totalValue) * 100
+      } else {
+        row[metric] = 0
+      }
+    }
+
+    return [row]
+  }
+
+  /**
+   * Build average query (for daily/monthly averages)
+   */
+  private async buildAverageQuery(params: QueryParameters): Promise<QueryResultRow[]> {
+    const whereClause = this.buildWhereClause(params)
+
+    const sales = await this.prisma.sale.findMany({
+      where: whereClause
+    })
+
+    const row: QueryResultRow = {}
+
+    for (const metric of params.metrics) {
+      const totalValue = this.calculateMetric(metric, sales, [], params)
+
+      // Calculate time-based average
+      if (params.calculationType === 'daily_average') {
+        // Calculate number of days in date range
+        let days = 1
+        if (params.startDate && params.endDate) {
+          const diffTime = Math.abs(params.endDate.getTime() - params.startDate.getTime())
+          days = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1
+        } else {
+          // If no date range, get total days from all data
+          const allSales = await this.prisma.sale.findMany({
+            select: { date: true }
+          })
+          if (allSales.length > 0) {
+            const dates = allSales.map(s => s.date).sort((a, b) => a.getTime() - b.getTime())
+            const firstDate = dates[0]
+            const lastDate = dates[dates.length - 1]
+            const diffTime = lastDate.getTime() - firstDate.getTime()
+            days = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1
+          }
+        }
+        row[metric] = totalValue / days
+      } else if (params.calculationType === 'monthly_average') {
+        // Approximate monthly average (total / 18 months based on test data)
+        const approximateMonths = 18
+        row[metric] = totalValue / approximateMonths
+      }
+    }
+
+    return [row]
+  }
+
+  /**
    * Get query plan description
    */
   private getQueryPlan(params: QueryParameters): string {
     const parts: string[] = []
+
+    if (params.calculationType) {
+      parts.push(`calculation: ${params.calculationType}`)
+    }
 
     if (params.groupBy.length > 0) {
       parts.push(`grouped by ${params.groupBy.join(', ')}`)

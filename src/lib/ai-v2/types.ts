@@ -20,6 +20,9 @@ export interface QueryParameters {
   // Group by dimensions
   groupBy: GroupBy[]
 
+  // Special calculation types for complex queries
+  calculationType?: CalculationType
+
   // Sorting
   sortBy?: string
   sortDirection?: 'asc' | 'desc'
@@ -38,6 +41,13 @@ export type GroupBy =
   | 'item'            // Group by item
   | 'month'           // Group by month
   | 'date'            // Group by date
+
+export type CalculationType =
+  | 'daily_average'    // Calculate daily average (total / days)
+  | 'monthly_average'  // Calculate monthly average (total / months)
+  | 'percentage'       // Calculate percentage of total
+  | 'location_sum'     // Sum multiple specific locations
+  | 'location_compare' // Compare specific locations side by side
 
 export interface QueryResult {
   success: boolean

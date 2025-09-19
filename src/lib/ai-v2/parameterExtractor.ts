@@ -10,7 +10,8 @@ import type {
   QueryParameters,
   ParameterExtractionResult,
   Metric,
-  GroupBy
+  GroupBy,
+  CalculationType
 } from './types'
 
 export class ParameterExtractor {
@@ -119,6 +120,14 @@ PARAMETER EXTRACTION:
    - "average transaction", "avg transaction" → avg_transaction
    - "average price", "avg price" → avg_item_price
 
+SPECIAL CALCULATION PATTERNS:
+   - "average daily sales", "daily average sales" → revenue + calculationType: "daily_average"
+   - "transactions per day", "daily transactions" → count + calculationType: "daily_average"
+   - "percentage of transactions", "% of transactions" → count + calculationType: "percentage"
+   - "compare X and Y", "X vs Y", "X and Y combined" → revenue + calculationType: "location_sum"
+   - "which location has lowest/highest" → revenue + groupBy: location + sortBy: revenue
+   - "average monthly", "monthly average" → revenue + calculationType: "monthly_average"
+
 2. GROUPING (how to organize results):
    - "by location", "compare locations", "which location" → location
    - "by item", "top items", "which item" → item
@@ -157,8 +166,24 @@ Respond with valid JSON only:
   "itemNames": ["Latte"],
   "limit": 3,
   "sortBy": "revenue",
-  "sortDirection": "desc"
-}`
+  "sortDirection": "desc",
+  "calculationType": "daily_average"
+}
+
+CRITICAL EXAMPLES:
+- "What's our average daily sales?" → {"metrics": ["revenue"], "calculationType": "daily_average"}
+- "How many transactions per day?" → {"metrics": ["count"], "calculationType": "daily_average"}
+- "What percentage of transactions at HQ?" → {"metrics": ["count"], "calculationType": "percentage", "locationKeywords": ["hq"]}
+- "Compare Bloor and Yonge" → {"metrics": ["revenue"], "calculationType": "location_sum", "locationKeywords": ["bloor", "yonge"]}
+- "Which location has lowest sales?" → {"metrics": ["revenue"], "groupBy": ["location"], "sortBy": "revenue", "sortDirection": "asc", "limit": 1}
+- "Which location has highest sales?" → {"metrics": ["revenue"], "groupBy": ["location"], "sortBy": "revenue", "sortDirection": "desc", "limit": 1}
+- "Sales at Kingston location" → {"metrics": ["revenue"], "locationKeywords": ["kingston"]}
+- "Average monthly sales" → {"metrics": ["revenue"], "calculationType": "monthly_average"}
+
+SORTING RULES:
+- "lowest", "minimum", "worst", "bottom" → sortDirection: "asc"
+- "highest", "maximum", "best", "top" → sortDirection: "desc"
+- "which location" queries should include limit: 1 to return single result`
 
     const userPrompt = `Extract parameters from this query: "${userQuery}"`
 
@@ -192,6 +217,7 @@ Respond with valid JSON only:
         endDate: parsed.endDate ? new Date(parsed.endDate) : undefined,
         itemNames: Array.isArray(parsed.itemNames) ? parsed.itemNames : [],
         locationIds: [], // Will be resolved from keywords
+        calculationType: this.validateCalculationType(parsed.calculationType),
         sortBy: parsed.sortBy,
         sortDirection: parsed.sortDirection,
         limit: parsed.limit
@@ -226,6 +252,19 @@ Respond with valid JSON only:
     return groupBy
       .filter((g): g is string => typeof g === 'string')
       .filter((g): g is GroupBy => validGroupBy.includes(g as GroupBy))
+  }
+
+  /**
+   * Validate calculationType
+   */
+  private validateCalculationType(calculationType: unknown): CalculationType | undefined {
+    const validTypes: CalculationType[] = ['daily_average', 'monthly_average', 'percentage', 'location_sum', 'location_compare']
+
+    if (typeof calculationType === 'string' && validTypes.includes(calculationType as CalculationType)) {
+      return calculationType as CalculationType
+    }
+
+    return undefined
   }
 
   /**
@@ -289,12 +328,29 @@ Respond with valid JSON only:
     // Default groupBy if none specified but query suggests grouping
     let groupBy = params.groupBy || []
     if (groupBy.length === 0) {
-      if (query.includes('location') || query.includes('compare') || query.includes('which location')) {
+      if (query.includes('location') || query.includes('compare') || query.includes('which location') || query.includes('lowest') || query.includes('highest')) {
         groupBy = ['location']
       } else if (query.includes('item') || query.includes('top') || query.includes('best')) {
         groupBy = ['item']
       } else if (query.includes('month') || query.includes('monthly')) {
         groupBy = ['month']
+      }
+    }
+
+    // Auto-detect sorting direction and add limit for superlative queries
+    let sortBy = params.sortBy || this.getDefaultSortBy(metrics, groupBy)
+    let sortDirection = params.sortDirection || 'desc'
+    let limit = params.limit
+
+    if (query.includes('lowest') || query.includes('minimum') || query.includes('worst') || query.includes('bottom')) {
+      sortDirection = 'asc'
+      if (!limit && (query.includes('which') || query.includes('location'))) {
+        limit = 1
+      }
+    } else if (query.includes('highest') || query.includes('maximum') || query.includes('best') || query.includes('top')) {
+      sortDirection = 'desc'
+      if (!limit && (query.includes('which') || query.includes('location'))) {
+        limit = 1
       }
     }
 
@@ -312,9 +368,10 @@ Respond with valid JSON only:
       itemNames: params.itemNames || [],
       startDate: params.startDate,
       endDate: params.endDate,
-      sortBy: params.sortBy || this.getDefaultSortBy(metrics, groupBy),
-      sortDirection: params.sortDirection || 'desc',
-      limit: params.limit
+      calculationType: params.calculationType,
+      sortBy,
+      sortDirection,
+      limit
     }
   }
 

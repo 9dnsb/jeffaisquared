@@ -19,8 +19,8 @@ export class LocationMapper {
       const locations = await prisma.location.findMany({
         select: {
           locationId: true,
-          name: true
-        }
+          name: true,
+        },
       })
 
       // Define keyword mappings based on test data
@@ -28,23 +28,45 @@ export class LocationMapper {
         {
           id: 'LZEVY2P88KZA8',
           name: 'HQ',
-          keywords: ['hq', 'headquarters', 'main', 'main location', 'primary', 'head office']
+          keywords: [
+            'hq',
+            'headquarters',
+            'main',
+            'main location',
+            'primary',
+            'head office',
+          ],
         },
         {
           id: 'LAH170A0KK47P',
           name: 'Yonge',
-          keywords: ['yonge', 'yonge street', 'yonge location', 'yonge st']
+          keywords: ['yonge', 'yonge street', 'yonge location', 'yonge st'],
         },
         {
           id: 'LPSSMJYZX8X7P',
           name: 'Bloor',
-          keywords: ['bloor', 'bloor street', 'bloor location', 'bloor st']
-        }
+          keywords: ['bloor', 'bloor street', 'bloor location', 'bloor st'],
+        },
+        {
+          id: 'LYJ3TVBQ23F5V',
+          name: 'Kingston',
+          keywords: ['kingston', 'kingston location'],
+        },
+        {
+          id: 'LT8YK4FBNGH17',
+          name: 'The Well',
+          keywords: ['well', 'the well', 'well location'],
+        },
+        {
+          id: 'LDPNNFWBTFB26',
+          name: 'Broadway',
+          keywords: ['broadway', 'broadway location'],
+        },
       ]
 
       // Update with actual location data
       for (const location of locations) {
-        const mapping = mappings.find(m => m.id === location.locationId)
+        const mapping = mappings.find((m) => m.id === location.locationId)
         if (mapping) {
           mapping.name = location.name || mapping.name
           this.locationCache.set(location.locationId, mapping)
@@ -59,11 +81,13 @@ export class LocationMapper {
       this.isInitialized = true
       logger.success('Location mapper initialized', undefined, {
         locationCount: this.locationCache.size,
-        keywordCount: this.keywordCache.size
+        keywordCount: this.keywordCache.size,
       })
-
     } catch (err) {
-      const error = err instanceof Error ? err : new Error('Failed to initialize location mapper')
+      const error =
+        err instanceof Error
+          ? err
+          : new Error('Failed to initialize location mapper')
       logger.error('Location mapper initialization failed', error)
       throw error
     }
@@ -88,7 +112,7 @@ export class LocationMapper {
     logger.data('Location resolution completed', undefined, {
       input: userInput.slice(0, 100),
       resolvedCount: resolvedIds.length,
-      resolvedIds: resolvedIds.join(', ')
+      resolvedIds: resolvedIds.join(', '),
     })
 
     return resolvedIds

@@ -216,6 +216,196 @@ const TEST_CASES = [
     expectedMetrics: ['count'],
     expectedGroupBy: ['location'],
     category: 'weekly_location_analysis'
+  },
+  {
+    id: 'average_daily_sales',
+    prompt: "What's our average daily sales?",
+    expectedRange: { min: 670, max: 680 },
+    expectedMetrics: ['revenue'],
+    expectedGroupBy: [],
+    category: 'business_metrics'
+  },
+  {
+    id: 'transactions_per_day_average',
+    prompt: "How many transactions do we average per day?",
+    expectedRange: { min: 39, max: 41 },
+    expectedMetrics: ['count'],
+    expectedGroupBy: [],
+    category: 'business_metrics'
+  },
+  {
+    id: 'bloor_vs_yonge_comparison',
+    prompt: "Compare Bloor and Yonge locations",
+    expectedRange: { min: 138000, max: 140000 },
+    expectedMetrics: ['revenue'],
+    expectedGroupBy: ['location'],
+    expectedLocationCount: 2,
+    category: 'location_comparison'
+  },
+  {
+    id: 'bottom_performing_location',
+    prompt: "Which location had the lowest sales?",
+    expectedRange: { min: 50000, max: 51000 },
+    expectedMetrics: ['revenue'],
+    expectedGroupBy: ['location'],
+    expectedTopLocation: 'Broadway',
+    category: 'location_analysis'
+  },
+  {
+    id: 'hq_transaction_percentage',
+    prompt: "What percentage of transactions happen at HQ?",
+    expectedRange: { min: 23, max: 24 },
+    expectedMetrics: ['count'],
+    expectedGroupBy: ['location'],
+    category: 'location_analysis'
+  },
+  {
+    id: 'total_2025_sales',
+    prompt: "What were our total sales in 2025?",
+    expectedRange: { min: 182000, max: 184000 },
+    expectedMetrics: ['revenue'],
+    expectedGroupBy: [],
+    category: 'yearly_analysis'
+  },
+  {
+    id: 'kingston_location_sales',
+    prompt: "What were sales at Kingston location?",
+    expectedRange: { min: 56700, max: 56900 },
+    expectedMetrics: ['revenue'],
+    expectedGroupBy: [],
+    expectedLocationMapping: 'LYJ3TVBQ23F5V',
+    category: 'location_specific'
+  },
+  {
+    id: 'well_location_sales',
+    prompt: "Sales at The Well location",
+    expectedRange: { min: 52800, max: 53000 },
+    expectedMetrics: ['revenue'],
+    expectedGroupBy: [],
+    expectedLocationMapping: 'LT8YK4FBNGH17',
+    category: 'location_specific'
+  },
+  {
+    id: 'average_transaction_by_location',
+    prompt: "What's the average transaction value by location?",
+    expectedRange: { min: 15, max: 19 },
+    expectedMetrics: ['avg_transaction'],
+    expectedGroupBy: ['location'],
+    category: 'location_metrics'
+  },
+  {
+    id: 'total_transactions_2024',
+    prompt: "How many transactions did we have in 2024?",
+    expectedRange: { min: 11000, max: 12000 },
+    expectedMetrics: ['count'],
+    expectedGroupBy: [],
+    category: 'yearly_analysis'
+  },
+  {
+    id: 'total_transactions_2025',
+    prompt: "How many transactions did we have in 2025?",
+    expectedRange: { min: 10500, max: 11000 },
+    expectedMetrics: ['count'],
+    expectedGroupBy: [],
+    category: 'yearly_analysis'
+  },
+  {
+    id: 'total_transactions_all_time',
+    prompt: "How many transactions have we had in total?",
+    expectedRange: { min: 22500, max: 22600 },
+    expectedMetrics: ['count'],
+    expectedGroupBy: [],
+    category: 'comprehensive_analysis'
+  },
+  {
+    id: 'average_transaction_all_time',
+    prompt: "What's our average transaction value across all time?",
+    expectedRange: { min: 17, max: 18 },
+    expectedMetrics: ['avg_transaction'],
+    expectedGroupBy: [],
+    category: 'comprehensive_analysis'
+  },
+  {
+    id: 'busiest_day_this_week',
+    prompt: "Which day had the most sales this week?",
+    expectedRange: { min: 600, max: 900 },
+    expectedMetrics: ['revenue'],
+    expectedGroupBy: ['date'],
+    category: 'weekly_analysis'
+  },
+  {
+    id: 'hq_average_transaction',
+    prompt: "What's the average transaction value at HQ?",
+    expectedRange: { min: 16, max: 17 },
+    expectedMetrics: ['avg_transaction'],
+    expectedGroupBy: [],
+    expectedLocationMapping: 'LZEVY2P88KZA8',
+    category: 'location_metrics'
+  },
+  {
+    id: 'transactions_this_month',
+    prompt: "How many transactions did we have this month?",
+    expectedRange: { min: 850, max: 900 },
+    expectedMetrics: ['count'],
+    expectedGroupBy: [],
+    category: 'monthly_analysis'
+  },
+  {
+    id: 'sales_this_month',
+    prompt: "What were our sales this month?",
+    expectedRange: { min: 15500, max: 15700 },
+    expectedMetrics: ['revenue'],
+    expectedGroupBy: [],
+    category: 'monthly_analysis'
+  },
+  {
+    id: 'average_monthly_sales',
+    prompt: "What's our average monthly sales?",
+    expectedRange: { min: 20000, max: 25000 },
+    expectedMetrics: ['revenue'],
+    expectedGroupBy: [],
+    category: 'business_metrics'
+  },
+  {
+    id: 'two_weeks_ago_sales',
+    prompt: "What were our sales two weeks ago?",
+    expectedRange: { min: 4500, max: 5500 },
+    expectedMetrics: ['revenue'],
+    expectedGroupBy: [],
+    category: 'weekly_analysis'
+  },
+  {
+    id: 'last_30_days_sales',
+    prompt: "What were our sales in the last 30 days?",
+    expectedRange: { min: 20000, max: 25000 },
+    expectedMetrics: ['revenue'],
+    expectedGroupBy: [],
+    category: 'time_analysis'
+  },
+  {
+    id: 'last_30_days_transactions',
+    prompt: "How many transactions did we have in the last 30 days?",
+    expectedRange: { min: 1150, max: 1250 },
+    expectedMetrics: ['count'],
+    expectedGroupBy: [],
+    category: 'time_analysis'
+  },
+  {
+    id: 'busiest_location_by_transactions',
+    prompt: "Which location is busiest by transaction count?",
+    expectedRange: { min: 5280, max: 5300 },
+    expectedMetrics: ['count'],
+    expectedGroupBy: ['location'],
+    expectedTopLocation: 'HQ',
+    category: 'location_analysis'
+  },
+  {
+    id: 'sales_growth_rate',
+    prompt: "What's our sales growth from 2024 to 2025?",
+    expectedRange: { min: -15, max: -5 },
+    expectedMetrics: ['revenue'],
+    expectedGroupBy: [],
+    category: 'growth_analysis'
   }
 ]
 
