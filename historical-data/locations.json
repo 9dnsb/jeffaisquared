@@ -1,0 +1,311 @@
+[
+  {
+    "squareLocationId": "LPSSMJYZX8X7P",
+    "name": "De Mello Coffee - Bloor",
+    "address": "365 Bloor Street East Toronto ON",
+    "timezone": "America/Toronto",
+    "currency": "CAD",
+    "status": "ACTIVE",
+    "businessHours": {
+      "periods": [
+        {
+          "day_of_week": "SUN",
+          "start_local_time": "08:00:00",
+          "end_local_time": "17:00:00"
+        },
+        {
+          "day_of_week": "MON",
+          "start_local_time": "08:00:00",
+          "end_local_time": "17:00:00"
+        },
+        {
+          "day_of_week": "TUE",
+          "start_local_time": "08:00:00",
+          "end_local_time": "17:00:00"
+        },
+        {
+          "day_of_week": "WED",
+          "start_local_time": "08:00:00",
+          "end_local_time": "17:00:00"
+        },
+        {
+          "day_of_week": "THU",
+          "start_local_time": "08:00:00",
+          "end_local_time": "17:00:00"
+        },
+        {
+          "day_of_week": "FRI",
+          "start_local_time": "08:00:00",
+          "end_local_time": "17:00:00"
+        },
+        {
+          "day_of_week": "SAT",
+          "start_local_time": "08:00:00",
+          "end_local_time": "17:00:00"
+        }
+      ]
+    }
+  },
+  {
+    "squareLocationId": "LDPNNFWBTFB26",
+    "name": "De Mello Coffee - Broadway",
+    "address": "2389 Yonge Street Toronto ON",
+    "timezone": "America/Toronto",
+    "currency": "CAD",
+    "status": "ACTIVE",
+    "businessHours": {
+      "periods": [
+        {
+          "day_of_week": "SUN",
+          "start_local_time": "08:00:00",
+          "end_local_time": "18:00:00"
+        },
+        {
+          "day_of_week": "MON",
+          "start_local_time": "07:00:00",
+          "end_local_time": "18:00:00"
+        },
+        {
+          "day_of_week": "TUE",
+          "start_local_time": "07:00:00",
+          "end_local_time": "18:00:00"
+        },
+        {
+          "day_of_week": "WED",
+          "start_local_time": "07:00:00",
+          "end_local_time": "18:00:00"
+        },
+        {
+          "day_of_week": "THU",
+          "start_local_time": "07:00:00",
+          "end_local_time": "18:00:00"
+        },
+        {
+          "day_of_week": "FRI",
+          "start_local_time": "07:00:00",
+          "end_local_time": "18:00:00"
+        },
+        {
+          "day_of_week": "SAT",
+          "start_local_time": "08:00:00",
+          "end_local_time": "18:00:00"
+        }
+      ]
+    }
+  },
+  {
+    "squareLocationId": "LZEVY2P88KZA8",
+    "name": "De Mello Coffee - HQ",
+    "address": "Unit 3, 40 Adesso Drive Vaughan ON",
+    "timezone": "America/Toronto",
+    "currency": "CAD",
+    "status": "ACTIVE",
+    "businessHours": {
+      "periods": [
+        {
+          "day_of_week": "MON",
+          "start_local_time": "08:00:00",
+          "end_local_time": "16:00:00"
+        },
+        {
+          "day_of_week": "TUE",
+          "start_local_time": "08:00:00",
+          "end_local_time": "16:00:00"
+        },
+        {
+          "day_of_week": "WED",
+          "start_local_time": "08:00:00",
+          "end_local_time": "16:00:00"
+        },
+        {
+          "day_of_week": "THU",
+          "start_local_time": "08:00:00",
+          "end_local_time": "16:00:00"
+        },
+        {
+          "day_of_week": "FRI",
+          "start_local_time": "08:00:00",
+          "end_local_time": "16:00:00"
+        }
+      ]
+    }
+  },
+  {
+    "squareLocationId": "LYJ3TVBQ23F5V",
+    "name": "De Mello Coffee - Kingston",
+    "address": "33 Brock Street Kingston ON",
+    "timezone": "America/Toronto",
+    "currency": "CAD",
+    "status": "ACTIVE",
+    "businessHours": {
+      "periods": [
+        {
+          "day_of_week": "SUN",
+          "start_local_time": "08:00:00",
+          "end_local_time": "18:00:00"
+        },
+        {
+          "day_of_week": "MON",
+          "start_local_time": "07:00:00",
+          "end_local_time": "19:00:00"
+        },
+        {
+          "day_of_week": "TUE",
+          "start_local_time": "07:00:00",
+          "end_local_time": "19:00:00"
+        },
+        {
+          "day_of_week": "WED",
+          "start_local_time": "07:00:00",
+          "end_local_time": "19:00:00"
+        },
+        {
+          "day_of_week": "THU",
+          "start_local_time": "07:00:00",
+          "end_local_time": "19:00:00"
+        },
+        {
+          "day_of_week": "FRI",
+          "start_local_time": "07:00:00",
+          "end_local_time": "19:00:00"
+        },
+        {
+          "day_of_week": "SAT",
+          "start_local_time": "08:00:00",
+          "end_local_time": "18:00:00"
+        }
+      ]
+    }
+  },
+  {
+    "squareLocationId": "LT8YK4FBNGH17",
+    "name": "De Mello Coffee - The Well",
+    "address": "100G - 8 Spadina Ave Toronto ON",
+    "timezone": "America/Toronto",
+    "currency": "CAD",
+    "status": "ACTIVE",
+    "businessHours": {
+      "periods": [
+        {
+          "day_of_week": "SUN",
+          "start_local_time": "09:00:00",
+          "end_local_time": "16:00:00"
+        },
+        {
+          "day_of_week": "MON",
+          "start_local_time": "07:30:00",
+          "end_local_time": "16:00:00"
+        },
+        {
+          "day_of_week": "TUE",
+          "start_local_time": "07:30:00",
+          "end_local_time": "16:00:00"
+        },
+        {
+          "day_of_week": "WED",
+          "start_local_time": "07:30:00",
+          "end_local_time": "16:00:00"
+        },
+        {
+          "day_of_week": "THU",
+          "start_local_time": "07:30:00",
+          "end_local_time": "16:00:00"
+        },
+        {
+          "day_of_week": "FRI",
+          "start_local_time": "07:30:00",
+          "end_local_time": "16:00:00"
+        },
+        {
+          "day_of_week": "SAT",
+          "start_local_time": "09:00:00",
+          "end_local_time": "16:00:00"
+        }
+      ]
+    }
+  },
+  {
+    "squareLocationId": "LAH170A0KK47P",
+    "name": "De Mello Coffee - Yonge",
+    "address": "2489 Yonge Street Toronto ON",
+    "timezone": "America/Toronto",
+    "currency": "CAD",
+    "status": "ACTIVE",
+    "businessHours": {
+      "periods": [
+        {
+          "day_of_week": "SUN",
+          "start_local_time": "08:00:00",
+          "end_local_time": "19:00:00"
+        },
+        {
+          "day_of_week": "MON",
+          "start_local_time": "07:00:00",
+          "end_local_time": "19:00:00"
+        },
+        {
+          "day_of_week": "TUE",
+          "start_local_time": "07:00:00",
+          "end_local_time": "19:00:00"
+        },
+        {
+          "day_of_week": "WED",
+          "start_local_time": "07:00:00",
+          "end_local_time": "19:00:00"
+        },
+        {
+          "day_of_week": "THU",
+          "start_local_time": "07:00:00",
+          "end_local_time": "19:00:00"
+        },
+        {
+          "day_of_week": "FRI",
+          "start_local_time": "07:00:00",
+          "end_local_time": "19:00:00"
+        },
+        {
+          "day_of_week": "SAT",
+          "start_local_time": "08:00:00",
+          "end_local_time": "19:00:00"
+        }
+      ]
+    }
+  },
+  {
+    "squareLocationId": "L8VG8YSD6QMZ1",
+    "name": "Kiosk",
+    "address": "The Well Toronto ON",
+    "timezone": "America/Toronto",
+    "currency": "CAD",
+    "status": "ACTIVE",
+    "businessHours": {
+      "periods": [
+        {
+          "day_of_week": "MON",
+          "start_local_time": "08:00:00",
+          "end_local_time": "16:00:00"
+        },
+        {
+          "day_of_week": "TUE",
+          "start_local_time": "08:00:00",
+          "end_local_time": "16:00:00"
+        },
+        {
+          "day_of_week": "WED",
+          "start_local_time": "08:00:00",
+          "end_local_time": "16:00:00"
+        },
+        {
+          "day_of_week": "THU",
+          "start_local_time": "08:00:00",
+          "end_local_time": "16:00:00"
+        },
+        {
+          "day_of_week": "FRI",
+          "start_local_time": "08:00:00",
+          "end_local_time": "16:00:00"
+        }
+      ]
+    }
+  }
+]
