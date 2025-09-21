@@ -20,52 +20,88 @@ model Profile {
   @@map("profiles")
 }
 
+model Category {
+  id               String   @id @default(cuid())
+  squareCategoryId String   @unique
+  name             String
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  items            Item[]
+
+  @@map("categories")
+}
+
 model Location {
-  id         String   @id @default(cuid())
-  locationId String   @unique
-  name       String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  sales      Sale[]
+  id                String     @id @default(cuid())
+  squareLocationId  String     @unique
+  name              String
+  address           String?
+  timezone          String?
+  currency          String?
+  status            String?
+  businessHours     Json?
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  orders            Order[]
 
   @@map("locations")
 }
 
-model Sale {
-  id         String     @id @default(cuid())
-  date       DateTime
-  locationId String
-  totalSales Decimal    @db.Decimal(10, 2)
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  saleItems  SaleItem[]
-  location   Location   @relation(fields: [locationId], references: [locationId])
-
-  @@map("sales")
-}
-
 model Item {
-  id        String     @id @default(cuid())
-  name      String     @unique
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  saleItems SaleItem[]
+  id               String      @id @default(cuid())
+  squareItemId     String      @unique
+  squareCatalogId  String      @unique
+  squareCategoryId String?
+  name             String
+  category         String?
+  isActive         Boolean     @default(true)
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  categoryRel      Category?   @relation(fields: [squareCategoryId], references: [squareCategoryId])
+  lineItems        LineItem[]
 
   @@map("items")
 }
 
-model SaleItem {
-  id        String   @id @default(cuid())
-  saleId    String
-  itemId    String
-  price     Decimal  @db.Decimal(10, 2)
-  quantity  Int      @default(1)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  item      Item     @relation(fields: [itemId], references: [id])
-  sale      Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
+model Order {
+  id              String     @id @default(cuid())
+  squareOrderId   String     @unique
+  locationId      String
+  date            DateTime
+  state           String
+  totalAmount     Int        // Amount in cents
+  currency        String
+  version         Int?
+  source          String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  location        Location   @relation(fields: [locationId], references: [squareLocationId])
+  lineItems       LineItem[]
 
-  @@map("sale_items")
+  @@map("orders")
+}
+
+model LineItem {
+  id                   String   @id @default(cuid())
+  squareLineItemUid    String   @unique
+  orderId              String
+  itemId               String?
+  name                 String
+  quantity             Int
+  unitPriceAmount      Int      // Amount in cents
+  totalPriceAmount     Int      // Amount in cents
+  currency             String
+  taxAmount            Int      @default(0)
+  discountAmount       Int      @default(0)
+  variations           String?
+  category             String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  order                Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  item                 Item?    @relation(fields: [itemId], references: [id])
+
+  @@map("line_items")
 }
 
 model Conversation {

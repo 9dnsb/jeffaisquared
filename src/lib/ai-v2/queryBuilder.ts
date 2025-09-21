@@ -1,6 +1,6 @@
 /**
  * Type-safe Prisma query builder for sales analytics
- * Builds and executes queries based on extracted parameters
+ * Updated for Square Order/LineItem schema
  */
 
 import { logger } from '../utils/logger'
@@ -106,23 +106,21 @@ export class QueryBuilder {
   }
 
   /**
-   * Build location-grouped query
+   * Build location-grouped query using Order/LineItem schema
    */
   private async buildLocationQuery(params: QueryParameters): Promise<QueryResultRow[]> {
     const whereClause = this.buildWhereClause(params)
 
-    // Get location grouping with metrics
-    const sales = await this.prisma.sale.findMany({
+    // Get orders with line items grouped by location
+    const orders = await this.prisma.order.findMany({
       where: whereClause,
       include: {
         location: true,
-        ...(params.metrics.includes('quantity') || params.itemNames.length > 0 ? {
-          saleItems: {
-            include: {
-              item: true
-            }
+        lineItems: {
+          include: {
+            item: true
           }
-        } : {})
+        }
       }
     })
 
@@ -130,31 +128,38 @@ export class QueryBuilder {
     const locationGroups = new Map<string, {
       locationId: string
       name: string
-      sales: typeof sales
-      saleItems: Array<{ price: number; quantity: number; item: { name: string } }>
+      orders: typeof orders
+      lineItems: Array<{
+        unitPriceAmount: number
+        totalPriceAmount: number
+        quantity: number
+        name: string
+        item?: { name: string } | null
+      }>
     }>()
 
-    for (const sale of sales) {
-      const locationId = sale.locationId
+    for (const order of orders) {
+      const locationId = order.locationId
       if (!locationGroups.has(locationId)) {
         locationGroups.set(locationId, {
           locationId,
-          name: sale.location.name || locationId,
-          sales: [],
-          saleItems: []
+          name: order.location.name || locationId,
+          orders: [],
+          lineItems: []
         })
       }
 
       const group = locationGroups.get(locationId)!
-      group.sales.push(sale)
+      group.orders.push(order)
 
-      if (sale.saleItems) {
-        group.saleItems.push(...sale.saleItems.map(si => ({
-          price: Number(si.price),
-          quantity: si.quantity,
-          item: si.item
-        })))
-      }
+      // Add line items with price in dollars (convert from cents)
+      group.lineItems.push(...order.lineItems.map(li => ({
+        unitPriceAmount: li.unitPriceAmount / 100, // Convert cents to dollars
+        totalPriceAmount: li.totalPriceAmount / 100, // Convert cents to dollars
+        quantity: li.quantity,
+        name: li.name,
+        item: li.item
+      })))
     }
 
     // Calculate metrics for each location
@@ -167,7 +172,7 @@ export class QueryBuilder {
       }
 
       for (const metric of params.metrics) {
-        row[metric] = this.calculateMetric(metric, group.sales, group.saleItems, params)
+        row[metric] = this.calculateMetric(metric, group.orders, group.lineItems, params)
       }
 
       results.push(row)
@@ -177,67 +182,81 @@ export class QueryBuilder {
   }
 
   /**
-   * Build item-grouped query
+   * Build item-grouped query using LineItem schema
    */
   private async buildItemQuery(params: QueryParameters): Promise<QueryResultRow[]> {
-    const whereClause = this.buildWhereClause(params)
+    const whereClause = this.buildOrderWhereClause(params)
 
-    // Get sale items with details
-    const saleItems = await this.prisma.saleItem.findMany({
+    // Get line items with order details
+    const lineItems = await this.prisma.lineItem.findMany({
       where: {
-        sale: whereClause,
+        order: whereClause,
         ...(params.itemNames.length > 0 && {
-          item: {
-            name: {
-              in: params.itemNames
+          OR: [
+            {
+              name: {
+                in: params.itemNames
+              }
+            },
+            {
+              item: {
+                name: {
+                  in: params.itemNames
+                }
+              }
             }
-          }
+          ]
         })
       },
       include: {
         item: true,
-        sale: true
+        order: {
+          include: {
+            location: true
+          }
+        }
       }
     })
 
     // Group by item and calculate metrics
     const itemGroups = new Map<string, {
-      itemId: string
-      name: string
-      saleItems: Array<{ price: number; quantity: number; sale: { totalSales: number } }>
+      itemName: string
+      lineItems: Array<{
+        unitPriceAmount: number
+        totalPriceAmount: number
+        quantity: number
+        order: { totalAmount: number }
+      }>
     }>()
 
-    for (const saleItem of saleItems) {
-      const itemId = saleItem.itemId
-      const itemName = saleItem.item.name
-
-      if (!itemGroups.has(itemId)) {
-        itemGroups.set(itemId, {
-          itemId,
-          name: itemName,
-          saleItems: []
+    for (const lineItem of lineItems) {
+      const itemName = lineItem.item?.name || lineItem.name
+      if (!itemGroups.has(itemName)) {
+        itemGroups.set(itemName, {
+          itemName,
+          lineItems: []
         })
       }
 
-      const group = itemGroups.get(itemId)!
-      group.saleItems.push({
-        price: Number(saleItem.price),
-        quantity: saleItem.quantity,
-        sale: { totalSales: Number(saleItem.sale.totalSales) }
+      const group = itemGroups.get(itemName)!
+      group.lineItems.push({
+        unitPriceAmount: lineItem.unitPriceAmount / 100, // Convert cents to dollars
+        totalPriceAmount: lineItem.totalPriceAmount / 100, // Convert cents to dollars
+        quantity: lineItem.quantity,
+        order: { totalAmount: lineItem.order.totalAmount / 100 } // Convert cents to dollars
       })
     }
 
     // Calculate metrics for each item
     const results: QueryResultRow[] = []
 
-    for (const [itemId, group] of itemGroups) {
+    for (const [itemName, group] of itemGroups) {
       const row: QueryResultRow = {
-        itemId,
-        item: group.name
+        item: itemName
       }
 
       for (const metric of params.metrics) {
-        row[metric] = this.calculateItemMetric(metric, group.saleItems)
+        row[metric] = this.calculateItemMetric(metric, group.lineItems, params)
       }
 
       results.push(row)
@@ -252,30 +271,36 @@ export class QueryBuilder {
   private async buildMonthQuery(params: QueryParameters): Promise<QueryResultRow[]> {
     const whereClause = this.buildWhereClause(params)
 
-    const sales = await this.prisma.sale.findMany({
+    const orders = await this.prisma.order.findMany({
       where: whereClause,
-      ...(params.metrics.includes('quantity') ? {
-        include: {
-          saleItems: true
-        }
-      } : {})
+      include: {
+        lineItems: true
+      }
     })
 
     // Group by month
     const monthGroups = new Map<string, {
       month: string
-      sales: typeof sales
+      orders: typeof orders
+      lineItems: Array<{ totalPriceAmount: number; quantity: number }>
     }>()
 
-    for (const sale of sales) {
-      const month = sale.date.toISOString().slice(0, 7) // YYYY-MM
+    for (const order of orders) {
+      const month = order.date.toISOString().substring(0, 7) // YYYY-MM format
       if (!monthGroups.has(month)) {
         monthGroups.set(month, {
           month,
-          sales: []
+          orders: [],
+          lineItems: []
         })
       }
-      monthGroups.get(month)!.sales.push(sale)
+
+      const group = monthGroups.get(month)!
+      group.orders.push(order)
+      group.lineItems.push(...order.lineItems.map(li => ({
+        totalPriceAmount: li.totalPriceAmount / 100, // Convert cents to dollars
+        quantity: li.quantity
+      })))
     }
 
     // Calculate metrics for each month
@@ -287,13 +312,13 @@ export class QueryBuilder {
       }
 
       for (const metric of params.metrics) {
-        row[metric] = this.calculateMetric(metric, group.sales, [], params)
+        row[metric] = this.calculateMetric(metric, group.orders, group.lineItems, params)
       }
 
       results.push(row)
     }
 
-    return results
+    return results.sort((a, b) => (a.month || '').localeCompare(b.month || ''))
   }
 
   /**
@@ -302,63 +327,93 @@ export class QueryBuilder {
   private async buildAggregateQuery(params: QueryParameters): Promise<QueryResultRow[]> {
     const whereClause = this.buildWhereClause(params)
 
-    const sales = await this.prisma.sale.findMany({
+    const orders = await this.prisma.order.findMany({
       where: whereClause,
-      ...(params.metrics.includes('quantity') || params.itemNames.length > 0 ? {
-        include: {
-          saleItems: {
-            include: {
-              item: true
-            }
-          }
-        }
-      } : {})
+      include: {
+        lineItems: true
+      }
     })
 
-    // Filter sale items if specific items requested
-    let allSaleItems: Array<{ price: number; quantity: number; item: { name: string } }> = []
+    const allLineItems = orders.flatMap(order =>
+      order.lineItems.map(li => ({
+        totalPriceAmount: li.totalPriceAmount / 100, // Convert cents to dollars
+        quantity: li.quantity
+      }))
+    )
 
-    for (const sale of sales) {
-      if ('saleItems' in sale && sale.saleItems) {
-        const filteredItems = (sale.saleItems as Array<{ price: unknown; quantity: number; item: { name: string } }>)
-          .filter(si => params.itemNames.length === 0 || params.itemNames.includes(si.item.name))
-          .map(si => ({
-            price: Number(si.price),
-            quantity: si.quantity,
-            item: si.item
-          }))
-        allSaleItems.push(...filteredItems)
-      }
-    }
-
-    // Calculate aggregate metrics
     const row: QueryResultRow = {}
 
     for (const metric of params.metrics) {
-      row[metric] = this.calculateMetric(metric, sales, allSaleItems, params)
+      row[metric] = this.calculateMetric(metric, orders, allLineItems, params)
     }
 
     return [row]
   }
 
   /**
-   * Build WHERE clause for queries
+   * Build location sum query for multi-location comparisons
    */
-  private buildWhereClause(params: QueryParameters) {
-    const where: Record<string, unknown> = {}
+  private async buildLocationSumQuery(params: QueryParameters): Promise<QueryResultRow[]> {
+    // Similar to buildLocationQuery but with sum aggregation
+    return this.buildLocationQuery(params)
+  }
 
-    // Date filtering
+  /**
+   * Build percentage query
+   */
+  private async buildPercentageQuery(params: QueryParameters): Promise<QueryResultRow[]> {
+    // Get base data and calculate percentages
+    const baseData = await this.buildLocationQuery(params)
+
+    // Calculate percentages if we have revenue data
+    if (params.metrics.includes('revenue')) {
+      const totalRevenue = baseData.reduce((sum, row) => sum + (Number(row.revenue) || 0), 0)
+
+      return baseData.map(row => ({
+        ...row,
+        percentage: totalRevenue > 0 ? ((Number(row.revenue) || 0) / totalRevenue * 100) : 0
+      }))
+    }
+
+    return baseData
+  }
+
+  /**
+   * Build average query (daily/monthly averages)
+   */
+  private async buildAverageQuery(params: QueryParameters): Promise<QueryResultRow[]> {
+    const monthData = await this.buildMonthQuery(params)
+
+    if (params.calculationType === 'daily_average') {
+      // Convert monthly to daily averages (assuming 30 days per month)
+      return monthData.map(row => ({
+        ...row,
+        revenue: (Number(row.revenue) || 0) / 30,
+        quantity: (Number(row.quantity) || 0) / 30
+      }))
+    }
+
+    return monthData
+  }
+
+  /**
+   * Build where clause for orders
+   */
+  private buildWhereClause(params: QueryParameters): any {
+    const where: any = {}
+
+    // Date range filter
     if (params.startDate || params.endDate) {
       where.date = {}
       if (params.startDate) {
-        (where.date as Record<string, unknown>).gte = params.startDate
+        where.date.gte = params.startDate
       }
       if (params.endDate) {
-        (where.date as Record<string, unknown>).lte = params.endDate
+        where.date.lte = params.endDate
       }
     }
 
-    // Location filtering
+    // Location filter
     if (params.locationIds.length > 0) {
       where.locationId = {
         in: params.locationIds
@@ -369,62 +424,54 @@ export class QueryBuilder {
   }
 
   /**
-   * Calculate metric for sales data
+   * Build where clause specifically for order queries
+   */
+  private buildOrderWhereClause(params: QueryParameters): any {
+    return this.buildWhereClause(params)
+  }
+
+  /**
+   * Calculate metric for orders and line items
    */
   private calculateMetric(
     metric: Metric,
-    sales: Array<{ totalSales: unknown }>,
-    saleItems: Array<{ price: number; quantity: number; item: { name: string } }>,
+    orders: any[],
+    lineItems: Array<{ totalPriceAmount: number; quantity: number }>,
     params: QueryParameters
   ): number {
     switch (metric) {
       case 'revenue':
-        return sales.reduce((sum, sale) => sum + Number(sale.totalSales), 0)
-
-      case 'count':
-        return sales.length
-
+        return orders.reduce((sum, order) => sum + (order.totalAmount / 100), 0) // Convert cents to dollars
       case 'quantity':
-        return saleItems
-          .filter(si => params.itemNames.length === 0 || params.itemNames.includes(si.item.name))
-          .reduce((sum, si) => sum + si.quantity, 0)
-
-      case 'avg_transaction':
-        if (sales.length === 0) return 0
-        const totalRevenue = sales.reduce((sum, sale) => sum + Number(sale.totalSales), 0)
-        return totalRevenue / sales.length
-
-      case 'avg_item_price':
-        if (saleItems.length === 0) return 0
-        const totalPrice = saleItems.reduce((sum, si) => sum + si.price, 0)
-        return totalPrice / saleItems.length
-
+        return lineItems.reduce((sum, item) => sum + item.quantity, 0)
+      case 'transaction_count':
+        return orders.length
+      case 'average_order_value':
+        const totalRevenue = orders.reduce((sum, order) => sum + (order.totalAmount / 100), 0)
+        return orders.length > 0 ? totalRevenue / orders.length : 0
       default:
         return 0
     }
   }
 
   /**
-   * Calculate metric for item-specific data
+   * Calculate metric specifically for line items
    */
   private calculateItemMetric(
     metric: Metric,
-    saleItems: Array<{ price: number; quantity: number; sale: { totalSales: number } }>
+    lineItems: Array<{ totalPriceAmount: number; quantity: number }>,
+    params: QueryParameters
   ): number {
     switch (metric) {
       case 'revenue':
-        return saleItems.reduce((sum, si) => sum + si.price, 0)
-
-      case 'count':
-        return saleItems.length
-
+        return lineItems.reduce((sum, item) => sum + item.totalPriceAmount, 0)
       case 'quantity':
-        return saleItems.reduce((sum, si) => sum + si.quantity, 0)
-
-      case 'avg_item_price':
-        if (saleItems.length === 0) return 0
-        return saleItems.reduce((sum, si) => sum + si.price, 0) / saleItems.length
-
+        return lineItems.reduce((sum, item) => sum + item.quantity, 0)
+      case 'transaction_count':
+        return lineItems.length
+      case 'average_order_value':
+        const totalRevenue = lineItems.reduce((sum, item) => sum + item.totalPriceAmount, 0)
+        return lineItems.length > 0 ? totalRevenue / lineItems.length : 0
       default:
         return 0
     }
@@ -434,168 +481,46 @@ export class QueryBuilder {
    * Apply sorting and limiting to results
    */
   private applySortingAndLimiting(data: QueryResultRow[], params: QueryParameters): QueryResultRow[] {
-    let result = [...data]
-
-    // Apply sorting
-    if (params.sortBy && result.length > 0) {
-      result.sort((a, b) => {
-        const aVal = a[params.sortBy as keyof QueryResultRow] as number || 0
-        const bVal = b[params.sortBy as keyof QueryResultRow] as number || 0
-
-        if (params.sortDirection === 'asc') {
-          return aVal - bVal
-        } else {
-          return bVal - aVal
-        }
-      })
+    // Sort by primary metric if specified
+    if (params.metrics.length > 0) {
+      const primaryMetric = params.metrics[0]
+      data.sort((a, b) => (Number(b[primaryMetric]) || 0) - (Number(a[primaryMetric]) || 0))
     }
 
-    // Apply limiting
+    // Apply limit if specified
     if (params.limit && params.limit > 0) {
-      result = result.slice(0, params.limit)
+      data = data.slice(0, params.limit)
     }
 
-    return result
+    return data
   }
 
   /**
-   * Build location sum query (for comparing/combining multiple locations)
-   */
-  private async buildLocationSumQuery(params: QueryParameters): Promise<QueryResultRow[]> {
-    const whereClause = this.buildWhereClause(params)
-
-    const sales = await this.prisma.sale.findMany({
-      where: whereClause,
-      include: {
-        location: true
-      }
-    })
-
-    // Calculate sum across all specified locations
-    const row: QueryResultRow = {}
-
-    for (const metric of params.metrics) {
-      row[metric] = this.calculateMetric(metric, sales, [], params)
-    }
-
-    return [row]
-  }
-
-  /**
-   * Build percentage query (for calculating percentages)
-   */
-  private async buildPercentageQuery(params: QueryParameters): Promise<QueryResultRow[]> {
-    // Get total across all locations for denominator
-    const allSales = await this.prisma.sale.findMany({
-      where: {
-        ...(params.startDate || params.endDate ? {
-          date: {
-            ...(params.startDate && { gte: params.startDate }),
-            ...(params.endDate && { lte: params.endDate })
-          }
-        } : {})
-      }
-    })
-
-    // Get sales for specific location(s) for numerator
-    const whereClause = this.buildWhereClause(params)
-    const filteredSales = await this.prisma.sale.findMany({
-      where: whereClause
-    })
-
-    const row: QueryResultRow = {}
-
-    for (const metric of params.metrics) {
-      const totalValue = this.calculateMetric(metric, allSales, [], params)
-      const filteredValue = this.calculateMetric(metric, filteredSales, [], params)
-
-      // Calculate percentage
-      if (totalValue > 0) {
-        row[metric] = (filteredValue / totalValue) * 100
-      } else {
-        row[metric] = 0
-      }
-    }
-
-    return [row]
-  }
-
-  /**
-   * Build average query (for daily/monthly averages)
-   */
-  private async buildAverageQuery(params: QueryParameters): Promise<QueryResultRow[]> {
-    const whereClause = this.buildWhereClause(params)
-
-    const sales = await this.prisma.sale.findMany({
-      where: whereClause
-    })
-
-    const row: QueryResultRow = {}
-
-    for (const metric of params.metrics) {
-      const totalValue = this.calculateMetric(metric, sales, [], params)
-
-      // Calculate time-based average
-      if (params.calculationType === 'daily_average') {
-        // Calculate number of days in date range
-        let days = 1
-        if (params.startDate && params.endDate) {
-          const diffTime = Math.abs(params.endDate.getTime() - params.startDate.getTime())
-          days = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1
-        } else {
-          // If no date range, get total days from all data
-          const allSales = await this.prisma.sale.findMany({
-            select: { date: true }
-          })
-          if (allSales.length > 0) {
-            const dates = allSales.map(s => s.date).sort((a, b) => a.getTime() - b.getTime())
-            const firstDate = dates[0]
-            const lastDate = dates[dates.length - 1]
-            const diffTime = lastDate.getTime() - firstDate.getTime()
-            days = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1
-          }
-        }
-        row[metric] = totalValue / days
-      } else if (params.calculationType === 'monthly_average') {
-        // Approximate monthly average (total / 18 months based on test data)
-        const approximateMonths = 18
-        row[metric] = totalValue / approximateMonths
-      }
-    }
-
-    return [row]
-  }
-
-  /**
-   * Get query plan description
+   * Get query execution plan description
    */
   private getQueryPlan(params: QueryParameters): string {
-    const parts: string[] = []
-
-    if (params.calculationType) {
-      parts.push(`calculation: ${params.calculationType}`)
-    }
+    const parts = []
 
     if (params.groupBy.length > 0) {
-      parts.push(`grouped by ${params.groupBy.join(', ')}`)
-    } else {
-      parts.push('aggregate query')
+      parts.push(`GROUP BY ${params.groupBy.join(', ')}`)
+    }
+
+    if (params.metrics.length > 0) {
+      parts.push(`METRICS ${params.metrics.join(', ')}`)
     }
 
     if (params.locationIds.length > 0) {
-      parts.push(`${params.locationIds.length} locations`)
+      parts.push(`LOCATIONS ${params.locationIds.length}`)
     }
 
     if (params.itemNames.length > 0) {
-      parts.push(`${params.itemNames.length} items`)
+      parts.push(`ITEMS ${params.itemNames.length}`)
     }
 
     if (params.startDate || params.endDate) {
-      parts.push('date filtered')
+      parts.push('DATE_FILTER')
     }
 
-    return parts.join(', ')
+    return parts.join(' | ')
   }
 }
-
-export const createQueryBuilder = (prisma: PrismaClient) => new QueryBuilder(prisma)

@@ -18,7 +18,7 @@ export class LocationMapper {
     try {
       const locations = await prisma.location.findMany({
         select: {
-          locationId: true,
+          squareLocationId: true,
           name: true,
         },
       })
@@ -66,14 +66,14 @@ export class LocationMapper {
 
       // Update with actual location data
       for (const location of locations) {
-        const mapping = mappings.find((m) => m.id === location.locationId)
+        const mapping = mappings.find((m) => m.id === location.squareLocationId)
         if (mapping) {
           mapping.name = location.name || mapping.name
-          this.locationCache.set(location.locationId, mapping)
+          this.locationCache.set(location.squareLocationId, mapping)
 
           // Build keyword cache
           for (const keyword of mapping.keywords) {
-            this.keywordCache.set(keyword.toLowerCase(), location.locationId)
+            this.keywordCache.set(keyword.toLowerCase(), location.squareLocationId)
           }
         }
       }

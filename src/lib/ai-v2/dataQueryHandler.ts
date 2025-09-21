@@ -6,7 +6,7 @@
 import { logger } from '../utils/logger'
 import { PrismaClient } from '../../generated/prisma'
 import { parameterExtractor } from './parameterExtractor'
-import { createQueryBuilder } from './queryBuilder'
+import { QueryBuilder } from './queryBuilder'
 import { responseFormatter } from './responseFormatter'
 import { locationMapper } from './locationMapper'
 import type {
@@ -80,7 +80,7 @@ export class DataQueryHandler {
       }
 
       // Step 2: Execute query
-      const queryBuilder = createQueryBuilder(this.prisma)
+      const queryBuilder = new QueryBuilder(this.prisma)
       const queryResult = await queryBuilder.executeQuery(extractionResult.parameters)
 
       if (!queryResult.success) {

@@ -45,7 +45,8 @@
       "Bash(dotenv:*)",
       "Read(//c/Users/david/Documents/**)",
       "Bash(npx dotenv -e:*)",
-      "Bash(timeout:*)"
+      "Bash(timeout:*)",
+      "WebFetch(domain:developer.squareup.com)"
     ],
     "deny": [],
     "ask": []

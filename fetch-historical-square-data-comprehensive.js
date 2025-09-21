@@ -184,14 +184,18 @@ async function extractUniqueItems(orders, catalogMapping) {
         // Get real category from Square catalog
         const variation = catalogMapping.variations.get(lineItem.category)
         const parentItem = variation ? catalogMapping.items.get(variation.itemId) : null
-        const category = parentItem?.categoryId ? catalogMapping.categories.get(parentItem.categoryId) : null
+
+        // Get the first category from the categories array (Square allows multiple but we found none in practice)
+        const categoryIds = parentItem?.categoryIds || []
+        const primaryCategoryId = categoryIds.length > 0 ? categoryIds[0] : null
+        const squareCategory = primaryCategoryId ? catalogMapping.categories.get(primaryCategoryId) : null
 
         itemsMap.set(itemName, {
           name: itemName,
-          category: category?.name || categorizeItem(itemName), // Use Square category or fallback
+          category: squareCategory?.name || categorizeItem(itemName), // Use Square category name or fallback
           squareCatalogId: lineItem.category,
           squareItemId: variation?.itemId || null,
-          squareCategoryId: parentItem?.categoryId || null,
+          squareCategoryId: primaryCategoryId,
           isActive: true,
           // Calculate average price
           totalRevenue: 0,
@@ -219,8 +223,29 @@ async function extractUniqueItems(orders, catalogMapping) {
   return items
 }
 
-// Simple item categorization based on name
-function categorizeItem(itemName) {
+// Intelligent item categorization that maps Square categories to simplified categories
+function categorizeItem(itemName, squareCategory = null) {
+  // If we have a Square category, try to map it to a simplified category first
+  if (squareCategory) {
+    const categoryLower = squareCategory.toLowerCase()
+
+    // Map Square categories to simplified categories
+    if (categoryLower.includes('coffee')) return 'coffee'
+    if (categoryLower.includes('tea')) return 'tea'
+    if (categoryLower.includes('food')) return 'food'
+    if (categoryLower.includes('beverage')) return 'beverages'
+    if (categoryLower.includes('signature')) return 'signature-drinks'
+    if (categoryLower.includes('retail')) return 'retail'
+    if (categoryLower.includes('wholesale')) return 'wholesale'
+    if (categoryLower.includes('apparel') || categoryLower.includes('merchandize')) return 'merchandise'
+    if (categoryLower.includes('syrup') || categoryLower.includes('powder') || categoryLower.includes('modification')) return 'add-ons'
+    if (categoryLower.includes('education') || categoryLower.includes('event')) return 'services'
+
+    // If we have a Square category but it doesn't match our mapping, use it as-is
+    return squareCategory.toLowerCase().replace(/[^a-z0-9]/g, '-')
+  }
+
+  // Fallback to name-based categorization if no Square category
   if (!itemName || typeof itemName !== 'string') {
     return 'other'
   }
@@ -271,7 +296,7 @@ function categorizeItem(itemName) {
 }
 
 // Save data to JSON files for seeding
-async function saveDataToFiles(locations, orders, items) {
+async function saveDataToFiles(locations, orders, items, catalogMapping) {
   console.log('💾 Saving data to files...')
 
   const dataDir = path.join(__dirname, 'historical-data')
@@ -294,6 +319,18 @@ async function saveDataToFiles(locations, orders, items) {
     JSON.stringify(items, null, 2)
   )
 
+  // Save categories from Square catalog
+  const categoriesData = Array.from(catalogMapping.categories.entries()).map(([id, data]) => ({
+    squareCategoryId: id,
+    name: data.name,
+    isActive: true
+  }))
+
+  await fs.writeFile(
+    path.join(dataDir, 'categories.json'),
+    JSON.stringify(categoriesData, null, 2)
+  )
+
   // Save orders (might be large, so save in chunks if needed)
   await fs.writeFile(
     path.join(dataDir, 'orders.json'),
@@ -301,10 +338,17 @@ async function saveDataToFiles(locations, orders, items) {
   )
 
   // Save summary stats
+  const categoriesForSummary = Array.from(catalogMapping.categories.entries()).map(([id, data]) => ({
+    squareCategoryId: id,
+    name: data.name,
+    isActive: true
+  }))
+
   const summary = {
     totalLocations: locations.length,
     totalItems: items.length,
     totalOrders: orders.length,
+    totalCategories: categoriesForSummary.length,
     totalRevenue:
       orders.reduce((sum, order) => sum + order.totalAmount, 0) / 100,
     dateRange: {
@@ -335,6 +379,7 @@ async function saveDataToFiles(locations, orders, items) {
   console.log(`✅ Data saved to ${dataDir}/`)
   console.log(`📊 Summary:`)
   console.log(`   Locations: ${summary.totalLocations}`)
+  console.log(`   Categories: ${summary.totalCategories}`)
   console.log(`   Items: ${summary.totalItems}`)
   console.log(`   Orders: ${summary.totalOrders}`)
   console.log(`   Revenue: $${summary.totalRevenue.toFixed(2)}`)
@@ -382,8 +427,16 @@ async function fetchCatalogMapping() {
     allObjects.forEach(obj => {
       if (obj.type === 'ITEM') {
         const name = obj.item_data?.name || 'Unknown Item'
-        const categoryId = obj.item_data?.category_id
-        catalogMapping.items.set(obj.id, { name, categoryId })
+        // Handle both single category_id and categories array (Square supports both)
+        let categoryIds = []
+        if (obj.item_data?.categories) {
+          // Categories array - extract just the IDs from the objects
+          categoryIds = obj.item_data.categories.map(cat => typeof cat === 'string' ? cat : cat.id)
+        } else if (obj.item_data?.category_id) {
+          // Single category_id
+          categoryIds = [obj.item_data.category_id]
+        }
+        catalogMapping.items.set(obj.id, { name, categoryIds })
 
         // Extract variations from this item
         if (obj.item_data?.variations) {
@@ -427,11 +480,12 @@ async function fetchAllHistoricalData() {
     const items = await extractUniqueItems(orders, catalogMapping)
 
     // Save to files
-    const summary = await saveDataToFiles(locations, orders, items)
+    const summary = await saveDataToFiles(locations, orders, items, catalogMapping)
 
     console.log('\n🎉 HISTORICAL DATA FETCH COMPLETE!')
     console.log('\nFiles created:')
     console.log('  📍 historical-data/locations.json')
+    console.log('  🏷️  historical-data/categories.json')
     console.log('  🍰 historical-data/items.json')
     console.log('  📊 historical-data/orders.json')
     console.log('  📈 historical-data/summary.json')

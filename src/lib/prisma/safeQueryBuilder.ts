@@ -149,21 +149,21 @@ class PrismaSafeQueryBuilder {
   }
 
   /**
-   * Get sales data with comprehensive filtering
+   * Get orders data with comprehensive filtering (updated for Square schema)
    */
-  async getSalesData(filters?: SalesFilters): Promise<SafeQueryResult<Prisma.SaleGetPayload<{
+  async getSalesData(filters?: SalesFilters): Promise<SafeQueryResult<Prisma.OrderGetPayload<{
     include: {
       location: true
-      saleItems: {
+      lineItems: {
         include: {
           item: true
         }
       }
     }
   }>[]>> {
-    logger.data('Building sales query with filters', undefined, this.serializeFilters(filters))
+    logger.data('Building orders query with filters', undefined, this.serializeFilters(filters))
 
-    const where: Prisma.SaleWhereInput = {}
+    const where: Prisma.OrderWhereInput = {}
 
     // Build where clause with Prisma's type-safe operators
     if (filters?.dateRange) {
@@ -180,37 +180,46 @@ class PrismaSafeQueryBuilder {
     }
 
     if (filters?.minAmount !== undefined || filters?.maxAmount !== undefined) {
-      where.totalSales = {}
+      where.totalAmount = {}
       if (filters.minAmount !== undefined) {
-        where.totalSales.gte = filters.minAmount
+        where.totalAmount.gte = Math.round(filters.minAmount * 100) // Convert dollars to cents
       }
       if (filters.maxAmount !== undefined) {
-        where.totalSales.lte = filters.maxAmount
+        where.totalAmount.lte = Math.round(filters.maxAmount * 100) // Convert dollars to cents
       }
     }
 
-    // Add item filtering for sales data
+    // Add item filtering for orders data
     if (filters?.itemNames && filters.itemNames.length > 0) {
-      where.saleItems = {
+      where.lineItems = {
         some: {
-          item: {
-            name: {
-              in: filters.itemNames
+          OR: [
+            {
+              name: {
+                in: filters.itemNames
+              }
+            },
+            {
+              item: {
+                name: {
+                  in: filters.itemNames
+                }
+              }
             }
-          }
+          ]
         }
       }
     }
 
     return this.executeWithLogging(
-      'GET_SALES_DATA',
-      'Sale',
+      'GET_ORDERS_DATA',
+      'Order',
       'findMany',
-      () => prisma.sale.findMany({
+      () => prisma.order.findMany({
         where,
         include: {
           location: true,
-          saleItems: {
+          lineItems: {
             include: {
               item: true
             }
@@ -223,18 +232,18 @@ class PrismaSafeQueryBuilder {
   }
 
   /**
-   * Get sales summary with aggregations
+   * Get orders summary with aggregations (updated for Square schema)
    */
-  async getSalesSummary(filters?: LocationFilters): Promise<SafeQueryResult<Prisma.GetSaleAggregateType<{
+  async getSalesSummary(filters?: LocationFilters): Promise<SafeQueryResult<Prisma.GetOrderAggregateType<{
     _count: true
-    _sum: { totalSales: true }
-    _avg: { totalSales: true }
-    _max: { totalSales: true }
-    _min: { totalSales: true }
+    _sum: { totalAmount: true }
+    _avg: { totalAmount: true }
+    _max: { totalAmount: true }
+    _min: { totalAmount: true }
   }>>> {
-    logger.data('Building sales summary query', undefined, this.serializeFilters(filters))
+    logger.data('Building orders summary query', undefined, this.serializeFilters(filters))
 
-    const where: Prisma.SaleWhereInput = {}
+    const where: Prisma.OrderWhereInput = {}
 
     if (filters?.dateRange) {
       where.date = {
@@ -251,28 +260,37 @@ class PrismaSafeQueryBuilder {
 
     // Add item filtering - if specific items are requested, filter by those items
     if (filters?.itemNames && filters.itemNames.length > 0) {
-      where.saleItems = {
+      where.lineItems = {
         some: {
-          item: {
-            name: {
-              in: filters.itemNames
+          OR: [
+            {
+              name: {
+                in: filters.itemNames
+              }
+            },
+            {
+              item: {
+                name: {
+                  in: filters.itemNames
+                }
+              }
             }
-          }
+          ]
         }
       }
     }
 
     return this.executeWithLogging(
-      'GET_SALES_SUMMARY',
-      'Sale',
+      'GET_ORDERS_SUMMARY',
+      'Order',
       'aggregate',
-      () => prisma.sale.aggregate({
+      () => prisma.order.aggregate({
         where,
         _count: true,
-        _sum: { totalSales: true },
-        _avg: { totalSales: true },
-        _max: { totalSales: true },
-        _min: { totalSales: true }
+        _sum: { totalAmount: true },
+        _avg: { totalAmount: true },
+        _max: { totalAmount: true },
+        _min: { totalAmount: true }
       })
     )
   }
@@ -280,18 +298,18 @@ class PrismaSafeQueryBuilder {
   /**
    * Get top-selling items
    */
-  async getTopItems(filters?: ItemFilters): Promise<SafeQueryResult<Prisma.SaleItemGetPayload<{
+  async getTopItems(filters?: ItemFilters): Promise<SafeQueryResult<Prisma.LineItemGetPayload<{
     include: {
       item: true
-      sale: true
+      order: true
     }
   }>[]>> {
     logger.data('Building top items query', undefined, this.serializeFilters(filters))
 
-    const where: Prisma.SaleItemWhereInput = {}
+    const where: Prisma.LineItemWhereInput = {}
 
     if (filters?.dateRange) {
-      where.sale = {
+      where.order = {
         date: {
           gte: filters.dateRange.start,
           lte: filters.dateRange.end
@@ -309,13 +327,13 @@ class PrismaSafeQueryBuilder {
 
     return this.executeWithLogging(
       'GET_TOP_ITEMS',
-      'SaleItem',
+      'LineItem',
       'findMany',
-      () => prisma.saleItem.findMany({
+      () => prisma.lineItem.findMany({
         where,
         include: {
           item: true,
-          sale: true
+          order: true
         },
         orderBy: { quantity: 'desc' },
         take: Math.min(filters?.limit || this.defaultTopItemsLimit, this.maxRecords)
@@ -326,14 +344,14 @@ class PrismaSafeQueryBuilder {
   /**
    * Get location performance data
    */
-  async getLocationPerformance(filters?: LocationFilters): Promise<SafeQueryResult<Prisma.SaleGetPayload<{
+  async getLocationPerformance(filters?: LocationFilters): Promise<SafeQueryResult<Prisma.OrderGetPayload<{
     include: {
       location: true
     }
   }>[]>> {
     logger.data('Building location performance query', undefined, this.serializeFilters(filters))
 
-    const where: Prisma.SaleWhereInput = {}
+    const where: Prisma.OrderWhereInput = {}
 
     if (filters?.dateRange) {
       where.date = {
@@ -344,14 +362,14 @@ class PrismaSafeQueryBuilder {
 
     return this.executeWithLogging(
       'GET_LOCATION_PERFORMANCE',
-      'Sale',
+      'Order',
       'findMany',
-      () => prisma.sale.findMany({
+      () => prisma.order.findMany({
         where,
         include: {
           location: true
         },
-        orderBy: { totalSales: 'desc' }
+        orderBy: { totalAmount: 'desc' }
       })
     )
   }
@@ -362,7 +380,7 @@ class PrismaSafeQueryBuilder {
   async getSalesCount(filters?: LocationFilters): Promise<SafeQueryResult<number>> {
     logger.data('Building sales count query', undefined, this.serializeFilters(filters))
 
-    const where: Prisma.SaleWhereInput = {}
+    const where: Prisma.OrderWhereInput = {}
 
     if (filters?.dateRange) {
       where.date = {
@@ -379,9 +397,9 @@ class PrismaSafeQueryBuilder {
 
     return this.executeWithLogging(
       'GET_SALES_COUNT',
-      'Sale',
+      'Order',
       'count',
-      () => prisma.sale.count({ where })
+      () => prisma.order.count({ where })
     )
   }
 

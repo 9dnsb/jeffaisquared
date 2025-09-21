@@ -1,0 +1,102 @@
+[
+  {
+    "squareCategoryId": "QS5YI5F4GSUKL2FEL6II7WSZ",
+    "name": "Coffee",
+    "isActive": true
+  },
+  {
+    "squareCategoryId": "KL3EF3JQRXKOF6TOKCDJ45XX",
+    "name": "Signature Drink",
+    "isActive": true
+  },
+  {
+    "squareCategoryId": "WZPD4A4JMO5ZOU33TJUXH2CD",
+    "name": "Apparel",
+    "isActive": true
+  },
+  {
+    "squareCategoryId": "M5J6XKVPVUP6QNEGSWFUTZGD",
+    "name": "Beverage",
+    "isActive": true
+  },
+  {
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "name": "Merchandize",
+    "isActive": true
+  },
+  {
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "name": "Retail Coffee-227g",
+    "isActive": true
+  },
+  {
+    "squareCategoryId": "LE5Z4VBDS66FTX4PPRSIOAA5",
+    "name": "Retail Tea",
+    "isActive": true
+  },
+  {
+    "squareCategoryId": "ICS3QWJ3YMHFCR26V3J55RPJ",
+    "name": "Syrup & Powder",
+    "isActive": true
+  },
+  {
+    "squareCategoryId": "7UFNH4SYMGX5ZTUBSL3EKXZH",
+    "name": "Wholesale Coffee-227g",
+    "isActive": true
+  },
+  {
+    "squareCategoryId": "DJT2TUYEAYOQJ3PGQ24GTEFC",
+    "name": "Tea",
+    "isActive": true
+  },
+  {
+    "squareCategoryId": "MYYN6KVN3GUR3DYFJ7RTMMUW",
+    "name": "Modification",
+    "isActive": true
+  },
+  {
+    "squareCategoryId": "EG5SRK3VQ3P7DXNT6MFVDKC2",
+    "name": "Retail Bean-5lb",
+    "isActive": true
+  },
+  {
+    "squareCategoryId": "RATAMXGZLMLAHXVZDY6QP56R",
+    "name": "Wholesale Coffee-5lb",
+    "isActive": true
+  },
+  {
+    "squareCategoryId": "6ZOTV6LIEM4PT46VJS6FOK3L",
+    "name": "Event",
+    "isActive": true
+  },
+  {
+    "squareCategoryId": "LE5B5I3QE43P64QWQ6ZZGK3C",
+    "name": "Education Class",
+    "isActive": true
+  },
+  {
+    "squareCategoryId": "VPNOWLFO7U7DOM2CDMNWEEOT",
+    "name": "Favourites",
+    "isActive": true
+  },
+  {
+    "squareCategoryId": "J6WFZDKIER2TUPP5XWZPKX2O",
+    "name": "Food Kingston",
+    "isActive": true
+  },
+  {
+    "squareCategoryId": "5GQAXAEC3MLXCC6KDRCPTP25",
+    "name": "Food Kingston - Tax Exempt",
+    "isActive": true
+  },
+  {
+    "squareCategoryId": "Q7BT5OBG3LJFNR7DK72PVW5Q",
+    "name": "Food C&S",
+    "isActive": true
+  },
+  {
+    "squareCategoryId": "4TBMVWBX7EKDBBZYENC7MZDX",
+    "name": "Food C&S - Tax Exempt",
+    "isActive": true
+  }
+]

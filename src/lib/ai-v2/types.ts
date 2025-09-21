@@ -30,11 +30,13 @@ export interface QueryParameters {
 }
 
 export type Metric =
-  | 'revenue'           // Sum of sales/prices
-  | 'count'            // Number of transactions/items
-  | 'quantity'         // Sum of quantities
-  | 'avg_transaction'  // Average transaction value
-  | 'avg_item_price'   // Average item price
+  | 'revenue'              // Sum of sales/prices
+  | 'count'               // Number of transactions/items
+  | 'quantity'            // Sum of quantities
+  | 'transaction_count'   // Number of transactions/orders
+  | 'average_order_value' // Average order value
+  | 'avg_transaction'     // Average transaction value (legacy)
+  | 'avg_item_price'      // Average item price
 
 export type GroupBy =
   | 'location'         // Group by location
@@ -75,8 +77,11 @@ export interface QueryResultRow {
   revenue?: number
   count?: number
   quantity?: number
+  transaction_count?: number
+  average_order_value?: number
   avg_transaction?: number
   avg_item_price?: number
+  percentage?: number
 }
 
 export interface LocationMapping {

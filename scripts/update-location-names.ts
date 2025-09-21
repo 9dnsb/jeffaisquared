@@ -22,16 +22,16 @@ async function updateLocationNames() {
     console.log(existingLocations)
 
     // Update or create locations with proper names
-    for (const [locationId, name] of Object.entries(locationMappings)) {
+    for (const [squareLocationId, name] of Object.entries(locationMappings)) {
       const result = await prisma.location.upsert({
-        where: { locationId },
+        where: { squareLocationId },
         update: { name },
         create: {
-          locationId,
+          squareLocationId,
           name
         }
       })
-      console.log(`✅ Updated/Created: ${result.locationId} -> ${result.name}`)
+      console.log(`✅ Updated/Created: ${result.squareLocationId} -> ${result.name}`)
     }
 
     // Show final state

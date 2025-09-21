@@ -554,19 +554,19 @@ Focus on what specific data the user is asking for. Consider time periods, locat
 
       // Location name patterns and their variations
       const locationPatterns = [
-        { keywords: ['hq', 'main', 'head office', 'headquarters'], locationId: 'LZEVY2P88KZA8' },
-        { keywords: ['yonge', 'yonge street'], locationId: 'LAH170A0KK47P' },
-        { keywords: ['bloor', 'bloor street'], locationId: 'LPSSMJYZX8X7P' },
-        { keywords: ['well', 'the well', 'spadina'], locationId: 'LT8YK4FBNGH17' },
-        { keywords: ['broadway'], locationId: 'LDPNNFWBTFB26' },
-        { keywords: ['kingston', 'brock street'], locationId: 'LYJ3TVBQ23F5V' }
+        { keywords: ['hq', 'main', 'head office', 'headquarters'], squareLocationId: 'LZEVY2P88KZA8' },
+        { keywords: ['yonge', 'yonge street'], squareLocationId: 'LAH170A0KK47P' },
+        { keywords: ['bloor', 'bloor street'], squareLocationId: 'LPSSMJYZX8X7P' },
+        { keywords: ['well', 'the well', 'spadina'], squareLocationId: 'LT8YK4FBNGH17' },
+        { keywords: ['broadway'], squareLocationId: 'LDPNNFWBTFB26' },
+        { keywords: ['kingston', 'brock street'], squareLocationId: 'LYJ3TVBQ23F5V' }
       ]
 
       // Check for direct matches in patterns
       for (const pattern of locationPatterns) {
         for (const keyword of pattern.keywords) {
           if (message.includes(keyword)) {
-            locationIds.push(pattern.locationId)
+            locationIds.push(pattern.squareLocationId)
             break // Only add each location once
           }
         }
@@ -580,8 +580,8 @@ Focus on what specific data the user is asking for. Consider time periods, locat
           if (message.includes(locationNameLower) ||
               locationNameLower.includes(message.trim()) ||
               this.checkLocationNameVariations(message, locationNameLower)) {
-            if (!locationIds.includes(location.locationId)) {
-              locationIds.push(location.locationId)
+            if (!locationIds.includes(location.squareLocationId)) {
+              locationIds.push(location.squareLocationId)
             }
           }
         }
