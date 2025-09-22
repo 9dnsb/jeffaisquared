@@ -188,7 +188,24 @@ async function fetchSquareOrdersStreaming(locations: any[], days = 730) {
 
       do {
         batchCount++
-        const searchBody = {
+        const searchBody: {
+          location_ids: string[]
+          query: {
+            filter: {
+              date_time_filter: {
+                created_at: {
+                  start_at: string
+                  end_at: string
+                }
+              }
+              state_filter: {
+                states: string[]
+              }
+            }
+          }
+          limit: number
+          cursor?: string
+        } = {
           location_ids: [location.squareLocationId],
           query: {
             filter: {

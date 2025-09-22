@@ -23,7 +23,7 @@ export class TestDataManager {
       ...options
     };
 
-    return await prisma.user.create({
+    return await prisma.profile.create({
       data: testUser
     });
   }
@@ -43,12 +43,14 @@ export class TestDataManager {
     // Use test location if not specified
     const locationId = data.locationId || await this.ensureTestLocation();
 
-    const sale = await prisma.sale.create({
+    const sale = await prisma.order.create({
       data: {
         id: saleId,
         squareOrderId: orderId,
         locationId,
-        totalSales: data.totalSales,
+        totalAmount: data.totalSales,
+        state: 'COMPLETED',
+        currency: 'CAD',
         date: data.date
       }
     });
@@ -58,14 +60,17 @@ export class TestDataManager {
       for (const item of data.items) {
         const itemId = await this.ensureTestItem(item.name, item.price);
 
-        await prisma.saleItem.create({
+        await prisma.lineItem.create({
           data: {
             id: `${this.TEST_PREFIX}ITEM_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-            saleId: sale.id,
+            orderId: sale.id,
             itemId,
             squareLineItemUid: `${this.TEST_PREFIX}LINE_${Date.now()}`,
+            name: item.name,
             quantity: item.quantity,
-            price: item.price * item.quantity
+            unitPriceAmount: item.price,
+            totalPriceAmount: item.price * item.quantity,
+            currency: 'CAD'
           }
         });
       }
@@ -82,10 +87,10 @@ export class TestDataManager {
     const locationName = name || `${this.TEST_PREFIX}Default Location`;
 
     await prisma.location.upsert({
-      where: { locationId },
+      where: { squareLocationId: locationId },
       update: {},
       create: {
-        locationId,
+        squareLocationId: locationId,
         name: locationName,
         address: 'Test Address'
       }
@@ -107,7 +112,8 @@ export class TestDataManager {
         id: itemId,
         name: `${this.TEST_PREFIX}${name}`,
         squareItemId: `${this.TEST_PREFIX}SQ_${itemId}`,
-        basePrice
+        squareCatalogId: `${this.TEST_PREFIX}CAT_${itemId}`,
+        category: 'Test Category'
       }
     });
 
@@ -156,20 +162,20 @@ export class TestDataManager {
    */
   static async cleanupAllTestData() {
     const deleteOperations = [
-      prisma.saleItem.deleteMany({
+      prisma.lineItem.deleteMany({
         where: { id: { startsWith: this.TEST_PREFIX } }
       }),
-      prisma.sale.deleteMany({
+      prisma.order.deleteMany({
         where: { id: { startsWith: this.TEST_PREFIX } }
       }),
       prisma.item.deleteMany({
         where: { id: { startsWith: this.TEST_PREFIX } }
       }),
       prisma.location.deleteMany({
-        where: { locationId: { startsWith: this.TEST_PREFIX } }
+        where: { squareLocationId: { startsWith: this.TEST_PREFIX } }
       }),
-      prisma.user.deleteMany({
-        where: { id: { startsWith: this.TEST_PREFIX } }
+      prisma.profile.deleteMany({
+        where: { email: { startsWith: `${this.TEST_PREFIX.toLowerCase()}test` } }
       })
     ];
 
@@ -184,9 +190,9 @@ export class TestDataManager {
    */
   static async getTestDataStatus() {
     const counts = await Promise.all([
-      prisma.sale.count({ where: { id: { startsWith: this.TEST_PREFIX } } }),
-      prisma.sale.count({ where: { id: { not: { startsWith: this.TEST_PREFIX } } } }),
-      prisma.user.count({ where: { id: { startsWith: this.TEST_PREFIX } } })
+      prisma.order.count({ where: { id: { startsWith: this.TEST_PREFIX } } }),
+      prisma.order.count({ where: { id: { not: { startsWith: this.TEST_PREFIX } } } }),
+      prisma.profile.count({ where: { email: { startsWith: `${this.TEST_PREFIX.toLowerCase()}test` } } })
     ]);
 
     return {
