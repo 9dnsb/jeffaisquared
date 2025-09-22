@@ -16,6 +16,7 @@
     "db:generate": "dotenv -e .env.development -- npx prisma generate",
     "db:generate:prod": "dotenv -e .env.production -- npx prisma generate",
     "db:seed": "timeout 300 dotenv -e .env.development -- npx prisma db seed",
+    "db:seed:api": "timeout 86400 dotenv -e .env.development -- npx cross-env USE_SQUARE_API=true npx prisma db seed",
     "db:seed:prod": "dotenv -e .env.production -- npx prisma db seed",
     "db:reset": "dotenv -e .env.development -- npx prisma migrate reset --force",
     "db:reset:prod": "dotenv -e .env.production -- npx prisma migrate reset --force",

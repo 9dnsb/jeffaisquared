@@ -13,9 +13,9 @@ dotenv.config({ path: path.resolve(__dirname, '.env.development') })
  */
 export default defineConfig({
   testDir: './tests',
-  /* Global setup and teardown for database operations */
-  globalSetup: require.resolve('./tests/global-setup'),
-  globalTeardown: require.resolve('./tests/global-teardown'),
+  /* Global setup and teardown for database operations - Data-preserving strategy */
+  globalSetup: require.resolve('./tests/global-setup-new'),
+  globalTeardown: require.resolve('./tests/global-teardown-new'),
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */

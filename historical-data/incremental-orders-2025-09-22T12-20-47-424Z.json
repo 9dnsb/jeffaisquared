@@ -1,0 +1,2126 @@
+[
+  {
+    "squareOrderId": "2g0JKcKmE3Ts9msYOqpXijw02AeZY",
+    "locationId": "LPSSMJYZX8X7P",
+    "date": "2025-09-22T12:20:20.081Z",
+    "state": "COMPLETED",
+    "totalAmount": 834,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "3bd1df11-7124-4030-99d9-1c4fcca482ba",
+        "name": "Latte - Mocha",
+        "quantity": 1,
+        "unitPriceAmount": 650,
+        "totalPriceAmount": 734,
+        "currency": "CAD",
+        "taxAmount": 84,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "ZN4HAVEBVEAI4247XEPHCZ5A"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "yg5BrV3p4HJvBrsO6cWwCnpKjR7YY",
+    "locationId": "LPSSMJYZX8X7P",
+    "date": "2025-09-22T12:08:50.372Z",
+    "state": "COMPLETED",
+    "totalAmount": 2304,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "8ea02bc1-af7f-4008-9f5f-3e03c7356e82",
+        "name": "Matcha Kumo",
+        "quantity": 1,
+        "unitPriceAmount": 850,
+        "totalPriceAmount": 960,
+        "currency": "CAD",
+        "taxAmount": 110,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "SSCVW6CHT7PKBSWUFDI5LKHW"
+      },
+      {
+        "squareLineItemUid": "d3424c0e-9b9b-471a-85a3-449c524c2293",
+        "name": "Matcha Kumo",
+        "quantity": 1,
+        "unitPriceAmount": 850,
+        "totalPriceAmount": 1074,
+        "currency": "CAD",
+        "taxAmount": 124,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "SSCVW6CHT7PKBSWUFDI5LKHW"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "qsLG7HuClr5bdeGB9YbScKRhPuGZY",
+    "locationId": "LPSSMJYZX8X7P",
+    "date": "2025-09-22T12:06:41.429Z",
+    "state": "COMPLETED",
+    "totalAmount": 2608,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "355f4131-ad9e-4956-bd00-17f048911357",
+        "name": "Dancing Goats",
+        "quantity": 1,
+        "unitPriceAmount": 1600,
+        "totalPriceAmount": 1600,
+        "currency": "CAD",
+        "taxAmount": 0,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "IOW5HXVXVI4ELXAF6QGGJEW4"
+      },
+      {
+        "squareLineItemUid": "294aa696-3cc2-4b34-8374-daeca27e2fc0",
+        "name": "Hot/Ice Chocolate",
+        "quantity": 1,
+        "unitPriceAmount": 600,
+        "totalPriceAmount": 678,
+        "currency": "CAD",
+        "taxAmount": 78,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "EEXUJRSCG6N7HQTLUMH64CDV"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "4dati6cKcB97v8qVRJEhcjMZURDZY",
+    "locationId": "LPSSMJYZX8X7P",
+    "date": "2025-09-22T12:05:50.288Z",
+    "state": "COMPLETED",
+    "totalAmount": 898,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "76e53251-8b8b-4d15-8962-33bab1bd7f55",
+        "name": "Marronmisu",
+        "quantity": 1,
+        "unitPriceAmount": 750,
+        "totalPriceAmount": 848,
+        "currency": "CAD",
+        "taxAmount": 98,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "VULVIGTFVNLAKUPHSHINESUS"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "yUb3IHHaYSzupDLqoyL8XCIcb4OZY",
+    "locationId": "LPSSMJYZX8X7P",
+    "date": "2025-09-22T12:01:41.437Z",
+    "state": "COMPLETED",
+    "totalAmount": 622,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "5cd19537-0a7f-490a-aa2c-01005c8133f9",
+        "name": "Latte",
+        "quantity": 1,
+        "unitPriceAmount": 550,
+        "totalPriceAmount": 622,
+        "currency": "CAD",
+        "taxAmount": 72,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "ASODRZ4S7SQG3LDXXMRO3GUE"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "uSrp5dBAKoNkjABumBtajCZons9YY",
+    "locationId": "LPSSMJYZX8X7P",
+    "date": "2025-09-22T11:55:57.715Z",
+    "state": "COMPLETED",
+    "totalAmount": 565,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "1d364239-a41a-4c29-983b-42f4c3c3ed8b",
+        "name": "Cappuccino",
+        "quantity": 1,
+        "unitPriceAmount": 500,
+        "totalPriceAmount": 565,
+        "currency": "CAD",
+        "taxAmount": 65,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "RNQBYNY6DXYFX7QII7ZNOJIN"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "6E9vlf8USIZc2SVI8XjMpJxYCdFZY",
+    "locationId": "LPSSMJYZX8X7P",
+    "date": "2025-09-22T11:51:56.073Z",
+    "state": "COMPLETED",
+    "totalAmount": 960,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "ca43adb6-80aa-4588-b25f-c9ab2bc200e7",
+        "name": "Americano",
+        "quantity": 1,
+        "unitPriceAmount": 400,
+        "totalPriceAmount": 452,
+        "currency": "CAD",
+        "taxAmount": 52,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "AD3H7Y2RJ4V4FC53C7OL3YLY"
+      },
+      {
+        "squareLineItemUid": "51ffc5c9-cc0a-4b61-8454-e7fe9a07f60e",
+        "name": "Brew Coffee",
+        "quantity": 1,
+        "unitPriceAmount": 350,
+        "totalPriceAmount": 508,
+        "currency": "CAD",
+        "taxAmount": 58,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "7TZVWEGC5OQIBYGTVTBQGEC6"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "WsIqpCbJWqGMNt6B82SCce2znnNZY",
+    "locationId": "LPSSMJYZX8X7P",
+    "date": "2025-09-22T11:48:12.497Z",
+    "state": "COMPLETED",
+    "totalAmount": 2023,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "e6d7a573-8799-40c4-9637-ccbcc2250b0c",
+        "name": "Latte",
+        "quantity": 1,
+        "unitPriceAmount": 550,
+        "totalPriceAmount": 622,
+        "currency": "CAD",
+        "taxAmount": 72,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "ASODRZ4S7SQG3LDXXMRO3GUE"
+      },
+      {
+        "squareLineItemUid": "7e36894f-aa9e-47de-8b39-ee66501e50ab",
+        "name": "Latte - Vanilla",
+        "quantity": 1,
+        "unitPriceAmount": 650,
+        "totalPriceAmount": 734,
+        "currency": "CAD",
+        "taxAmount": 84,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "QXZF2KOJIY2THXHO2N4ILX3O"
+      },
+      {
+        "squareLineItemUid": "670b050c-23ad-442a-a1e1-75c93dd73d0e",
+        "name": "Churro Cruffin",
+        "quantity": 1,
+        "unitPriceAmount": 590,
+        "totalPriceAmount": 667,
+        "currency": "CAD",
+        "taxAmount": 77,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "7GXK5SVBZ53ZFMPLH4ZUNSCV"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "wfbsKacs0cRJ9VDZY8fe6jBxRJWZY",
+    "locationId": "LPSSMJYZX8X7P",
+    "date": "2025-09-22T11:47:30.153Z",
+    "state": "COMPLETED",
+    "totalAmount": 1582,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "0d5c20b4-9a98-4e7d-a73b-a6bfc6116606",
+        "name": "Latte - Matcha",
+        "quantity": 1,
+        "unitPriceAmount": 650,
+        "totalPriceAmount": 960,
+        "currency": "CAD",
+        "taxAmount": 110,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "QQZUANKRYO77PESNA3EWN5RH"
+      },
+      {
+        "squareLineItemUid": "26cf0d27-ca14-493d-8616-aad24537d80a",
+        "name": "Sundried Tomato Mozzarella Danish",
+        "quantity": 1,
+        "unitPriceAmount": 550,
+        "totalPriceAmount": 622,
+        "currency": "CAD",
+        "taxAmount": 72,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "KXOJW5WHY5LVHZ3KPW6ZOUQR"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "WuLJoi3uOq1PAEWFyGiTaEDDc8LZY",
+    "locationId": "LPSSMJYZX8X7P",
+    "date": "2025-09-22T11:44:35.587Z",
+    "state": "COMPLETED",
+    "totalAmount": 1148,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "06e15e5b-4746-44ef-975d-1c301b536ebf",
+        "name": "Cortado",
+        "quantity": 2,
+        "unitPriceAmount": 500,
+        "totalPriceAmount": 848,
+        "currency": "CAD",
+        "taxAmount": 98,
+        "discountAmount": 250,
+        "variations": "Regular",
+        "category": "N2DYMPRYUUGMGYETBMM3HDOY"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "2MsUp3FqTsduOtqiR7x8LE45TdaZY",
+    "locationId": "LPSSMJYZX8X7P",
+    "date": "2025-09-22T11:37:52.891Z",
+    "state": "COMPLETED",
+    "totalAmount": 368,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "58794eb7-f2b7-421b-96e0-1d40f0b76208",
+        "name": "Brew Coffee",
+        "quantity": 1,
+        "unitPriceAmount": 350,
+        "totalPriceAmount": 368,
+        "currency": "CAD",
+        "taxAmount": 18,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "7TZVWEGC5OQIBYGTVTBQGEC6"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "mgw9KmaAYRcG0aNFQ75EWQa8kNDZY",
+    "locationId": "LPSSMJYZX8X7P",
+    "date": "2025-09-22T11:34:37.859Z",
+    "state": "COMPLETED",
+    "totalAmount": 2730,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "0b81605a-1709-47ea-848c-64e384a5620f",
+        "name": "Cappuccino",
+        "quantity": 2,
+        "unitPriceAmount": 500,
+        "totalPriceAmount": 1130,
+        "currency": "CAD",
+        "taxAmount": 130,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "RNQBYNY6DXYFX7QII7ZNOJIN"
+      },
+      {
+        "squareLineItemUid": "66f0f67a-61d2-442a-8b49-18caa7cc58a7",
+        "name": "Gentleman",
+        "quantity": 1,
+        "unitPriceAmount": 1600,
+        "totalPriceAmount": 1600,
+        "currency": "CAD",
+        "taxAmount": 0,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "6D235L3RMDLVFVMR3PQWFS7D"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "4hIn805HCsqq2hqeYpEmZMoMA3IZY",
+    "locationId": "LPSSMJYZX8X7P",
+    "date": "2025-09-22T11:25:58.454Z",
+    "state": "COMPLETED",
+    "totalAmount": 565,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "a103c053-18ce-4c96-aaa4-d331cbdeb2bd",
+        "name": "Cortado",
+        "quantity": 1,
+        "unitPriceAmount": 500,
+        "totalPriceAmount": 565,
+        "currency": "CAD",
+        "taxAmount": 65,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "N2DYMPRYUUGMGYETBMM3HDOY"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "IBOCRtz1cwu94w6KeuhuePvNXzRZY",
+    "locationId": "LDPNNFWBTFB26",
+    "date": "2025-09-22T12:11:58.633Z",
+    "state": "COMPLETED",
+    "totalAmount": 565,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "6297622d-2579-480d-8cbd-e377e3a21d82",
+        "name": "Flat White",
+        "quantity": 1,
+        "unitPriceAmount": 500,
+        "totalPriceAmount": 565,
+        "currency": "CAD",
+        "taxAmount": 65,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "7QFULVLFIVIJYXSCATVVJVHC"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "OE6wJH02e0NDXHhfSUEpho7ugDUZY",
+    "locationId": "LDPNNFWBTFB26",
+    "date": "2025-09-22T12:11:14.501Z",
+    "state": "COMPLETED",
+    "totalAmount": 565,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "9f1d8f80-1975-4556-9ed5-1446490ff8ee",
+        "name": "Americano",
+        "quantity": 1,
+        "unitPriceAmount": 400,
+        "totalPriceAmount": 565,
+        "currency": "CAD",
+        "taxAmount": 65,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "AD3H7Y2RJ4V4FC53C7OL3YLY"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "shXf5A8QqkFRyc2j9bUQQbW8p9WZY",
+    "locationId": "LDPNNFWBTFB26",
+    "date": "2025-09-22T12:10:54.296Z",
+    "state": "COMPLETED",
+    "totalAmount": 457,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "41529bb4-c1d7-498a-a6c8-356514335115",
+        "name": "Brew Coffee",
+        "quantity": 1,
+        "unitPriceAmount": 350,
+        "totalPriceAmount": 457,
+        "currency": "CAD",
+        "taxAmount": 52,
+        "discountAmount": 45,
+        "variations": "Regular",
+        "category": "7TZVWEGC5OQIBYGTVTBQGEC6"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "GiVbK6kGRNVFGZGOIHOfgAKPg5AZY",
+    "locationId": "LDPNNFWBTFB26",
+    "date": "2025-09-22T12:08:50.057Z",
+    "state": "COMPLETED",
+    "totalAmount": 966,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "a6aca7c3-73a5-4425-af99-bb5948ee64d9",
+        "name": "Wild Blueberry & Earl Grey Scone",
+        "quantity": 1,
+        "unitPriceAmount": 360,
+        "totalPriceAmount": 407,
+        "currency": "CAD",
+        "taxAmount": 47,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "5Q26VPFIAVGODSOFCH27BFOZ"
+      },
+      {
+        "squareLineItemUid": "0e3db287-fb34-4599-ba43-55861eec6c3e",
+        "name": "Cappuccino",
+        "quantity": 1,
+        "unitPriceAmount": 500,
+        "totalPriceAmount": 559,
+        "currency": "CAD",
+        "taxAmount": 64,
+        "discountAmount": 55,
+        "variations": "Regular",
+        "category": "RNQBYNY6DXYFX7QII7ZNOJIN"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "Oc8Z8vdw1N73SEZZHSbxjJRxVFYZY",
+    "locationId": "LDPNNFWBTFB26",
+    "date": "2025-09-22T12:02:46.203Z",
+    "state": "COMPLETED",
+    "totalAmount": 763,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "c9610c38-4d55-4307-8f5c-75bc2d6f9979",
+        "name": "Blueberry Latte",
+        "quantity": 1,
+        "unitPriceAmount": 750,
+        "totalPriceAmount": 763,
+        "currency": "CAD",
+        "taxAmount": 88,
+        "discountAmount": 75,
+        "variations": "Regular",
+        "category": "U4HWVEZBXT4CWRWDCETAZDB7"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "g1ElwoNAUht2xKldLPmGOCbezYZZY",
+    "locationId": "LDPNNFWBTFB26",
+    "date": "2025-09-22T12:01:11.580Z",
+    "state": "COMPLETED",
+    "totalAmount": 784,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "45fcbd96-a727-4d8d-a1af-e197f34f88ea",
+        "name": "Latte",
+        "quantity": 1,
+        "unitPriceAmount": 550,
+        "totalPriceAmount": 734,
+        "currency": "CAD",
+        "taxAmount": 84,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "ASODRZ4S7SQG3LDXXMRO3GUE"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "yYLQL4zgH9aCqLWcxktQCjqYkMRZY",
+    "locationId": "LDPNNFWBTFB26",
+    "date": "2025-09-22T11:59:17.390Z",
+    "state": "COMPLETED",
+    "totalAmount": 452,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "74fe2f7d-749c-4207-a426-a3d36a31abea",
+        "name": "Brew Coffee",
+        "quantity": 1,
+        "unitPriceAmount": 350,
+        "totalPriceAmount": 452,
+        "currency": "CAD",
+        "taxAmount": 52,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "7TZVWEGC5OQIBYGTVTBQGEC6"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "SeA5X1jSHE24fzGiRT9yA6haeuKZY",
+    "locationId": "LDPNNFWBTFB26",
+    "date": "2025-09-22T11:57:33.275Z",
+    "state": "COMPLETED",
+    "totalAmount": 1582,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "6e2e00c1-cf47-4cd8-a219-cf61bc7f0517",
+        "name": "Latte",
+        "quantity": 1,
+        "unitPriceAmount": 550,
+        "totalPriceAmount": 734,
+        "currency": "CAD",
+        "taxAmount": 84,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "ASODRZ4S7SQG3LDXXMRO3GUE"
+      },
+      {
+        "squareLineItemUid": "81199915-4830-4f28-8106-7e903b5ef66a",
+        "name": "Latte",
+        "quantity": 1,
+        "unitPriceAmount": 550,
+        "totalPriceAmount": 848,
+        "currency": "CAD",
+        "taxAmount": 98,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "ASODRZ4S7SQG3LDXXMRO3GUE"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "01p07HHHUrfy4UXaCLpxWDBFHbfZY",
+    "locationId": "LDPNNFWBTFB26",
+    "date": "2025-09-22T11:55:52.562Z",
+    "state": "COMPLETED",
+    "totalAmount": 1243,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "1a236f88-de1e-43e4-8b99-c14460cbe061",
+        "name": "Latte",
+        "quantity": 2,
+        "unitPriceAmount": 550,
+        "totalPriceAmount": 1243,
+        "currency": "CAD",
+        "taxAmount": 143,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "ASODRZ4S7SQG3LDXXMRO3GUE"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "i6u3thp2mZN5QSQmhUMPaEjHtO9YY",
+    "locationId": "LDPNNFWBTFB26",
+    "date": "2025-09-22T11:46:48.008Z",
+    "state": "COMPLETED",
+    "totalAmount": 904,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "e51adb06-5ca0-44d9-994b-11c131ced2e0",
+        "name": "Brew Coffee",
+        "quantity": 2,
+        "unitPriceAmount": 350,
+        "totalPriceAmount": 904,
+        "currency": "CAD",
+        "taxAmount": 104,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "7TZVWEGC5OQIBYGTVTBQGEC6"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "WiFz7bAUjJCWUoIFUsr1y89gKsIZY",
+    "locationId": "LDPNNFWBTFB26",
+    "date": "2025-09-22T11:45:30.781Z",
+    "state": "COMPLETED",
+    "totalAmount": 508,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "8d6735d8-0c46-4591-b042-22b67466b6b7",
+        "name": "Brew Coffee",
+        "quantity": 1,
+        "unitPriceAmount": 350,
+        "totalPriceAmount": 508,
+        "currency": "CAD",
+        "taxAmount": 58,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "7TZVWEGC5OQIBYGTVTBQGEC6"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "kVNeW8RTYGTSHWV9l3dTGCQEA7ZZY",
+    "locationId": "LDPNNFWBTFB26",
+    "date": "2025-09-22T11:44:46.120Z",
+    "state": "COMPLETED",
+    "totalAmount": 1695,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "eaba27f2-a965-48af-bda0-c07c26a770bc",
+        "name": "NomNom - Iced",
+        "quantity": 2,
+        "unitPriceAmount": 650,
+        "totalPriceAmount": 1322,
+        "currency": "CAD",
+        "taxAmount": 152,
+        "discountAmount": 130,
+        "variations": "Regular",
+        "category": "PNYWNVBIT6CI2ADLMTFY2L52"
+      },
+      {
+        "squareLineItemUid": "ecd7bc46-0018-49d6-8abf-ab06ad8b9c63",
+        "name": "Wild Blueberry Crumble Muffin",
+        "quantity": 1,
+        "unitPriceAmount": 330,
+        "totalPriceAmount": 373,
+        "currency": "CAD",
+        "taxAmount": 43,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "5ASGKD7TVZSJHSNUODJ4NGIY"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "sTy0new3lQn4MZaEfJnwkTTIqqaZY",
+    "locationId": "LDPNNFWBTFB26",
+    "date": "2025-09-22T11:43:43.772Z",
+    "state": "COMPLETED",
+    "totalAmount": 870,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "01148730-1347-43fa-8448-fdb1787517e4",
+        "name": "Americano",
+        "quantity": 1,
+        "unitPriceAmount": 400,
+        "totalPriceAmount": 452,
+        "currency": "CAD",
+        "taxAmount": 52,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "AD3H7Y2RJ4V4FC53C7OL3YLY"
+      },
+      {
+        "squareLineItemUid": "d939a187-187d-4e25-896a-a6c0307b63f7",
+        "name": "Pain Au Chocolat",
+        "quantity": 1,
+        "unitPriceAmount": 370,
+        "totalPriceAmount": 418,
+        "currency": "CAD",
+        "taxAmount": 48,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "2TBWLIMJJ6VN2S6HRGR5V3E2"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "qWMaqzIgTjYU8QdWxc7rlUfnvGgZY",
+    "locationId": "LDPNNFWBTFB26",
+    "date": "2025-09-22T11:27:58.509Z",
+    "state": "COMPLETED",
+    "totalAmount": 924,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "303c4ab1-cf25-4708-8d78-d4bc429a8aba",
+        "name": "Americano",
+        "quantity": 1,
+        "unitPriceAmount": 400,
+        "totalPriceAmount": 452,
+        "currency": "CAD",
+        "taxAmount": 52,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "AD3H7Y2RJ4V4FC53C7OL3YLY"
+      },
+      {
+        "squareLineItemUid": "65a8d157-c5d0-4e77-b26c-a10f5352a8fb",
+        "name": "Carrot Oat Crumble Muffin",
+        "quantity": 1,
+        "unitPriceAmount": 330,
+        "totalPriceAmount": 372,
+        "currency": "CAD",
+        "taxAmount": 42,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "G72YW4K3WBG7DZMVAHWDUN35"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "UBRzioUe8Isp65NTJqbHHPYR0t9YY",
+    "locationId": "LDPNNFWBTFB26",
+    "date": "2025-09-22T11:25:04.453Z",
+    "state": "COMPLETED",
+    "totalAmount": 948,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "b1878890-efcd-4fa7-a621-ce2dcc3b3057",
+        "name": "Blueberry Latte",
+        "quantity": 1,
+        "unitPriceAmount": 750,
+        "totalPriceAmount": 848,
+        "currency": "CAD",
+        "taxAmount": 98,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "U4HWVEZBXT4CWRWDCETAZDB7"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "WmFkmgIhX4qegZsuBzohGgIqNhfZY",
+    "locationId": "LDPNNFWBTFB26",
+    "date": "2025-09-22T11:24:20.966Z",
+    "state": "COMPLETED",
+    "totalAmount": 552,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "66a57ea3-410f-485d-b9a4-44acf6cf3518",
+        "name": "Brew Coffee",
+        "quantity": 1,
+        "unitPriceAmount": 350,
+        "totalPriceAmount": 452,
+        "currency": "CAD",
+        "taxAmount": 52,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "7TZVWEGC5OQIBYGTVTBQGEC6"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "SQbK941wVQE7HDa8QAgWyVB1akZZY",
+    "locationId": "LDPNNFWBTFB26",
+    "date": "2025-09-22T11:16:27.490Z",
+    "state": "COMPLETED",
+    "totalAmount": 622,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "727a9808-39ab-4eb5-be3e-00793f58e6b7",
+        "name": "Latte",
+        "quantity": 1,
+        "unitPriceAmount": 550,
+        "totalPriceAmount": 622,
+        "currency": "CAD",
+        "taxAmount": 72,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "ASODRZ4S7SQG3LDXXMRO3GUE"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "kPMtLdGOH79T4I978BfyzEkePCCZY",
+    "locationId": "LDPNNFWBTFB26",
+    "date": "2025-09-22T11:04:40.453Z",
+    "state": "COMPLETED",
+    "totalAmount": 848,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "054049e7-5bad-438b-91da-42c698296bd5",
+        "name": "Latte - Matcha",
+        "quantity": 1,
+        "unitPriceAmount": 650,
+        "totalPriceAmount": 848,
+        "currency": "CAD",
+        "taxAmount": 98,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "QQZUANKRYO77PESNA3EWN5RH"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "8vwcyCD6MaSK0VvggyuuMby1KNJZY",
+    "locationId": "LYJ3TVBQ23F5V",
+    "date": "2025-09-22T12:12:16.673Z",
+    "state": "COMPLETED",
+    "totalAmount": 834,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "55c74868-8d8b-4c53-ac0c-e7298de581bb",
+        "name": "Latte",
+        "quantity": 1,
+        "unitPriceAmount": 550,
+        "totalPriceAmount": 734,
+        "currency": "CAD",
+        "taxAmount": 84,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "ASODRZ4S7SQG3LDXXMRO3GUE"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "a8xBcgQo1dvPNcfbmy2KWUUskVRZY",
+    "locationId": "LYJ3TVBQ23F5V",
+    "date": "2025-09-22T12:04:08.631Z",
+    "state": "COMPLETED",
+    "totalAmount": 608,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "e6064fa9-e3ed-4931-b759-73f4384074c5",
+        "name": "Cappuccino",
+        "quantity": 1,
+        "unitPriceAmount": 500,
+        "totalPriceAmount": 508,
+        "currency": "CAD",
+        "taxAmount": 58,
+        "discountAmount": 50,
+        "variations": "Regular",
+        "category": "RNQBYNY6DXYFX7QII7ZNOJIN"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "sLgTI1cNiJnPdJnRQJUkafDalZYZY",
+    "locationId": "LYJ3TVBQ23F5V",
+    "date": "2025-09-22T12:02:34.578Z",
+    "state": "COMPLETED",
+    "totalAmount": 608,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "e79a2208-3b20-4985-87bb-5ceefc81413e",
+        "name": "Brew Coffee",
+        "quantity": 1,
+        "unitPriceAmount": 350,
+        "totalPriceAmount": 508,
+        "currency": "CAD",
+        "taxAmount": 58,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "7TZVWEGC5OQIBYGTVTBQGEC6"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "meHbDknWb0O63ssRvEd5n40ITrdZY",
+    "locationId": "LYJ3TVBQ23F5V",
+    "date": "2025-09-22T11:48:03.331Z",
+    "state": "COMPLETED",
+    "totalAmount": 1600,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "087c876d-ea45-47a6-a412-f28343565001",
+        "name": "Blueberry Latte",
+        "quantity": 1,
+        "unitPriceAmount": 750,
+        "totalPriceAmount": 847,
+        "currency": "CAD",
+        "taxAmount": 97,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "U4HWVEZBXT4CWRWDCETAZDB7"
+      },
+      {
+        "squareLineItemUid": "ff4c5f86-c63b-4f98-a7df-d7ae205bed83",
+        "name": "Butter Croissant",
+        "quantity": 1,
+        "unitPriceAmount": 500,
+        "totalPriceAmount": 565,
+        "currency": "CAD",
+        "taxAmount": 65,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "KPB7HZX5VCKJ4AEMFTM3FFPM"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "mki3JJWZZ58p6KAshea0qF8H62VZY",
+    "locationId": "LYJ3TVBQ23F5V",
+    "date": "2025-09-22T11:45:38.116Z",
+    "state": "COMPLETED",
+    "totalAmount": 1920,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "56a6c65a-946d-4874-8f08-f653eb79e3d7",
+        "name": "Butter Croissant",
+        "quantity": 1,
+        "unitPriceAmount": 500,
+        "totalPriceAmount": 565,
+        "currency": "CAD",
+        "taxAmount": 65,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "KPB7HZX5VCKJ4AEMFTM3FFPM"
+      },
+      {
+        "squareLineItemUid": "594acae4-6e50-45de-a445-821ef2590960",
+        "name": "Pain au Chocolat",
+        "quantity": 1,
+        "unitPriceAmount": 600,
+        "totalPriceAmount": 678,
+        "currency": "CAD",
+        "taxAmount": 78,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "IWL5SQED7RCSX4EPRV6TQ54N"
+      },
+      {
+        "squareLineItemUid": "5b3a7174-87f7-4c0d-afc5-583fb594123d",
+        "name": "Brew Coffee",
+        "quantity": 1,
+        "unitPriceAmount": 350,
+        "totalPriceAmount": 452,
+        "currency": "CAD",
+        "taxAmount": 52,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "7TZVWEGC5OQIBYGTVTBQGEC6"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "YvlQLnNb2kjrAb46upPEInLpEWHZY",
+    "locationId": "LYJ3TVBQ23F5V",
+    "date": "2025-09-22T11:38:12.869Z",
+    "state": "COMPLETED",
+    "totalAmount": 1280,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "23245535-4d00-4f31-b249-bd6ff0f2c327",
+        "name": "Babyccino / Steam M",
+        "quantity": 1,
+        "unitPriceAmount": 350,
+        "totalPriceAmount": 396,
+        "currency": "CAD",
+        "taxAmount": 46,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "NNZZCBRO2POMWGU5MKVTW4B2"
+      },
+      {
+        "squareLineItemUid": "b33baf32-5592-4410-a5d6-071c0b9a4f88",
+        "name": "Latte - Matcha",
+        "quantity": 1,
+        "unitPriceAmount": 650,
+        "totalPriceAmount": 734,
+        "currency": "CAD",
+        "taxAmount": 84,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "QQZUANKRYO77PESNA3EWN5RH"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "gLPZmAEB3rBb56JuNtHfdu3djQGZY",
+    "locationId": "LYJ3TVBQ23F5V",
+    "date": "2025-09-22T11:07:55.389Z",
+    "state": "COMPLETED",
+    "totalAmount": 678,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "75567e59-8b77-4118-922b-6d63e325d66b",
+        "name": "Americano",
+        "quantity": 1,
+        "unitPriceAmount": 400,
+        "totalPriceAmount": 678,
+        "currency": "CAD",
+        "taxAmount": 78,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "AD3H7Y2RJ4V4FC53C7OL3YLY"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "OeLC9JcK3uwADePYnEuct0SwrrCZY",
+    "locationId": "LYJ3TVBQ23F5V",
+    "date": "2025-09-22T11:05:41.278Z",
+    "state": "COMPLETED",
+    "totalAmount": 934,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "0a1efdfb-93a1-4839-a3f3-a579a9eda53e",
+        "name": "Latte",
+        "quantity": 1,
+        "unitPriceAmount": 550,
+        "totalPriceAmount": 734,
+        "currency": "CAD",
+        "taxAmount": 84,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "ASODRZ4S7SQG3LDXXMRO3GUE"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "U9p0mJKh2Ie5mPd1A205E4OpC6ZZY",
+    "locationId": "LYJ3TVBQ23F5V",
+    "date": "2025-09-22T11:03:41.141Z",
+    "state": "COMPLETED",
+    "totalAmount": 1302,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "23ddf82e-3154-4fc7-bde4-4f93d9968fc1",
+        "name": "Bold Breakfast",
+        "quantity": 1,
+        "unitPriceAmount": 425,
+        "totalPriceAmount": 480,
+        "currency": "CAD",
+        "taxAmount": 55,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "ZQJNBU3RKBQWZE2CICHKTFEK"
+      },
+      {
+        "squareLineItemUid": "65fe199a-d77c-42d7-99b6-ca207025b455",
+        "name": "Latte",
+        "quantity": 1,
+        "unitPriceAmount": 550,
+        "totalPriceAmount": 622,
+        "currency": "CAD",
+        "taxAmount": 72,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "ASODRZ4S7SQG3LDXXMRO3GUE"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "iiG5ZL7NGa5qcHwEhIWw2w2WxIHZY",
+    "locationId": "LT8YK4FBNGH17",
+    "date": "2025-09-22T12:17:43.966Z",
+    "state": "COMPLETED",
+    "totalAmount": 622,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "98cfbf30-928a-4095-a7fa-ed1d44f9d202",
+        "name": "Flat White",
+        "quantity": 1,
+        "unitPriceAmount": 500,
+        "totalPriceAmount": 622,
+        "currency": "CAD",
+        "taxAmount": 72,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "7QFULVLFIVIJYXSCATVVJVHC"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "QPfk1qI2ZyFcoRwKU59bAHkRCTGZY",
+    "locationId": "LT8YK4FBNGH17",
+    "date": "2025-09-22T12:16:26.078Z",
+    "state": "COMPLETED",
+    "totalAmount": 502,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "cd0a7a26-5734-4541-95a8-0a03f6452a08",
+        "name": "Brew Coffee",
+        "quantity": 1,
+        "unitPriceAmount": 350,
+        "totalPriceAmount": 452,
+        "currency": "CAD",
+        "taxAmount": 52,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "7TZVWEGC5OQIBYGTVTBQGEC6"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "e8QVkbSx4l5dRTApENeCzB1YUWPZY",
+    "locationId": "LT8YK4FBNGH17",
+    "date": "2025-09-22T12:13:31.367Z",
+    "state": "COMPLETED",
+    "totalAmount": 378,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "89b74db3-1a51-43b1-bcc7-111a732bb41f",
+        "name": "Brew Coffee",
+        "quantity": 1,
+        "unitPriceAmount": 350,
+        "totalPriceAmount": 378,
+        "currency": "CAD",
+        "taxAmount": 18,
+        "discountAmount": 40,
+        "variations": "Regular",
+        "category": "7TZVWEGC5OQIBYGTVTBQGEC6"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "mguwAyx4hXg8BTrrhJziTQ8oiFPZY",
+    "locationId": "LT8YK4FBNGH17",
+    "date": "2025-09-22T12:11:42.292Z",
+    "state": "COMPLETED",
+    "totalAmount": 552,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "bc3f8c5e-e4c2-43ca-bd62-8134aa8946f5",
+        "name": "Americano",
+        "quantity": 1,
+        "unitPriceAmount": 400,
+        "totalPriceAmount": 452,
+        "currency": "CAD",
+        "taxAmount": 52,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "AD3H7Y2RJ4V4FC53C7OL3YLY"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "8zkb1WHnmIo0S1IRjhqJbBUjrtIZY",
+    "locationId": "LT8YK4FBNGH17",
+    "date": "2025-09-22T12:11:05.832Z",
+    "state": "COMPLETED",
+    "totalAmount": 1074,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "c4da7700-fedd-418b-8a00-6046d5f575b3",
+        "name": "Latte - Chai",
+        "quantity": 1,
+        "unitPriceAmount": 650,
+        "totalPriceAmount": 1074,
+        "currency": "CAD",
+        "taxAmount": 124,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "PHPE7PNKA4GXO6RBIVFUULVV"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "MbOmOD0k1qNVvESWHcrjPYSUSffZY",
+    "locationId": "LT8YK4FBNGH17",
+    "date": "2025-09-22T12:10:10.333Z",
+    "state": "COMPLETED",
+    "totalAmount": 558,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "62bd28f5-348d-429f-843a-7218c287ca2a",
+        "name": "Brew Coffee",
+        "quantity": 1,
+        "unitPriceAmount": 350,
+        "totalPriceAmount": 508,
+        "currency": "CAD",
+        "taxAmount": 58,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "7TZVWEGC5OQIBYGTVTBQGEC6"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "QNm6eKINmXYZn8RmGAHxnx34pwXZY",
+    "locationId": "LT8YK4FBNGH17",
+    "date": "2025-09-22T12:09:21.523Z",
+    "state": "COMPLETED",
+    "totalAmount": 722,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "bbceddc4-c17b-4a87-b1ab-b8af5803a429",
+        "name": "Latte",
+        "quantity": 1,
+        "unitPriceAmount": 550,
+        "totalPriceAmount": 622,
+        "currency": "CAD",
+        "taxAmount": 72,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "ASODRZ4S7SQG3LDXXMRO3GUE"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "ELwAXi0j6MWd3bVqmkDGVADA0rPZY",
+    "locationId": "LT8YK4FBNGH17",
+    "date": "2025-09-22T12:04:57.695Z",
+    "state": "COMPLETED",
+    "totalAmount": 665,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "66f5d1ee-067a-48cd-b940-e3c8c8ea957b",
+        "name": "Cappuccino",
+        "quantity": 1,
+        "unitPriceAmount": 500,
+        "totalPriceAmount": 565,
+        "currency": "CAD",
+        "taxAmount": 65,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "RNQBYNY6DXYFX7QII7ZNOJIN"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "K2mTcsNxJRQWyQGnLQNmdxRqpvbZY",
+    "locationId": "LT8YK4FBNGH17",
+    "date": "2025-09-22T12:04:14.449Z",
+    "state": "COMPLETED",
+    "totalAmount": 1060,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "d705026e-ef3c-4824-8d94-b7d24b05d5d3",
+        "name": "Latte - Vanilla",
+        "quantity": 1,
+        "unitPriceAmount": 650,
+        "totalPriceAmount": 960,
+        "currency": "CAD",
+        "taxAmount": 110,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "QXZF2KOJIY2THXHO2N4ILX3O"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "wdqSRsjdNA4gvVQMkhH3EWNvsvPZY",
+    "locationId": "LT8YK4FBNGH17",
+    "date": "2025-09-22T12:01:47.020Z",
+    "state": "COMPLETED",
+    "totalAmount": 1034,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "f5ea734c-4eb3-4d19-a17a-5e2b95372b34",
+        "name": "Latte",
+        "quantity": 1,
+        "unitPriceAmount": 550,
+        "totalPriceAmount": 734,
+        "currency": "CAD",
+        "taxAmount": 84,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "ASODRZ4S7SQG3LDXXMRO3GUE"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "qsVz9SEenv9YKysTHQd24y8tHvXZY",
+    "locationId": "LT8YK4FBNGH17",
+    "date": "2025-09-22T11:53:51.567Z",
+    "state": "COMPLETED",
+    "totalAmount": 452,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "dac0c876-25b0-4cbe-b69b-c39f3dedfb8e",
+        "name": "Brew Coffee",
+        "quantity": 1,
+        "unitPriceAmount": 350,
+        "totalPriceAmount": 452,
+        "currency": "CAD",
+        "taxAmount": 52,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "7TZVWEGC5OQIBYGTVTBQGEC6"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "UrinxEJlxHZOkUOu1GwJqj1doPDZY",
+    "locationId": "LT8YK4FBNGH17",
+    "date": "2025-09-22T11:47:05.618Z",
+    "state": "COMPLETED",
+    "totalAmount": 508,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "cc4b571c-d1cc-4f46-9c69-aca93cfba29d",
+        "name": "Americano",
+        "quantity": 1,
+        "unitPriceAmount": 400,
+        "totalPriceAmount": 508,
+        "currency": "CAD",
+        "taxAmount": 58,
+        "discountAmount": 50,
+        "variations": "Regular",
+        "category": "AD3H7Y2RJ4V4FC53C7OL3YLY"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "OO5NzkyI1qb6vqecwTtTMZ3BajLZY",
+    "locationId": "LT8YK4FBNGH17",
+    "date": "2025-09-22T11:46:04.142Z",
+    "state": "COMPLETED",
+    "totalAmount": 452,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "98bb2ff6-23d8-45eb-a1df-1fccee66ba5c",
+        "name": "Brew Coffee",
+        "quantity": 1,
+        "unitPriceAmount": 350,
+        "totalPriceAmount": 452,
+        "currency": "CAD",
+        "taxAmount": 52,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "7TZVWEGC5OQIBYGTVTBQGEC6"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "6msggeLkMJK92hGZeNFeWP6iDUTZY",
+    "locationId": "LT8YK4FBNGH17",
+    "date": "2025-09-22T11:44:46.150Z",
+    "state": "COMPLETED",
+    "totalAmount": 665,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "829c14d7-dedd-42a5-970a-60fa12683c38",
+        "name": "Flat White",
+        "quantity": 1,
+        "unitPriceAmount": 500,
+        "totalPriceAmount": 565,
+        "currency": "CAD",
+        "taxAmount": 65,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "7QFULVLFIVIJYXSCATVVJVHC"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "oFoijaxs6wUAZSltqs1dVEhISzRZY",
+    "locationId": "LT8YK4FBNGH17",
+    "date": "2025-09-22T11:40:56.357Z",
+    "state": "COMPLETED",
+    "totalAmount": 761,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "16dccc16-81ef-4756-af84-ed2627a6eb05",
+        "name": "Latte",
+        "quantity": 1,
+        "unitPriceAmount": 550,
+        "totalPriceAmount": 661,
+        "currency": "CAD",
+        "taxAmount": 76,
+        "discountAmount": 65,
+        "variations": "Regular",
+        "category": "ASODRZ4S7SQG3LDXXMRO3GUE"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "22TPSBeVbpHCx2A9CuGsMv4YXoNZY",
+    "locationId": "LT8YK4FBNGH17",
+    "date": "2025-09-22T11:40:04.308Z",
+    "state": "COMPLETED",
+    "totalAmount": 565,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "08854b0d-bb43-45b3-82e9-aa8b4b556a14",
+        "name": "Cappuccino",
+        "quantity": 1,
+        "unitPriceAmount": 500,
+        "totalPriceAmount": 565,
+        "currency": "CAD",
+        "taxAmount": 65,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "RNQBYNY6DXYFX7QII7ZNOJIN"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "4LfazFIqDFayEHVb15W2g6WWowbZY",
+    "locationId": "LT8YK4FBNGH17",
+    "date": "2025-09-22T11:39:09.162Z",
+    "state": "COMPLETED",
+    "totalAmount": 665,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "68dbd586-9c10-4198-8b38-134e7ee0be0a",
+        "name": "Cortado",
+        "quantity": 1,
+        "unitPriceAmount": 500,
+        "totalPriceAmount": 565,
+        "currency": "CAD",
+        "taxAmount": 65,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "N2DYMPRYUUGMGYETBMM3HDOY"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "6UPATTqFLFFz1EE9F1tY74p5MF6YY",
+    "locationId": "LT8YK4FBNGH17",
+    "date": "2025-09-22T11:37:59.777Z",
+    "state": "COMPLETED",
+    "totalAmount": 452,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "002d0542-cc04-4168-8b49-f454356b05e4",
+        "name": "Brew Coffee",
+        "quantity": 1,
+        "unitPriceAmount": 350,
+        "totalPriceAmount": 452,
+        "currency": "CAD",
+        "taxAmount": 52,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "7TZVWEGC5OQIBYGTVTBQGEC6"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "wzDj2wfpmtGZFzdvcH7wu0jdj4PZY",
+    "locationId": "LT8YK4FBNGH17",
+    "date": "2025-09-22T11:33:51.594Z",
+    "state": "COMPLETED",
+    "totalAmount": 948,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "c1d0e55a-53f0-4b6c-a4cf-40f1e83442fa",
+        "name": "Latte - Vanilla",
+        "quantity": 1,
+        "unitPriceAmount": 650,
+        "totalPriceAmount": 848,
+        "currency": "CAD",
+        "taxAmount": 98,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "QXZF2KOJIY2THXHO2N4ILX3O"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "OEUVtPWIsCHPVfLUrPEeLw4o7VLZY",
+    "locationId": "LT8YK4FBNGH17",
+    "date": "2025-09-22T11:33:20.198Z",
+    "state": "COMPLETED",
+    "totalAmount": 778,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "e15181ad-3bd8-495d-a50f-4943023031b7",
+        "name": "Flat White",
+        "quantity": 1,
+        "unitPriceAmount": 500,
+        "totalPriceAmount": 678,
+        "currency": "CAD",
+        "taxAmount": 78,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "7QFULVLFIVIJYXSCATVVJVHC"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "C4fS2ayUljc6SMDou6GS8CIg3WLZY",
+    "locationId": "LT8YK4FBNGH17",
+    "date": "2025-09-22T11:32:10.671Z",
+    "state": "COMPLETED",
+    "totalAmount": 690,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "28449d87-3440-4693-8824-d651b4488383",
+        "name": "Cortado",
+        "quantity": 1,
+        "unitPriceAmount": 500,
+        "totalPriceAmount": 678,
+        "currency": "CAD",
+        "taxAmount": 78,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "N2DYMPRYUUGMGYETBMM3HDOY"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "oBEJZvvhAMNCbEELx0WmyDVLaUfZY",
+    "locationId": "LAH170A0KK47P",
+    "date": "2025-09-22T12:20:10.242Z",
+    "state": "COMPLETED",
+    "totalAmount": 1060,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "65dee3c4-85a0-4e29-a686-8ff9dbb579cd",
+        "name": "Latte - Vanilla",
+        "quantity": 1,
+        "unitPriceAmount": 650,
+        "totalPriceAmount": 960,
+        "currency": "CAD",
+        "taxAmount": 110,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "QXZF2KOJIY2THXHO2N4ILX3O"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "2U8AaoMxHFMIFKs99r5nJQKC8b6YY",
+    "locationId": "LAH170A0KK47P",
+    "date": "2025-09-22T12:15:45.456Z",
+    "state": "COMPLETED",
+    "totalAmount": 1729,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "c0280164-c9cb-4c52-a225-d771d1dfc0ef",
+        "name": "NomNom - Iced",
+        "quantity": 2,
+        "unitPriceAmount": 650,
+        "totalPriceAmount": 1469,
+        "currency": "CAD",
+        "taxAmount": 169,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "PNYWNVBIT6CI2ADLMTFY2L52"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "UBZhdxVBwAU9nO84tznQx83VtlRZY",
+    "locationId": "LAH170A0KK47P",
+    "date": "2025-09-22T12:09:53.752Z",
+    "state": "COMPLETED",
+    "totalAmount": 620,
+    "currency": "CAD",
+    "version": 4,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "9ef65142-cc51-4430-876f-773d6f09b1e9",
+        "name": "Latte",
+        "quantity": 1,
+        "unitPriceAmount": 550,
+        "totalPriceAmount": 622,
+        "currency": "CAD",
+        "taxAmount": 72,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "ASODRZ4S7SQG3LDXXMRO3GUE"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "G25kGnXshrFljujIkq10qCi53bZZY",
+    "locationId": "LAH170A0KK47P",
+    "date": "2025-09-22T12:07:33.028Z",
+    "state": "COMPLETED",
+    "totalAmount": 678,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "4c9e06e7-e706-4f0c-8a6f-16cd51629c05",
+        "name": "Cappuccino",
+        "quantity": 1,
+        "unitPriceAmount": 500,
+        "totalPriceAmount": 678,
+        "currency": "CAD",
+        "taxAmount": 78,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "RNQBYNY6DXYFX7QII7ZNOJIN"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "KgRWsOTGj8EYsjuoXG86XC6NkhcZY",
+    "locationId": "LAH170A0KK47P",
+    "date": "2025-09-22T12:05:40.194Z",
+    "state": "COMPLETED",
+    "totalAmount": 1411,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "cd98b067-25f2-459a-83ea-b9f03a0319ff",
+        "name": "Pistachio Chocolate Croissant",
+        "quantity": 1,
+        "unitPriceAmount": 790,
+        "totalPriceAmount": 893,
+        "currency": "CAD",
+        "taxAmount": 103,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "ONSFUFO6EYWDXNTURSSYCCPU"
+      },
+      {
+        "squareLineItemUid": "30e7bbeb-1bdc-4e20-9464-532db16b9e55",
+        "name": "Wild Blueberry & Earl Grey Scone",
+        "quantity": 1,
+        "unitPriceAmount": 360,
+        "totalPriceAmount": 407,
+        "currency": "CAD",
+        "taxAmount": 47,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "5Q26VPFIAVGODSOFCH27BFOZ"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "cJN8mzWGmJ2IOXyq4Hgf8zWPvvCZY",
+    "locationId": "LAH170A0KK47P",
+    "date": "2025-09-22T12:03:54.845Z",
+    "state": "COMPLETED",
+    "totalAmount": 948,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "da25cd61-df5b-422f-80d7-def567aaa3c3",
+        "name": "Blueberry Latte",
+        "quantity": 1,
+        "unitPriceAmount": 750,
+        "totalPriceAmount": 848,
+        "currency": "CAD",
+        "taxAmount": 98,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "U4HWVEZBXT4CWRWDCETAZDB7"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "eA0IPEQQtUOZIGqrpC1jx7f90G9YY",
+    "locationId": "LAH170A0KK47P",
+    "date": "2025-09-22T12:02:22.145Z",
+    "state": "COMPLETED",
+    "totalAmount": 948,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "7ca98118-e616-4e6a-9176-096aa5d875c9",
+        "name": "Blueberry Latte",
+        "quantity": 1,
+        "unitPriceAmount": 750,
+        "totalPriceAmount": 848,
+        "currency": "CAD",
+        "taxAmount": 98,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "U4HWVEZBXT4CWRWDCETAZDB7"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "YhALklHQCE8WSfLKBLFrTKov7PGZY",
+    "locationId": "LAH170A0KK47P",
+    "date": "2025-09-22T12:00:01.616Z",
+    "state": "COMPLETED",
+    "totalAmount": 1469,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "c5768c4d-8290-4a58-9144-f41af3307036",
+        "name": "Raspberry Cheesecake Danish",
+        "quantity": 1,
+        "unitPriceAmount": 450,
+        "totalPriceAmount": 508,
+        "currency": "CAD",
+        "taxAmount": 58,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "D35TY5R4BB74IAWFPZ2IAQ4M"
+      },
+      {
+        "squareLineItemUid": "67d39ddc-7547-4261-aebd-b68d7e6f8612",
+        "name": "Latte - Vanilla",
+        "quantity": 1,
+        "unitPriceAmount": 650,
+        "totalPriceAmount": 961,
+        "currency": "CAD",
+        "taxAmount": 111,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "QXZF2KOJIY2THXHO2N4ILX3O"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "8d93YNbsToiuDpPQagrRDTS053dZY",
+    "locationId": "LAH170A0KK47P",
+    "date": "2025-09-22T11:58:25.499Z",
+    "state": "COMPLETED",
+    "totalAmount": 722,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "32e5ee10-0f4a-4922-8b3c-8522ccd9073a",
+        "name": "Cappuccino",
+        "quantity": 1,
+        "unitPriceAmount": 500,
+        "totalPriceAmount": 622,
+        "currency": "CAD",
+        "taxAmount": 72,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "RNQBYNY6DXYFX7QII7ZNOJIN"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "WcqH1EqJdD7JqzJNGZ3VwdWeHEcZY",
+    "locationId": "LAH170A0KK47P",
+    "date": "2025-09-22T11:55:25.299Z",
+    "state": "COMPLETED",
+    "totalAmount": 690,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "07b5e8f8-ad3b-4c2b-90b7-8a2bdd213fd0",
+        "name": "Flat White",
+        "quantity": 1,
+        "unitPriceAmount": 500,
+        "totalPriceAmount": 565,
+        "currency": "CAD",
+        "taxAmount": 65,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "7QFULVLFIVIJYXSCATVVJVHC"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "ozHiBWvB1lsS1jslh0JWhzHZyVGZY",
+    "locationId": "LAH170A0KK47P",
+    "date": "2025-09-22T11:51:41.342Z",
+    "state": "COMPLETED",
+    "totalAmount": 981,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "ecf49b32-8bf0-4f56-9b69-f779c23d46fa",
+        "name": "Macchiato",
+        "quantity": 1,
+        "unitPriceAmount": 450,
+        "totalPriceAmount": 508,
+        "currency": "CAD",
+        "taxAmount": 58,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "5WQYDKL3PME5QAZDUZR4T37Q"
+      },
+      {
+        "squareLineItemUid": "dff50651-c2a7-4447-9913-8f7daa1b1bcd",
+        "name": "Vegan Banana Walnut Muffin",
+        "quantity": 1,
+        "unitPriceAmount": 330,
+        "totalPriceAmount": 373,
+        "currency": "CAD",
+        "taxAmount": 43,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "Z4MNAIAMYDOQNRTOKQTJOR5J"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "IF6R089JTviKnGML1vWaeWjGecHZY",
+    "locationId": "LAH170A0KK47P",
+    "date": "2025-09-22T11:48:40.741Z",
+    "state": "COMPLETED",
+    "totalAmount": 4200,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "5a52e9dc-9e68-437d-8f00-c8fad481b3df",
+        "name": "Butterfly Kiss",
+        "quantity": 2,
+        "unitPriceAmount": 2100,
+        "totalPriceAmount": 4200,
+        "currency": "CAD",
+        "taxAmount": 0,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "CFQHVC2RLWB24P5T6Q6TV75N"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "eMwTJtu5YoXvOwBIRdOp08mq5eXZY",
+    "locationId": "LAH170A0KK47P",
+    "date": "2025-09-22T11:40:12.824Z",
+    "state": "COMPLETED",
+    "totalAmount": 468,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "e1e4b617-635c-4598-8024-19280654c822",
+        "name": "Brew Coffee",
+        "quantity": 1,
+        "unitPriceAmount": 350,
+        "totalPriceAmount": 368,
+        "currency": "CAD",
+        "taxAmount": 18,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "7TZVWEGC5OQIBYGTVTBQGEC6"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "gX9nbCVmzzoepI2NmfZHGjkOSeLZY",
+    "locationId": "LAH170A0KK47P",
+    "date": "2025-09-22T11:25:47.780Z",
+    "state": "COMPLETED",
+    "totalAmount": 565,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "6ae07a1c-921c-4d0d-9ddb-0a0f2a8e81e5",
+        "name": "Americano",
+        "quantity": 1,
+        "unitPriceAmount": 400,
+        "totalPriceAmount": 565,
+        "currency": "CAD",
+        "taxAmount": 65,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "AD3H7Y2RJ4V4FC53C7OL3YLY"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "G0e7Y35mu46bnDkETyUUkmIuqeQZY",
+    "locationId": "LAH170A0KK47P",
+    "date": "2025-09-22T11:18:45.511Z",
+    "state": "COMPLETED",
+    "totalAmount": 502,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "aa1b2c1f-681e-4777-83b1-24c4db5f71c0",
+        "name": "Espresso",
+        "quantity": 1,
+        "unitPriceAmount": 400,
+        "totalPriceAmount": 452,
+        "currency": "CAD",
+        "taxAmount": 52,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "LJNEZ6QZJEB75N6Q7C5SBUX4"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "Ceq2KuQgrtGmOMduMxB5kF18UjaZY",
+    "locationId": "LAH170A0KK47P",
+    "date": "2025-09-22T11:16:51.950Z",
+    "state": "COMPLETED",
+    "totalAmount": 722,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "e310f1b1-3051-454c-ad8f-7d6ad1101e35",
+        "name": "Cappuccino",
+        "quantity": 1,
+        "unitPriceAmount": 500,
+        "totalPriceAmount": 622,
+        "currency": "CAD",
+        "taxAmount": 72,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "RNQBYNY6DXYFX7QII7ZNOJIN"
+      }
+    ]
+  },
+  {
+    "squareOrderId": "gdeOdddhSsUGlqRy9v0PFHSsra9YY",
+    "locationId": "LAH170A0KK47P",
+    "date": "2025-09-22T11:09:51.690Z",
+    "state": "COMPLETED",
+    "totalAmount": 1400,
+    "currency": "CAD",
+    "version": 5,
+    "source": null,
+    "lineItems": [
+      {
+        "squareLineItemUid": "dc4fedea-9b05-4124-8df8-070f5dfb44a9",
+        "name": "Americano",
+        "quantity": 1,
+        "unitPriceAmount": 400,
+        "totalPriceAmount": 565,
+        "currency": "CAD",
+        "taxAmount": 65,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "AD3H7Y2RJ4V4FC53C7OL3YLY"
+      },
+      {
+        "squareLineItemUid": "bb9680aa-2dd6-45a3-b8c8-be62e16edb3a",
+        "name": "Latte - Vanilla",
+        "quantity": 1,
+        "unitPriceAmount": 650,
+        "totalPriceAmount": 735,
+        "currency": "CAD",
+        "taxAmount": 85,
+        "discountAmount": 0,
+        "variations": "Regular",
+        "category": "QXZF2KOJIY2THXHO2N4ILX3O"
+      }
+    ]
+  }
+]

@@ -1,12 +1,12 @@
 {
   "totalLocations": 7,
-  "totalItems": 86,
-  "totalOrders": 1595,
+  "totalItems": 124,
+  "totalOrders": 9026,
   "totalCategories": 20,
-  "totalRevenue": 20795.31,
+  "totalRevenue": 109916.7,
   "dateRange": {
-    "earliest": "2025-09-20T14:35:20.414Z",
-    "latest": "2025-09-21T14:34:31.440Z"
+    "earliest": "2025-09-14T14:53:11.014Z",
+    "latest": "2025-09-21T14:52:24.399Z"
   },
-  "generatedAt": "2025-09-21T14:35:15.767Z"
+  "generatedAt": "2025-09-21T14:53:29.983Z"
 }

@@ -1,18 +1,82 @@
 [
   {
-    "name": "Ethiopia Habtamu F. Aga",
-    "category": "Retail Coffee-227g",
-    "squareCatalogId": "AOXDCXQPWVRQQUCMOJ4JBZES",
-    "squareItemId": "3U46ELP4TWBEKRX7MVQOIXV3",
-    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
-    "isActive": true
-  },
-  {
     "name": "Flat White",
     "category": "Coffee",
     "squareCatalogId": "7QFULVLFIVIJYXSCATVVJVHC",
     "squareItemId": "K6LSRDYPUFUYBDBGTVD4WBUV",
     "squareCategoryId": "QS5YI5F4GSUKL2FEL6II7WSZ",
+    "isActive": true
+  },
+  {
+    "name": "Cappuccino",
+    "category": "Coffee",
+    "squareCatalogId": "RNQBYNY6DXYFX7QII7ZNOJIN",
+    "squareItemId": "7WYRFKEMOU7J2JYGTWIKJY4W",
+    "squareCategoryId": "QS5YI5F4GSUKL2FEL6II7WSZ",
+    "isActive": true
+  },
+  {
+    "name": "Wild Blueberry Crumble Muffin",
+    "category": "Food C&S",
+    "squareCatalogId": "5ASGKD7TVZSJHSNUODJ4NGIY",
+    "squareItemId": "L3333N2NEAULZB6UTHRWPTHI",
+    "squareCategoryId": "Q7BT5OBG3LJFNR7DK72PVW5Q",
+    "isActive": true
+  },
+  {
+    "name": "Innovation: Colombia Granja Paraiso 92 Geisha P-06",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "SH2GBBQR6GBUHO36IVAUC5YC",
+    "squareItemId": "54T33EJ5TGSAUWLEFBH6SOOJ",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Latte - Matcha",
+    "category": "Coffee",
+    "squareCatalogId": "QQZUANKRYO77PESNA3EWN5RH",
+    "squareItemId": "FIKGEGDXOHQNLQ7IKZNAEBP4",
+    "squareCategoryId": "QS5YI5F4GSUKL2FEL6II7WSZ",
+    "isActive": true
+  },
+  {
+    "name": "Latte - Mocha",
+    "category": "Coffee",
+    "squareCatalogId": "ZN4HAVEBVEAI4247XEPHCZ5A",
+    "squareItemId": "7JGHBMHJ3M4WDXS2UGYVYXSQ",
+    "squareCategoryId": "QS5YI5F4GSUKL2FEL6II7WSZ",
+    "isActive": true
+  },
+  {
+    "name": "Pain Au Chocolat",
+    "category": "Food C&S",
+    "squareCatalogId": "2TBWLIMJJ6VN2S6HRGR5V3E2",
+    "squareItemId": "53WGXL6SUYMDW2G6R2N4B7FI",
+    "squareCategoryId": "Q7BT5OBG3LJFNR7DK72PVW5Q",
+    "isActive": true
+  },
+  {
+    "name": "Latte - Vanilla",
+    "category": "Coffee",
+    "squareCatalogId": "QXZF2KOJIY2THXHO2N4ILX3O",
+    "squareItemId": "2KZ6TOFRI73IHRT35WQ3V67M",
+    "squareCategoryId": "QS5YI5F4GSUKL2FEL6II7WSZ",
+    "isActive": true
+  },
+  {
+    "name": "Matcha Kumo",
+    "category": "Signature Drink",
+    "squareCatalogId": "SSCVW6CHT7PKBSWUFDI5LKHW",
+    "squareItemId": "VOUNFFG3XM2OTIIJ7I5KCAZ5",
+    "squareCategoryId": "KL3EF3JQRXKOF6TOKCDJ45XX",
+    "isActive": true
+  },
+  {
+    "name": "Ethiopia Habtamu F. Aga",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "AOXDCXQPWVRQQUCMOJ4JBZES",
+    "squareItemId": "3U46ELP4TWBEKRX7MVQOIXV3",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
     "isActive": true
   },
   {
@@ -29,14 +93,6 @@
     "squareCatalogId": "ONSFUFO6EYWDXNTURSSYCCPU",
     "squareItemId": "PUH352YN6ZEYBX2UKYVGNOXB",
     "squareCategoryId": "Q7BT5OBG3LJFNR7DK72PVW5Q",
-    "isActive": true
-  },
-  {
-    "name": "Latte - Matcha",
-    "category": "Coffee",
-    "squareCatalogId": "QQZUANKRYO77PESNA3EWN5RH",
-    "squareItemId": "FIKGEGDXOHQNLQ7IKZNAEBP4",
-    "squareCategoryId": "QS5YI5F4GSUKL2FEL6II7WSZ",
     "isActive": true
   },
   {
@@ -88,30 +144,6 @@
     "isActive": true
   },
   {
-    "name": "Cappuccino",
-    "category": "Coffee",
-    "squareCatalogId": "RNQBYNY6DXYFX7QII7ZNOJIN",
-    "squareItemId": "7WYRFKEMOU7J2JYGTWIKJY4W",
-    "squareCategoryId": "QS5YI5F4GSUKL2FEL6II7WSZ",
-    "isActive": true
-  },
-  {
-    "name": "Latte - Vanilla",
-    "category": "Coffee",
-    "squareCatalogId": "QXZF2KOJIY2THXHO2N4ILX3O",
-    "squareItemId": "2KZ6TOFRI73IHRT35WQ3V67M",
-    "squareCategoryId": "QS5YI5F4GSUKL2FEL6II7WSZ",
-    "isActive": true
-  },
-  {
-    "name": "Matcha Kumo",
-    "category": "Signature Drink",
-    "squareCatalogId": "SSCVW6CHT7PKBSWUFDI5LKHW",
-    "squareItemId": "VOUNFFG3XM2OTIIJ7I5KCAZ5",
-    "squareCategoryId": "KL3EF3JQRXKOF6TOKCDJ45XX",
-    "isActive": true
-  },
-  {
     "name": "NomNom - Iced",
     "category": "Signature Drink",
     "squareCatalogId": "PNYWNVBIT6CI2ADLMTFY2L52",
@@ -149,14 +181,6 @@
     "squareCatalogId": "F44NKBJ5O7VP6CW4M3LFM5XA",
     "squareItemId": "2VV62D5GZM4JHMRTE6HZJGMY",
     "squareCategoryId": "DJT2TUYEAYOQJ3PGQ24GTEFC",
-    "isActive": true
-  },
-  {
-    "name": "Wild Blueberry Crumble Muffin",
-    "category": "Food C&S",
-    "squareCatalogId": "5ASGKD7TVZSJHSNUODJ4NGIY",
-    "squareItemId": "L3333N2NEAULZB6UTHRWPTHI",
-    "squareCategoryId": "Q7BT5OBG3LJFNR7DK72PVW5Q",
     "isActive": true
   },
   {
@@ -272,14 +296,6 @@
     "isActive": true
   },
   {
-    "name": "Pain Au Chocolat",
-    "category": "Food C&S",
-    "squareCatalogId": "2TBWLIMJJ6VN2S6HRGR5V3E2",
-    "squareItemId": "53WGXL6SUYMDW2G6R2N4B7FI",
-    "squareCategoryId": "Q7BT5OBG3LJFNR7DK72PVW5Q",
-    "isActive": true
-  },
-  {
     "name": "Oatmeal Raisin Cookie",
     "category": "Food C&S",
     "squareCatalogId": "I6IZPLX7WZEXYJ6G65FYLYSM",
@@ -384,14 +400,6 @@
     "isActive": true
   },
   {
-    "name": "Latte - Mocha",
-    "category": "Coffee",
-    "squareCatalogId": "ZN4HAVEBVEAI4247XEPHCZ5A",
-    "squareItemId": "7JGHBMHJ3M4WDXS2UGYVYXSQ",
-    "squareCategoryId": "QS5YI5F4GSUKL2FEL6II7WSZ",
-    "isActive": true
-  },
-  {
     "name": "Spinach Artichoke",
     "category": "Food C&S",
     "squareCatalogId": "CGDEDGZC7TMWI2OCZ7GUKNUA",
@@ -416,35 +424,19 @@
     "isActive": true
   },
   {
+    "name": "NomNom Robusta Dark Roast",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "WRYE2KGQA65O76QHFIYANKOV",
+    "squareItemId": "GIXUSLDNISKL37BFWCNM6HF2",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
     "name": "Sea Salt Chocolate Chip Cookie",
     "category": "Food C&S",
     "squareCatalogId": "3VLY7IPCGKYFYN37YBVQGXT3",
     "squareItemId": "BPN7BY523YGWVOU3LTE7WQ74",
     "squareCategoryId": "Q7BT5OBG3LJFNR7DK72PVW5Q",
-    "isActive": true
-  },
-  {
-    "name": "Colombia Santa Barbara",
-    "category": "Retail Coffee-227g",
-    "squareCatalogId": "D6QGCF3XXQP75VTNVFZIMVR3",
-    "squareItemId": "V7PE7SUVGVTKH6AWP4B462KI",
-    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
-    "isActive": true
-  },
-  {
-    "name": "Magic Coffee",
-    "category": "Retail Coffee-227g",
-    "squareCatalogId": "BRGMQEVDRMSATNQEK5YGBNUM",
-    "squareItemId": "RQ4LFKXFF5WZEFE7R4FBUCE3",
-    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
-    "isActive": true
-  },
-  {
-    "name": "Butterfly Kiss",
-    "category": "Retail Coffee-227g",
-    "squareCatalogId": "CFQHVC2RLWB24P5T6Q6TV75N",
-    "squareItemId": "UNZ7NRVYCUES5LZY6PQ3DQJM",
-    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
     "isActive": true
   },
   {
@@ -456,19 +448,11 @@
     "isActive": true
   },
   {
-    "name": "Marrakesh Mint",
+    "name": "Matcha Tea",
     "category": "Tea",
-    "squareCatalogId": "2L2JS6HGQXEAJXGND5QWEGVP",
-    "squareItemId": "HPXFVQQNMMDKENKICK6OH6SG",
+    "squareCatalogId": "6XMIMIKREGL6ZKB7TYP3CDFN",
+    "squareItemId": "6UA5ZDQKAJRUP5STO5L62HQZ",
     "squareCategoryId": "DJT2TUYEAYOQJ3PGQ24GTEFC",
-    "isActive": true
-  },
-  {
-    "name": "Costa Rica Arleen & Maria",
-    "category": "Retail Coffee-227g",
-    "squareCatalogId": "XPAR4A47OV7RWYQALJAJSBDU",
-    "squareItemId": "U75HRC6V43MNM6R22EUH4JEG",
-    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
     "isActive": true
   },
   {
@@ -480,6 +464,166 @@
     "isActive": true
   },
   {
+    "name": "Zumachi Decaf",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "5RBNTBNP33AL6LQ5KMLG5QQ7",
+    "squareItemId": "Q6SRMVVNJKFPYLBEPAVZESY6",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Roasted Mushroom and Feta Ciabatta",
+    "category": "Food C&S",
+    "squareCatalogId": "R43OO6BKUGI5VKWPVLDYHJMZ",
+    "squareItemId": "AV4FOEQG3JGPRDTEOTFDIXQF",
+    "squareCategoryId": "Q7BT5OBG3LJFNR7DK72PVW5Q",
+    "isActive": true
+  },
+  {
+    "name": "Roasted Turkey Club",
+    "category": "Food C&S",
+    "squareCatalogId": "BAVJSBKPHSATKGGOZRDBB4NH",
+    "squareItemId": "IDJ5LIH755I3XFGCVWFGGAVC",
+    "squareCategoryId": "Q7BT5OBG3LJFNR7DK72PVW5Q",
+    "isActive": true
+  },
+  {
+    "name": "Ginger Twist",
+    "category": "Tea",
+    "squareCatalogId": "6KYOECSM6XJ5VP4MFTOUCNCZ",
+    "squareItemId": "3U33OGA5JNZPJYVLD3KNYQYY",
+    "squareCategoryId": "DJT2TUYEAYOQJ3PGQ24GTEFC",
+    "isActive": true
+  },
+  {
+    "name": "Peach & Cream",
+    "category": "Tea",
+    "squareCatalogId": "PL34Z6WNC6SOCFKGYS6KXDWK",
+    "squareItemId": "OXFBJVZEY3Q5IPWMQUARVUM3",
+    "squareCategoryId": "DJT2TUYEAYOQJ3PGQ24GTEFC",
+    "isActive": true
+  },
+  {
+    "name": "Butterfly Kiss",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "CFQHVC2RLWB24P5T6Q6TV75N",
+    "squareItemId": "UNZ7NRVYCUES5LZY6PQ3DQJM",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Churro Cruffin - Tax Free",
+    "category": "other",
+    "squareCatalogId": "UPVLED77YGFJXZD6M7N27SRV",
+    "squareItemId": "37XD7VEVDULBQT5RPNACKRV7",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Wild Blueberry & Earl Grey Scone - Tax Free",
+    "category": "Food C&S - Tax Exempt",
+    "squareCatalogId": "BCS6AY3KCOQGCRFWTW4OJSC3",
+    "squareItemId": "ZK2ANUKJXN3WPNRB7VZJMH7C",
+    "squareCategoryId": "4TBMVWBX7EKDBBZYENC7MZDX",
+    "isActive": true
+  },
+  {
+    "name": "Almond Croissant - Tax Free",
+    "category": "Food C&S - Tax Exempt",
+    "squareCatalogId": "IVQCOVWOGBREM2UNM7PL64LT",
+    "squareItemId": "MIQZ3IAFJUCMNDQGIMOTBODZ",
+    "squareCategoryId": "4TBMVWBX7EKDBBZYENC7MZDX",
+    "isActive": true
+  },
+  {
+    "name": "Marrakesh Mint",
+    "category": "Tea",
+    "squareCatalogId": "2L2JS6HGQXEAJXGND5QWEGVP",
+    "squareItemId": "HPXFVQQNMMDKENKICK6OH6SG",
+    "squareCategoryId": "DJT2TUYEAYOQJ3PGQ24GTEFC",
+    "isActive": true
+  },
+  {
+    "name": "Reusuable Bag",
+    "category": "Merchandize",
+    "squareCatalogId": "PFP45EERK6WERRJOGWHUDWA5",
+    "squareItemId": "LESFOGAU6BA4PYWLEIEV22AB",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Magic Coffee",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "BRGMQEVDRMSATNQEK5YGBNUM",
+    "squareItemId": "RQ4LFKXFF5WZEFE7R4FBUCE3",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Papua New Guinea Nebilyer Valley PB",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "QLTFDVHOBAS3NSZ5Z5KAWRMD",
+    "squareItemId": "3VGRKMJ2JXSPRQP5FXZCV56R",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Colombia Santa Barbara",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "D6QGCF3XXQP75VTNVFZIMVR3",
+    "squareItemId": "V7PE7SUVGVTKH6AWP4B462KI",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Crunchy Peanut Butter Cookie - Tax Free",
+    "category": "Food C&S - Tax Exempt",
+    "squareCatalogId": "GMY5JQJHWSGOWX2DGUHJHUTT",
+    "squareItemId": "JP2TLSPFD6JEPRTS4W6PSJ4W",
+    "squareCategoryId": "4TBMVWBX7EKDBBZYENC7MZDX",
+    "isActive": true
+  },
+  {
+    "name": "Chicken Caesar Salad",
+    "category": "Food C&S",
+    "squareCatalogId": "FUGTTGJJXVJ5FXA34XMGGVPX",
+    "squareItemId": "RR5V4ABR2C344EK3JM6SDR2Q",
+    "squareCategoryId": "Q7BT5OBG3LJFNR7DK72PVW5Q",
+    "isActive": true
+  },
+  {
+    "name": "Carrot Oat Crumble Muffin - Tax Free",
+    "category": "Food C&S - Tax Exempt",
+    "squareCatalogId": "RZ4T4XOTF77IT3HRWPCRWKI3",
+    "squareItemId": "FVNSCTOTL4GC7WPIHRAAGVBD",
+    "squareCategoryId": "4TBMVWBX7EKDBBZYENC7MZDX",
+    "isActive": true
+  },
+  {
+    "name": "Wild Blueberry Crumble Muffin - Tax Free",
+    "category": "Food C&S - Tax Exempt",
+    "squareCatalogId": "KRDLXWQ6JDHUSQ54X46VKXL6",
+    "squareItemId": "OOKOOKEOA7F3X5Q23S66MF3R",
+    "squareCategoryId": "4TBMVWBX7EKDBBZYENC7MZDX",
+    "isActive": true
+  },
+  {
+    "name": "Butter Croissant - Tax Free",
+    "category": "Food Kingston - Tax Exempt",
+    "squareCatalogId": "QR3Z2M6TZKET72BKUQJZMMLW",
+    "squareItemId": "DXQEVCCFOZVQFSB6CP6YNVP5",
+    "squareCategoryId": "5GQAXAEC3MLXCC6KDRCPTP25",
+    "isActive": true
+  },
+  {
+    "name": "Pin -  Small",
+    "category": "Merchandize",
+    "squareCatalogId": "RRE4YVJPLAZK26U5CMHJMT73",
+    "squareItemId": "563OJI6PUMZXKE3KVU5RN76C",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
     "name": "NomNom - 20 Sachets Box",
     "category": "Retail Coffee-227g",
     "squareCatalogId": "LSKDAG7VV7VAAKS5U2PRAF3S",
@@ -488,19 +632,11 @@
     "isActive": true
   },
   {
-    "name": "Ceremonial Grade Matcha (40g)",
-    "category": "Retail Tea",
-    "squareCatalogId": "5N2NADUI43RK5AQ5U27S4IOY",
-    "squareItemId": "ZS4FVE6UZG7CD2KB5J6BY5U6",
-    "squareCategoryId": "LE5Z4VBDS66FTX4PPRSIOAA5",
-    "isActive": true
-  },
-  {
-    "name": "Rouge Pomme",
-    "category": "Signature Drink",
-    "squareCatalogId": "5CBL7IXYHMA7XEZNH2UTVF6T",
-    "squareItemId": "OWEUOTWJOEMBZ42CZHV7VRXG",
-    "squareCategoryId": "KL3EF3JQRXKOF6TOKCDJ45XX",
+    "name": "Heavenly Cream",
+    "category": "Tea",
+    "squareCatalogId": "EVGQ6BKBKY7B7XHKEH6EJK6J",
+    "squareItemId": "RTDB7ZSX43NGMOUKZMSVLUYO",
+    "squareCategoryId": "DJT2TUYEAYOQJ3PGQ24GTEFC",
     "isActive": true
   },
   {
@@ -512,11 +648,1827 @@
     "isActive": true
   },
   {
-    "name": "Ginger Twist",
+    "name": "Ceremonial Grade Matcha (40g)",
+    "category": "Retail Tea",
+    "squareCatalogId": "5N2NADUI43RK5AQ5U27S4IOY",
+    "squareItemId": "ZS4FVE6UZG7CD2KB5J6BY5U6",
+    "squareCategoryId": "LE5Z4VBDS66FTX4PPRSIOAA5",
+    "isActive": true
+  },
+  {
+    "name": "Earl Grey",
     "category": "Tea",
-    "squareCatalogId": "6KYOECSM6XJ5VP4MFTOUCNCZ",
-    "squareItemId": "3U33OGA5JNZPJYVLD3KNYQYY",
+    "squareCatalogId": "NVAXPYF2YONBLEQLS4IQJVUK",
+    "squareItemId": "A25PH5HFAVQ5AGDFH2LI5L57",
     "squareCategoryId": "DJT2TUYEAYOQJ3PGQ24GTEFC",
+    "isActive": true
+  },
+  {
+    "name": "Crimson Berry",
+    "category": "Tea",
+    "squareCatalogId": "SMDKOTGK3TC72BP5ATX6KSAQ",
+    "squareItemId": "LVNNCOF5V6HTAF7PWVXETKCZ",
+    "squareCategoryId": "DJT2TUYEAYOQJ3PGQ24GTEFC",
+    "isActive": true
+  },
+  {
+    "name": "Citron Calm",
+    "category": "Tea",
+    "squareCatalogId": "3OXZP5ZMYTIQLDPCXOYMRHHM",
+    "squareItemId": "DDVFPFC5TVI2DPFTOU42Q3YL",
+    "squareCategoryId": "DJT2TUYEAYOQJ3PGQ24GTEFC",
+    "isActive": true
+  },
+  {
+    "name": "Rouge Pomme",
+    "category": "Signature Drink",
+    "squareCatalogId": "5CBL7IXYHMA7XEZNH2UTVF6T",
+    "squareItemId": "OWEUOTWJOEMBZ42CZHV7VRXG",
+    "squareCategoryId": "KL3EF3JQRXKOF6TOKCDJ45XX",
+    "isActive": true
+  },
+  {
+    "name": "Pain Au Chocolat - Tax Free",
+    "category": "Food C&S - Tax Exempt",
+    "squareCatalogId": "BNZNOO5WVJDHPV2BLEW7NMWT",
+    "squareItemId": "U6EPRJG5G2IDUC5BJWB2LWIB",
+    "squareCategoryId": "4TBMVWBX7EKDBBZYENC7MZDX",
+    "isActive": true
+  },
+  {
+    "name": "Raspberry Cheesecake Danish - Tax Free",
+    "category": "Food C&S - Tax Exempt",
+    "squareCatalogId": "QDS5QAJXKI7SUFSFVXIZYREE",
+    "squareItemId": "DSWZVJV5LGQWLVO4WNAACVU3",
+    "squareCategoryId": "4TBMVWBX7EKDBBZYENC7MZDX",
+    "isActive": true
+  },
+  {
+    "name": "Chicken Caesar Wrap",
+    "category": "Food C&S",
+    "squareCatalogId": "TUIMFPRITPT4LYCZPBBAT3HK",
+    "squareItemId": "SITWFE47PXZWJACWKZFMT3OW",
+    "squareCategoryId": "Q7BT5OBG3LJFNR7DK72PVW5Q",
+    "isActive": true
+  },
+  {
+    "name": "Lollipop",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "A3BJV5ZYDY4G42M7WKTIAEKO",
+    "squareItemId": "TVUJQQQ462YUUU63KFYHRT3U",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Open Price -Modification",
+    "category": "Modification",
+    "squareCatalogId": "OC46JBM2PPRFUWT4D45DO2QQ",
+    "squareItemId": "NHVARWBHAL2J5VAUY7S4V3AZ",
+    "squareCategoryId": "MYYN6KVN3GUR3DYFJ7RTMMUW",
+    "isActive": true
+  },
+  {
+    "name": "Espresso Shot",
+    "category": "Modification",
+    "squareCatalogId": "U7MRV5V76K7JRDD77MPEQYHJ",
+    "squareItemId": "YXWGIEAJF3XNMSLRL54QIOQ3",
+    "squareCategoryId": "MYYN6KVN3GUR3DYFJ7RTMMUW",
+    "isActive": true
+  },
+  {
+    "name": "Gift Card",
+    "category": "other",
+    "squareCatalogId": null,
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "White Cheddar & Chive Scone - Tax Free",
+    "category": "Food C&S - Tax Exempt",
+    "squareCatalogId": "VZQ3WKYHYPTFMLUIHJECV3QP",
+    "squareItemId": "T4Y3IYSLQKWQ4QYEE6ZT2VXZ",
+    "squareCategoryId": "4TBMVWBX7EKDBBZYENC7MZDX",
+    "isActive": true
+  },
+  {
+    "name": "Spinach Artichoke - Tax Free",
+    "category": "Food C&S - Tax Exempt",
+    "squareCatalogId": "7SOVVYRODGVPMJQDD3S2N5XE",
+    "squareItemId": "MTBCHW6UC3H2A4XNGYYVB42T",
+    "squareCategoryId": "4TBMVWBX7EKDBBZYENC7MZDX",
+    "isActive": true
+  },
+  {
+    "name": "Guatemala Finca Las Moritas",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "NH5676BUB67CF5PXJZEPL25M",
+    "squareItemId": "W6WQKCEPJXGC4OGN776AOO6L",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Vegan Banana Walnut Muffin - Tax Free",
+    "category": "Food C&S - Tax Exempt",
+    "squareCatalogId": "RRL72IP2R2HZ2T2VBBQ27F3D",
+    "squareItemId": "TQCNMCY2HHK3HGN4LVWJHY6N",
+    "squareCategoryId": "4TBMVWBX7EKDBBZYENC7MZDX",
+    "isActive": true
+  },
+  {
+    "name": "Flourless Chocolate Brownie - Tax Free",
+    "category": "Food C&S - Tax Exempt",
+    "squareCatalogId": "NZYI4U4SXM6X36ZV26EOLCOO",
+    "squareItemId": "L6564PU32EJE3O3RKBYNXRF6",
+    "squareCategoryId": "4TBMVWBX7EKDBBZYENC7MZDX",
+    "isActive": true
+  },
+  {
+    "name": "NOMNOM Canned Coffee - 1 Box / 6 ea",
+    "category": "Beverage",
+    "squareCatalogId": "JRTGAD5PILIH2IWJM5P4SHQF",
+    "squareItemId": "2UMJGETSUY4FRAHAGJNTMJ7J",
+    "squareCategoryId": "M5J6XKVPVUP6QNEGSWFUTZGD",
+    "isActive": true
+  },
+  {
+    "name": "Cacio e Pepe Croissant",
+    "category": "Food C&S",
+    "squareCatalogId": "7GXK5SVBZ53ZFMPLH4ZUNSCV",
+    "squareItemId": "SE55OP7YYDHGENQ2AEFX4QUI",
+    "squareCategoryId": "Q7BT5OBG3LJFNR7DK72PVW5Q",
+    "isActive": true
+  },
+  {
+    "name": "Umezu Matcha",
+    "category": "Signature Drink",
+    "squareCatalogId": "ERJAT55SWTS6FROSGH5DF5A6",
+    "squareItemId": "FKWI7AZDHYX4VQRSF74ORNIS",
+    "squareCategoryId": "KL3EF3JQRXKOF6TOKCDJ45XX",
+    "isActive": true
+  },
+  {
+    "name": "Pistachio Chocolate Croissant - Tax Free",
+    "category": "Food C&S - Tax Exempt",
+    "squareCatalogId": "VFVCBFCTYZ6226W7FFH2K7IQ",
+    "squareItemId": "DZHT6TYXKPR72JAZZSIMUH27",
+    "squareCategoryId": "4TBMVWBX7EKDBBZYENC7MZDX",
+    "isActive": true
+  },
+  {
+    "name": "Cherry Almond Croissant",
+    "category": "Food C&S",
+    "squareCatalogId": "RF3KC76FPA4XZ5A2GF322I42",
+    "squareItemId": "HS7NMADDIWDFQOYNZDRAHXKG",
+    "squareCategoryId": "Q7BT5OBG3LJFNR7DK72PVW5Q",
+    "isActive": true
+  },
+  {
+    "name": "Coffee Box",
+    "category": "Coffee",
+    "squareCatalogId": "6RNG24QB2BWLFHQYW65DDTOF",
+    "squareItemId": "NMBAHKH4DOPVFMOU7ACGIELG",
+    "squareCategoryId": "QS5YI5F4GSUKL2FEL6II7WSZ",
+    "isActive": true
+  },
+  {
+    "name": "Coconut Island",
+    "category": "Signature Drink",
+    "squareCatalogId": "TFU4LJWIHRSRYMFCUNFSUQBY",
+    "squareItemId": "2NMVXYU6PK3POI2F5LUU4WML",
+    "squareCategoryId": "KL3EF3JQRXKOF6TOKCDJ45XX",
+    "isActive": true
+  },
+  {
+    "name": "Cacio e Pepe Croissant - Tax Free",
+    "category": "Food C&S - Tax Exempt",
+    "squareCatalogId": "EENGXTLLRBG3GPCNWTA652ON",
+    "squareItemId": "BBT5RIWXRNMKF7T7ZQ3YVHDF",
+    "squareCategoryId": "4TBMVWBX7EKDBBZYENC7MZDX",
+    "isActive": true
+  },
+  {
+    "name": "Raisin Swirls",
+    "category": "other",
+    "squareCatalogId": "SSF5RMWP22FPBULRDBMM3GYU",
+    "squareItemId": "AV6KGAQUCN5CKEJ76P32VBNK",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Chocolate Cookie",
+    "category": "other",
+    "squareCatalogId": "5LPDBS4PNMRM6LOHINIDG4QZ",
+    "squareItemId": "PDHQMOOEYZ5AMBEVESZCW45H",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Cheese Croissant",
+    "category": "pastry",
+    "squareCatalogId": "NQBJHPVVS4V55BUYFFNM7UCI",
+    "squareItemId": "6TLSZAU44DKMQOU6LJKAZURM",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Raspberry Croissant",
+    "category": "pastry",
+    "squareCatalogId": "EWCOHD6HFAL36H2SQFWCW2DM",
+    "squareItemId": "SAIIEUAM2A3XSBINBFSOEYP5",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Nutella Croissant",
+    "category": "pastry",
+    "squareCatalogId": "C7RKDN2BD2I4EUG6FTUVUQYQ",
+    "squareItemId": "QFSQEKW54AHGUER3KTUCSI4W",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Croque Monsieur",
+    "category": "other",
+    "squareCatalogId": "IPIIQWQHEW6VUOSOAM2N2WTW",
+    "squareItemId": "EPGDULLIBBS3WEH4XK4U77EX",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Pain au Chocolat",
+    "category": "other",
+    "squareCatalogId": "5N5CJUHRWBZ7LOMJHYIEZPJN",
+    "squareItemId": "QORCPCQUS6GWTKOLOFHQDVK4",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Madeleine",
+    "category": "other",
+    "squareCatalogId": "FOIDKH4HE7XODIVF4JH7JDQ2",
+    "squareItemId": "45VNTTK3UKCL43QOUYJFBQMZ",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Cinnamon Knot",
+    "category": "other",
+    "squareCatalogId": "BBBJVWVO47UILY7XN45HAS3E",
+    "squareItemId": "AJXUINLKFLZSOUWTZVFLXQNO",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Double Baked Almond Croissant",
+    "category": "pastry",
+    "squareCatalogId": "APEPP7WYHN4LULN257QXHSJG",
+    "squareItemId": "HFROFGZE6I5LDN4VKBLUN7XV",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Double Baked Chocolate Almond Croissant",
+    "category": "pastry",
+    "squareCatalogId": "LXKJI3CNCCR4WJE54LZKSSY6",
+    "squareItemId": "YC7LZ7AZQVVC3IVHUBRUQNM4",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Kouign Amann",
+    "category": "other",
+    "squareCatalogId": "452HSBPZFMLZ3N7NHDLLAPWE",
+    "squareItemId": "2C47TUBTCRYMQDPXC3MPZ53I",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Rwanda Kawa Yacu N",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "WX5QTKLE5424I5ASCI6SPXSZ",
+    "squareItemId": "I62QARDGSGOPMB7LHBXP2IO2",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Croque Monsieur - Tax Free",
+    "category": "other",
+    "squareCatalogId": "EH6FGIBKM6L54OUOERVABJUK",
+    "squareItemId": "WI7MP57TRDXVONM753CW4O2Q",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Double Baked Almond Croissant - Tax Free",
+    "category": "pastry",
+    "squareCatalogId": "7CQGBMHEYYDU472VILKSR6XH",
+    "squareItemId": "LELIB4QS67HC7HSLOHLTU3K5",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Raspberry Croissant - Tax Free",
+    "category": "pastry",
+    "squareCatalogId": "GOUIVQJ7CUBPCQZBNWH5DQ2Q",
+    "squareItemId": "J5GNY7M4NNXITTCDWVLSBRJM",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "NomNom - 100 Sachets Box",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "Z2WOX3OIRPK2PQMEFUYWXM34",
+    "squareItemId": "2XJML3KNGDLW2VL6GUDNZTKE",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Madeleine - Tax Free",
+    "category": "other",
+    "squareCatalogId": "M2U3CU66T7M7NTBGCGYRHWW4",
+    "squareItemId": "KB4JJHIVGCQSCLEHITY3TDMQ",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Raisin Swirls - Tax Free",
+    "category": "other",
+    "squareCatalogId": "HNM4SHFVWQX542I4VHLKWMGO",
+    "squareItemId": "XZITOPY3K6PB2JH6WQRIAFCY",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Cheese Croissant - Tax Free",
+    "category": "pastry",
+    "squareCatalogId": "HEKCNOW2BS5RILZLM2BOSBOA",
+    "squareItemId": "TUNKXPEWW7PUK4WXQRBBPGYP",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Apron - Beige",
+    "category": "Merchandize",
+    "squareCatalogId": "LPRVOU27B7CJ6M2I3GWOHHF4",
+    "squareItemId": "UR4ZCGUQXDMTAF5BON3TU2K6",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Apron - Denim",
+    "category": "Merchandize",
+    "squareCatalogId": "26WOQQUO5JAWP2IMCR7GGJFF",
+    "squareItemId": "EIBG2LHW63DG3GKIQI6GEW25",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Costa Rica Arleen & Maria",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "XPAR4A47OV7RWYQALJAJSBDU",
+    "squareItemId": "U75HRC6V43MNM6R22EUH4JEG",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Nutella Croissant - Tax Free",
+    "category": "pastry",
+    "squareCatalogId": "TUJRDERMCVUOFVHGTILCEBJM",
+    "squareItemId": "DTSPPF2AQJVPK2X2W2ZYXH5I",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Double Baked Chocolate Almond Croissant - Tax Free",
+    "category": "pastry",
+    "squareCatalogId": "TZZ7LJNIRXMOMDCERPNQRKAB",
+    "squareItemId": "OBIQT5VQUBHKCYL7VFCXGRIV",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Pain au Chocolat - Tax Free",
+    "category": "other",
+    "squareCatalogId": "EX3YCZNKPZR6ENYWWGRYZ3XD",
+    "squareItemId": "27QAGBFXJSXE5SNDHXR5EVZS",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Innovation - Indonesia Blue Fire",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "VD62R37BVAZQT6VRW7RJ42MB",
+    "squareItemId": "G7FURD2WZAKQGCNN7AJPLM4H",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Innovation - Colombia Nestor Lasso El Diviso",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "SZZX3UHYG23SQJDHEQY2EJQF",
+    "squareItemId": "UVJI42WGXPIPBF5BK2VARTIW",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Rwanda Muraho Cyesha W",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "6EM7LMVPWV5AMBTWFUZAEKRR",
+    "squareItemId": "G6Z6DD6YNXVKTX3L5LUXVJFG",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Honduras Don Andres",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "2FDM6S2BTY6YSZ7U2KCVBCL5",
+    "squareItemId": "2YG5NGTWCYRTPR7PHTG4FGME",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Cinnamon Knot - Tax Free",
+    "category": "other",
+    "squareCatalogId": "RBC3F5TNAEAPAT6OFO77YZIF",
+    "squareItemId": "H7FRMZ4NKISGU6OPS6RLIZ2V",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Sakura",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "LC3IPMBUZKRCXR5BIIWQ4BO2",
+    "squareItemId": "5EWHIOJ4CZYCNGEJ6NI4IAMB",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Water - Sparking",
+    "category": "Beverage",
+    "squareCatalogId": "JKQF6EPTBF3ND7MU6YMZDAXJ",
+    "squareItemId": "OUC4Z4W4GLW4CKAUM5B6SRM4",
+    "squareCategoryId": "M5J6XKVPVUP6QNEGSWFUTZGD",
+    "isActive": true
+  },
+  {
+    "name": "Vegan Brownie",
+    "category": "other",
+    "squareCatalogId": "DRBHS4VSBXQRYF5A5HY6T7P6",
+    "squareItemId": "BX3R2VWZJ6PSXPJBZBC7RFYJ",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Butter Tart",
+    "category": "other",
+    "squareCatalogId": "ZHKY2OG6USERZCP26VBGA35W",
+    "squareItemId": "VRVHCG5NJYNZQVPPNANL4AQK",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Vegan Date Oat Bar",
+    "category": "other",
+    "squareCatalogId": "HMQ25F2ECBWOXQZ3WA4R2N7N",
+    "squareItemId": "BBTTHWJM76ZWD2VWNO4CAQEA",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Orange Vienna Cream - HOT / ICED",
+    "category": "Signature Drink",
+    "squareCatalogId": "7AEEO5BGLHACKXU3ARJD6PYK",
+    "squareItemId": "45HZSARIDICCA3XCCWJKF6KQ",
+    "squareCategoryId": "KL3EF3JQRXKOF6TOKCDJ45XX",
+    "isActive": true
+  },
+  {
+    "name": "Sakura Latte - HOT / ICED",
+    "category": "Signature Drink",
+    "squareCatalogId": "QQIHEX4OG5GATSU2B7SILR67",
+    "squareItemId": "KGM47N3V7KKAFAI4ZPMQAIB7",
+    "squareCategoryId": "KL3EF3JQRXKOF6TOKCDJ45XX",
+    "isActive": true
+  },
+  {
+    "name": "Butter Tart - Tax Free",
+    "category": "other",
+    "squareCatalogId": "YGQ5ZPD5OSJUY42CWEWVVLRM",
+    "squareItemId": "4KIXJEOCNMVYH2DSIA3JOU2U",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Chocolate Cookie - Tax Free",
+    "category": "other",
+    "squareCatalogId": "ZXSQC66LZXFO5QDAFGGCZ2OU",
+    "squareItemId": "LF3Y7IY2VZFMWFWWBOXR5VNJ",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Scone - Blueberry",
+    "category": "other",
+    "squareCatalogId": "PCK3RH5YZVH7TRFHHH6MUWK4",
+    "squareItemId": "7XT3MD7LY53O555WP527ECAC",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Croissant - Chocolate",
+    "category": "pastry",
+    "squareCatalogId": "EQK7BV5NU24GVFOJW2C2W2Y3",
+    "squareItemId": "BV625LUD5KT4HMKZ3J6LSAAL",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Tart - Blueberry Almond",
+    "category": "other",
+    "squareCatalogId": "GI2XHCBRHXQHKBDVQ4LGUG2M",
+    "squareItemId": "7APPQYEH6GCI6VSL5TK5G2DX",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Croissant - Butter",
+    "category": "pastry",
+    "squareCatalogId": "3UQZ7A24V3CHI4X67QAKM74U",
+    "squareItemId": "3BPO4DLK4SM64IKGB3MRSTHS",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Croissant - Almond",
+    "category": "pastry",
+    "squareCatalogId": "ERTNWERCHAF453XVZU6VVNOD",
+    "squareItemId": "TVXXTUW76MOKZGEMOOZERZXS",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Spinach Feta Danish",
+    "category": "pastry",
+    "squareCatalogId": "GUAQYTCZNK3I6QLJRZWNCT3M",
+    "squareItemId": "FWO66MAP75D7OCC5BRA3BPWO",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Croissant - Ham &  Cheese",
+    "category": "pastry",
+    "squareCatalogId": "IV3QCHIQ7N3NRF55Y7LGA72P",
+    "squareItemId": "3CIO2B7V2GIPOLN52ZYEHNBS",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Cookie - Chocolate Chip",
+    "category": "other",
+    "squareCatalogId": "5TWQZTSMPBSGSYDBEP6U6BU6",
+    "squareItemId": "AGRVVWI6H5ZEQ25LI4HP3FWW",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Tart - Pistachio Raspberry",
+    "category": "other",
+    "squareCatalogId": "7A2F5S3SYWJBEW4EL2TGI2WB",
+    "squareItemId": "FK4WVEYFGEWQTMV4QQEW7R5Z",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Tart - Lemon Passionfruit",
+    "category": "other",
+    "squareCatalogId": "RLQEENR5RJB6RRMQBWGDOKAG",
+    "squareItemId": "6YZ2S6KQHCCL25BLCVK3RAZU",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Tart - Classic Pecan",
+    "category": "other",
+    "squareCatalogId": "7OAI4VYFOMJZLIY6EK2U7TQX",
+    "squareItemId": "GHNTRI7WMJYTZN6E7TKUE4RN",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Tart - Peach Hamilton Pudding",
+    "category": "other",
+    "squareCatalogId": "DF72I6SRI2URKNDHKUYFGU6G",
+    "squareItemId": "OZQIK7PIVGHFK5OUVILMZEZG",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Raspberry Danish",
+    "category": "pastry",
+    "squareCatalogId": "ZXJ7DCTPQNXN7P63NULNRPFL",
+    "squareItemId": "MER5O3AEOSA2CNWW3O3KRXRF",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "PB & Fig Bar",
+    "category": "other",
+    "squareCatalogId": "EYDYUQ4WWBALVZDZ5LRNXETK",
+    "squareItemId": "CYAEJWWN5MYWCU4KDU3XAAUT",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Scone - Black Sesame White Choco",
+    "category": "other",
+    "squareCatalogId": "GLZNY5O2O6DE4RRFKVRU2RCU",
+    "squareItemId": "YRP6SHLNZ4ICNKJSLYS5IJGC",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Chicken Bechamel",
+    "category": "other",
+    "squareCatalogId": "LJFNKOGQLH6W7DNWKUEE3SKT",
+    "squareItemId": "OL2OB7T752K3L763GVOAIXWQ",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Croissant - Chocolate (Tax Free)",
+    "category": "pastry",
+    "squareCatalogId": "2M3HDAVI2UOHGJBWGMPJVBIA",
+    "squareItemId": "6Y334NTVA6TWWB7PUMGS44JF",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Croissant - Almond (Tax Free)",
+    "category": "pastry",
+    "squareCatalogId": "HHZUGYJY5PDUMFCLKZ53E5NZ",
+    "squareItemId": "EE572UBV6V4WGQJOESPAAUKC",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Scone - Strawberry",
+    "category": "other",
+    "squareCatalogId": "VV2SJDV2BTJ4MXMGVAOIXTOX",
+    "squareItemId": "LI6K2ACP7E32IPEPDCQAYX6A",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Croissant - Butter (Tax Free)",
+    "category": "pastry",
+    "squareCatalogId": "OICBQ3IJMUIMLG2D4HQUFFO6",
+    "squareItemId": "7X53TPOLQDOGJZIZI6ZYTXYH",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Croissant - Ham &  Cheese (Tax Free)",
+    "category": "pastry",
+    "squareCatalogId": "5RODXXL2NMHGPF7YSTVWAUQF",
+    "squareItemId": "OLTQNCHBVDKY5LYPX7EK3GKL",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Raspberry Danish (Tax Free)",
+    "category": "pastry",
+    "squareCatalogId": "ML7TRBVKMRQABKJQX4RXESYP",
+    "squareItemId": "WCNRNK2MPS76YABMQ4WW72LG",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Scone - Blueberry (Tax Free)",
+    "category": "other",
+    "squareCatalogId": "JILF72NF2IXZQB6LVNT46RA7",
+    "squareItemId": "6DSIVXBRKDUYYVHUCAD6KL5K",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Birthday Cake",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "MREINFD3ESVQAPPFRU3PIL33",
+    "squareItemId": "7LZDJQYXQPRENKGPKN5MCJ6Y",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Flavour Shot",
+    "category": "Modification",
+    "squareCatalogId": "FHSP65BDYAIA5VBZ6MNMSQWT",
+    "squareItemId": "YLUYZDNR7ZFYCFOEGDY7KYMS",
+    "squareCategoryId": "MYYN6KVN3GUR3DYFJ7RTMMUW",
+    "isActive": true
+  },
+  {
+    "name": "Cookie - Miso Walnut Cookie",
+    "category": "other",
+    "squareCatalogId": "3QHLMG7GDKYXPQSTNOZQBZNS",
+    "squareItemId": "PPXJ7Z2AP4DSDXKZ6IDXH2OS",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Muffin - Banana Chocolate",
+    "category": "pastry",
+    "squareCatalogId": "NIGXZ5VCBBPSM4YBUGRXEMHX",
+    "squareItemId": "6KSFWIUGEATJXNWSXU2BBDOJ",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Colombia Pedro Echavarria",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "DR7TBZIK32KL57BQANWHVQZV",
+    "squareItemId": "5GJROWV7XBXNZGEMIL2OTQWT",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Muffin - Blueberry",
+    "category": "pastry",
+    "squareCatalogId": "PGFQ3SLLPWT2ZAFKT5CIJY2Q",
+    "squareItemId": "YIX3DMZVQWKCPU7G7VROYTV4",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Muffin - Lemon Poppyseed",
+    "category": "pastry",
+    "squareCatalogId": "GWE6Z4GBSQFGUTGH2UWJVPPN",
+    "squareItemId": "SKPLFYHO437PZTRMGTBIK55V",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Oat & Fudge Bar",
+    "category": "other",
+    "squareCatalogId": "NW3PKXVA5GDOIQJLKT46WMNP",
+    "squareItemId": "A6JKOP6R6KNUPCXELEHIMIXD",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Iceberg",
+    "category": "Signature Drink",
+    "squareCatalogId": "HQ4XL6XJ32FYYGZADMHYBQQI",
+    "squareItemId": "L6WI3GZZ4JONTSZ4QQQ5SMTT",
+    "squareCategoryId": "KL3EF3JQRXKOF6TOKCDJ45XX",
+    "isActive": true
+  },
+  {
+    "name": "Rwanda Tumba W",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "3TYQIQA6T3VSGURJCSEJPRYV",
+    "squareItemId": "CKYASW3KRCOXEGF3YGIWJXBC",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Costa Rica Rita Aguilera",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "TWXW2KOP5IZNN7SMB47K4VPK",
+    "squareItemId": "X2H73PPNFMPI6DFVDN3WMG5Q",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Steam Milk",
+    "category": "Coffee",
+    "squareCatalogId": "NNZZCBRO2POMWGU5MKVTW4B2",
+    "squareItemId": "ISIVZX534U2S3DD3LX6FGPPY",
+    "squareCategoryId": "QS5YI5F4GSUKL2FEL6II7WSZ",
+    "isActive": true
+  },
+  {
+    "name": "Colombia La Union",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "NZ6ABBOJSZNNWTAMWMVLMWFD",
+    "squareItemId": "GX5CEKIUOZN7GDTXEL3KYODA",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Ethiopia Bombe W",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "5MI64BFMFSLRTC5R7NLKSWH6",
+    "squareItemId": "J7BYCKLSN4SHZKYM4IISV4ZO",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Kenya Kaguyu",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "LPQKHKXJMTXTBTGUJXZJGYIW",
+    "squareItemId": "LLGOTPHCYQ3I42NMQZX7D5HF",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Ethiopia Testi",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "SVEBDP5FZAUIGPUNJ4QV37ED",
+    "squareItemId": "2ARGRBTF3GWKZRIXYSYPVJPH",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Granola -150g",
+    "category": "other",
+    "squareCatalogId": "BZHBHHUIH4PKPTFNXGBJ56K5",
+    "squareItemId": "SXDHO3LYETI4YIAN74K2H2VB",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Rwanda - Kawa Yacu",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "YJPVS24GZQG36VFE5QWLYDHB",
+    "squareItemId": "YWDLASAMVKFLPEPA5N65Z4CE",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Hot Chocolate",
+    "category": "Coffee",
+    "squareCatalogId": "EEXUJRSCG6N7HQTLUMH64CDV",
+    "squareItemId": "CNGW6C3CLRVGAY4QUGGENX43",
+    "squareCategoryId": "QS5YI5F4GSUKL2FEL6II7WSZ",
+    "isActive": true
+  },
+  {
+    "name": "Orange Vienna Cream - ICED",
+    "category": "other",
+    "squareCatalogId": "UZP3JDLQ7Z7L26SMXQY4N7WI",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Aeropress Micro-Filter",
+    "category": "Merchandize",
+    "squareCatalogId": "SBUBCUP2PFU2BUA3LGTZNEIZ",
+    "squareItemId": "ACAN4QK644XLMA7DXEL2U22J",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Kalita Wave 185 Filter",
+    "category": "Merchandize",
+    "squareCatalogId": "AF5PFZ2CADA3YZRAGQUWY5X5",
+    "squareItemId": "F5GRKSZGJFXORDAZ6AIVSGYJ",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Brundi Nyabikenke",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "GRXB3QGEYYOOG2MEAS47M7MB",
+    "squareItemId": "QZNMDE2LVCWWXCEHOQS75R7J",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Costa Rica Rosa Aura",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "6S7NJPS5KXOYV34644QXXZ2V",
+    "squareItemId": "CAFB67MVY2UXTQFKEMLDEN4X",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Coral Beach",
+    "category": "Signature Drink",
+    "squareCatalogId": "45UNSYEPQWO23PGQ7MEVDS4L",
+    "squareItemId": "LLJJYECDGGYPZIYXEBAXIOJE",
+    "squareCategoryId": "KL3EF3JQRXKOF6TOKCDJ45XX",
+    "isActive": true
+  },
+  {
+    "name": "Hario V60-02 Filter White",
+    "category": "Merchandize",
+    "squareCatalogId": "BROHULKCORYVFXCE4BSBHD43",
+    "squareItemId": "PCPRWX2JRPCVHNFSJDV2RGMI",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "NomNom Cold Brew Can",
+    "category": "coffee",
+    "squareCatalogId": "MBGXR3AGNOV33HZIXQ7CHI4J",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Cookie - Pecan",
+    "category": "other",
+    "squareCatalogId": "5SQ7S5RQNZC7LIT3HQHK5LZJ",
+    "squareItemId": "MNI63UP2CJ35DUA7I4PTNQAO",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Iphone 13 Case - Sakura",
+    "category": "Merchandize",
+    "squareCatalogId": "AFGVIXUONTJ4RJYWMPAHKTDA",
+    "squareItemId": "2G4NQA6P46523VUR5HH2HTOY",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Granola - 500g",
+    "category": "other",
+    "squareCatalogId": "GFGWVUC7NWDC3GKOON6WDHP2",
+    "squareItemId": "LAYDG6QS4LGDSR3DWS2Z247M",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Water - Still",
+    "category": "Beverage",
+    "squareCatalogId": "TWEFGNCZ2OR7OTCLHZZY6XJQ",
+    "squareItemId": "OMPOHEFJU3CIBVR6GQV33YHV",
+    "squareCategoryId": "M5J6XKVPVUP6QNEGSWFUTZGD",
+    "isActive": true
+  },
+  {
+    "name": "Orange Vienna Cream - HOT",
+    "category": "Signature Drink",
+    "squareCatalogId": "7AEEO5BGLHACKXU3ARJD6PYK",
+    "squareItemId": "45HZSARIDICCA3XCCWJKF6KQ",
+    "squareCategoryId": "KL3EF3JQRXKOF6TOKCDJ45XX",
+    "isActive": true
+  },
+  {
+    "name": "Ethiopia Worka N",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "AMMNDLFIH3BKLWY2S2KBC6YX",
+    "squareItemId": "5AHYZJLH7SMDS3UB72CMF3EN",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Hot Chocolate - Kid",
+    "category": "other",
+    "squareCatalogId": "TXCYJFCTNO2EINGD7ACXLX5H",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Hot Chocolate Mix - 750g",
+    "category": "Syrup & Powder",
+    "squareCatalogId": "VC6GHPCXYKRP23GLC3FWELWX",
+    "squareItemId": "3VVS6LSXMSICGVMN3V5QGZXY",
+    "squareCategoryId": "ICS3QWJ3YMHFCR26V3J55RPJ",
+    "isActive": true
+  },
+  {
+    "name": "Pin -  Big Tiger",
+    "category": "Merchandize",
+    "squareCatalogId": "KT3CQFQXLIRLEIKW4LJRFS46",
+    "squareItemId": "UPHK4MUP7ENM76N353RTG2L3",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Iphone 13 Case - Yellow Tiger",
+    "category": "Merchandize",
+    "squareCatalogId": "OE7AZ56FXCKT644LD3WSTLPB",
+    "squareItemId": "7F57UKZEOBQLIJL2YDVUVHM7",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Masala Chai",
+    "category": "Tea",
+    "squareCatalogId": "GO64QK55EROJGQAGOSUKA4NH",
+    "squareItemId": "DVSZFA4U2OFOYHQB6XCHFRMP",
+    "squareCategoryId": "DJT2TUYEAYOQJ3PGQ24GTEFC",
+    "isActive": true
+  },
+  {
+    "name": "Coffee",
+    "category": "coffee",
+    "squareCatalogId": "Y4VBBDNVX4O4G4WEY2PN36UX",
+    "squareItemId": "ZNRKR65CNGISMZGO4TB6OT3R",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Aeropress Standard Kit",
+    "category": "Merchandize",
+    "squareCatalogId": "R2C2M3EE2PDW6SX4EK4LIUWC",
+    "squareItemId": "UI5EVOS7WSO6DGVUZSJXTLN4",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "London Fog",
+    "category": "other",
+    "squareCatalogId": "THWAMWMNALVDLY5VF5UFTSGT",
+    "squareItemId": "YWGUQAKK3MJJR5CLCFOHV6Z4",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Guatemala Ella Todos",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "3OPA7TK4LRIALVQTFWD6IIJ5",
+    "squareItemId": "R77WZCUJBBSI7I34C35BBHOP",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "El Salvador La Reforma",
+    "category": "other",
+    "squareCatalogId": "B5WO56ER4D275Z2LN5S7XGI5",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Assorted",
+    "category": "other",
+    "squareCatalogId": "GZGYP64EFTQDGSAIOTBI4NLA",
+    "squareItemId": "S3CR6CG6I2KD24IVQNNKO66V",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Gruvi - Dry Secco",
+    "category": "Beverage",
+    "squareCatalogId": "223KQVU2SJHUO5L2GU5U2375",
+    "squareItemId": "UNVZYUJVK7YXW5VKIJQWEPPL",
+    "squareCategoryId": "M5J6XKVPVUP6QNEGSWFUTZGD",
+    "isActive": true
+  },
+  {
+    "name": "Matcha",
+    "category": "tea",
+    "squareCatalogId": "SNNR3S4MFX6N6E3PCDNX2ARZ",
+    "squareItemId": "I4FOJPRBVLY3CTCEBNANJNAK",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Tea",
+    "category": "tea",
+    "squareCatalogId": null,
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Costa Rica La Pacaya",
+    "category": "other",
+    "squareCatalogId": "H4P4C5MYMRHFP6VT2J7336PE",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "White Chocolate Mix - 275g",
+    "category": "Syrup & Powder",
+    "squareCatalogId": "MDKNPBEQKWA53SEB3OHEUHLU",
+    "squareItemId": "GEZN6PW7ACLMJRE44A4SR2UD",
+    "squareCategoryId": "ICS3QWJ3YMHFCR26V3J55RPJ",
+    "isActive": true
+  },
+  {
+    "name": "Hot Chocolate Mix - 275g",
+    "category": "Syrup & Powder",
+    "squareCatalogId": "4DN6N2MV62IKQ6CSSSRKSHZR",
+    "squareItemId": "FZ44ECPSVDCKXCXWRAYZPAT3",
+    "squareCategoryId": "ICS3QWJ3YMHFCR26V3J55RPJ",
+    "isActive": true
+  },
+  {
+    "name": "Hazelnut",
+    "category": "other",
+    "squareCatalogId": "TZFNGNBO6SQRNBN2F66SSMDN",
+    "squareItemId": "4M4PWDM3B3ET5H3U2PIO45FK",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Tumbler",
+    "category": "Merchandize",
+    "squareCatalogId": "LC2LIKQPM3YLSSPJCQBO66YV",
+    "squareItemId": "VC6PP3DUTONFGZ5EHT542XOB",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Sea Salt",
+    "category": "other",
+    "squareCatalogId": "KCUMTPGGUUOS4HY3KJSX6WEF",
+    "squareItemId": "T6QQRQAVAGCA4O7H2ISMCWVC",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "La Campanella",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "WD5OOIAUHT2SRDAUYZCW7CAR",
+    "squareItemId": "WNJGYCRADENGH4JLPLHX3PLY",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Celebration Medely",
+    "category": "other",
+    "squareCatalogId": "5ONJQ2JGMKC4WJRNX2JE4H5C",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "NomNom - Sachet",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "MDXL63U5JOQC7QXLQVFZC54O",
+    "squareItemId": "7IZ5XDP2PNL7VNEH6UMD5AZT",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Kenya AB Ngugu",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "6SSYEF7VDWVNWAY257KML2W7",
+    "squareItemId": "KVBKU6IRHMZQIBVK6VAGUKRV",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Gruvi - Bubbly Rose",
+    "category": "Beverage",
+    "squareCatalogId": "LUL7BW7D6RYG7ZAEX4S7FJWG",
+    "squareItemId": "J5DRCU5OWQIBXAD3BYHLLRK3",
+    "squareCategoryId": "M5J6XKVPVUP6QNEGSWFUTZGD",
+    "isActive": true
+  },
+  {
+    "name": "Colombia Sierra Nevada",
+    "category": "other",
+    "squareCatalogId": "NBBLAB54B7D3PDUPZCHDOXQF",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Ethiopia Banko Chelchele",
+    "category": "other",
+    "squareCatalogId": "2HUJJGYFI2AO2E5BVA73YG4G",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Burundi Teka",
+    "category": "other",
+    "squareCatalogId": "O3Q2NXLE6DKZ6HDUPN4XF24O",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Costa Rica Los Naranjos",
+    "category": "other",
+    "squareCatalogId": "L2GVKPPEVIIHLTQIEP5H4WYG",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Wild Card - Blood Orange",
+    "category": "Beverage",
+    "squareCatalogId": "XPMLJLPHISY6ONSEDDGICUBU",
+    "squareItemId": "W6QWLUKCNHE7VSPXOLWNCAGK",
+    "squareCategoryId": "M5J6XKVPVUP6QNEGSWFUTZGD",
+    "isActive": true
+  },
+  {
+    "name": "T-Shirt - White",
+    "category": "Apparel",
+    "squareCatalogId": "ATL2RSSFBA736PGAKESN5E2Y",
+    "squareItemId": "SK77NK6J2XHYLEOY6YSSC4UG",
+    "squareCategoryId": "WZPD4A4JMO5ZOU33TJUXH2CD",
+    "isActive": true
+  },
+  {
+    "name": "T-Shirt - Black",
+    "category": "Apparel",
+    "squareCatalogId": "H5VVVRUHCP5IWMEWPWFM55RK",
+    "squareItemId": "267Q263LE3FHGR77OWL6VXNK",
+    "squareCategoryId": "WZPD4A4JMO5ZOU33TJUXH2CD",
+    "isActive": true
+  },
+  {
+    "name": "Costa Rica Terranova",
+    "category": "other",
+    "squareCatalogId": "BKXKMONVNCMBLB3WKMCHZYVC",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Open Price - Signature Drink",
+    "category": "Signature Drink",
+    "squareCatalogId": "AK7SUZ7U3WLLVCTJWLH5RNGV",
+    "squareItemId": "X2KKBNEOYDD4ZHPGX7F4OEDX",
+    "squareCategoryId": "KL3EF3JQRXKOF6TOKCDJ45XX",
+    "isActive": true
+  },
+  {
+    "name": "AeropressGO Kit",
+    "category": "Merchandize",
+    "squareCatalogId": "R2C2M3EE2PDW6SX4EK4LIUWC",
+    "squareItemId": "UI5EVOS7WSO6DGVUZSJXTLN4",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Postcard",
+    "category": "Merchandize",
+    "squareCatalogId": "M77VUBSZCFUR55BGZUHPO7H3",
+    "squareItemId": "LHXZB4JXRWDK6DD6GQ34KNAD",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Toothbrush - Single",
+    "category": "Merchandize",
+    "squareCatalogId": "SKEGY4TWOGJTGP3XSVTNUQNE",
+    "squareItemId": "ZOJLTRARWODGLJNQHWIJX5ZZ",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Toothbrush - 4 Pack",
+    "category": "Merchandize",
+    "squareCatalogId": "OJN45W7FLXUQLDVSQWSNQQRV",
+    "squareItemId": "AKJ36XLF5FTZNTSMVUUC7BS5",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Open Price - Coffee",
+    "category": "Coffee",
+    "squareCatalogId": "QI3ZFC6DRBLX3JHLAWWW2OGK",
+    "squareItemId": "ZLSOZQZVSUHSKWU3KKQAOY7P",
+    "squareCategoryId": "QS5YI5F4GSUKL2FEL6II7WSZ",
+    "isActive": true
+  },
+  {
+    "name": "Chicken Bechamel (Tax Free)",
+    "category": "other",
+    "squareCatalogId": "6U5NRB6MFGU3GJ6JTGRZBQVF",
+    "squareItemId": "5NCJ3GGOC3CKILXXCXLSENH5",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Scone - Black Sesame White Choco (Tax Free)",
+    "category": "other",
+    "squareCatalogId": "FYW6MDGXBC6ASRB26XK25SOE",
+    "squareItemId": "YFM6RTIOLK3OCRNBZVCOX5J7",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Spinach Feta Danish (Tax Free)",
+    "category": "pastry",
+    "squareCatalogId": "W7EVGN2B5KZJDX37LXDEDPWS",
+    "squareItemId": "44X2FBNYHTG3MK7UEKFHPTVH",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Postcard - 4 Set",
+    "category": "Merchandize",
+    "squareCatalogId": "D3ATT5HZAR3LVNKB2OCQLIVB",
+    "squareItemId": "YTE5FKCD7YUATVLNOIEFHT3Z",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Casper Giftset",
+    "category": "Merchandize",
+    "squareCatalogId": "MOGEKXDN2DJZV3X3HVEK7UK3",
+    "squareItemId": "UJIJIEWTCTLO7AT7QPK3JV54",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Lolli Roll - Matcha",
+    "category": "tea",
+    "squareCatalogId": "T5BUGW3UTAZDOIEDFSUND3RH",
+    "squareItemId": "NGTGN7FGCNHFG3MAIRRSM3MG",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Lolli Roll - Chocolate",
+    "category": "other",
+    "squareCatalogId": "QHQKIMA32Z4V3Y6ACTRCT2GH",
+    "squareItemId": "IYCMHHBLBWIZZDNQEIJXI43P",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Lolli Roll - Earl Grey",
+    "category": "other",
+    "squareCatalogId": "RBD6IT2BVEIVAGLRTVKKHIKP",
+    "squareItemId": "LQNMLTWHCHKXPYCVE47MTJHZ",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Lolli Roll - Mango&Passionfruit",
+    "category": "other",
+    "squareCatalogId": "V6OTHYKQMJU7QWQCPWFTIJA7",
+    "squareItemId": "2TT5Z2GQFWAP4AY63DE2ZASA",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Lolli Roll - Creme Brulee",
+    "category": "other",
+    "squareCatalogId": "T5O6HRMF2YYENMMURGJBKXEK",
+    "squareItemId": "QW5S4QX2O5JHO5QTAK5EVFZW",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Lolli Roll - Pistachio",
+    "category": "other",
+    "squareCatalogId": "WCKWCXIDQLO24AWGKKBIQZ2Y",
+    "squareItemId": "S6O2CDEQQO7CF7IF2J6EARDC",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Granola - 500g (Tax Free)",
+    "category": "other",
+    "squareCatalogId": "7ZHJOCUCENPQGE2ZDHMIZ7FP",
+    "squareItemId": "NKKACKRYWYZNKO42HM5WC4E6",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Latte - Sweet Dream",
+    "category": "coffee-drinks",
+    "squareCatalogId": "WZ3C4SPXAWP3QLVCRMGL3RBW",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Costa Rica Aracelly Robles",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "AKR4JVTW5AWEZZJLAFZA65KM",
+    "squareItemId": "FAKEHWGNFWQACSP6K4XC3WG3",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Ethiopia Gora Kone W",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "QTDTBA7RVXOZFKANAHXFVSYY",
+    "squareItemId": "BJSYAUEABH2KCLGDIWQZLE2C",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Gift Box",
+    "category": "other",
+    "squareCatalogId": "5DW6U3UIDKMFZJ3IGI6OBASM",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Innovation - Colombia El Diviso Caturro Chiroso",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "GFW27JX5EQDVZV6QY6NZHXGV",
+    "squareItemId": "PLW7WNEVJWSCVZW4JCX22ITX",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Open Price - Retail Coffee Bean 227g Bag",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "G4O6C5URXVLWEJ2RILMHL7NR",
+    "squareItemId": "DYGNNQM65KGVONZDITGFULD7",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Coffee Scrub",
+    "category": "Merchandize",
+    "squareCatalogId": "3F3ACKJPOE6L4OGFXQILEE3X",
+    "squareItemId": "5LDVX6J73XZU3QPZGLRBT74Q",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Lolli Roll - Matcha (Tax Free)",
+    "category": "tea",
+    "squareCatalogId": "XRNWT2H52CATPQUWPQXGGHNL",
+    "squareItemId": "3LSBWFWAY57UWU3SCAKOQ3M2",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Muffin - Blueberry (Tax Free)",
+    "category": "pastry",
+    "squareCatalogId": "BYDGRUCRFZEMUWQENTUXXZIT",
+    "squareItemId": "OHYZA4L7NTRWMJ2MJLUMJ22E",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Lolli Roll - Creme Brulee (Tax Free)",
+    "category": "other",
+    "squareCatalogId": "ET4D7VU7F5J2ZZAXW3QFVKYZ",
+    "squareItemId": "QFUBNOBOKY6BUQ7EDR35IHHU",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Lolli Roll - Chocolate (Tax Free)",
+    "category": "other",
+    "squareCatalogId": "P4SHKQ46QU3H7GCTAQFFPULQ",
+    "squareItemId": "J6TCFKTYFGCCJEJ4TURABMCZ",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Lolli Roll - Mango&Passionfruit (Tax Free)",
+    "category": "other",
+    "squareCatalogId": "GHNETFQ6KFLZ52EX6A3MUA6U",
+    "squareItemId": "KNNI42IE3UQ5J7DTLMYBCHWM",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Muffin - Banana Chocolate (Tax Free)",
+    "category": "pastry",
+    "squareCatalogId": "DAT7TM7G7VUZD6ZMMHPFC4CZ",
+    "squareItemId": "SADVUFKPJIYRXNDXINXAHLYU",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Muffin - Lemon Poppyseed (Tax Free)",
+    "category": "pastry",
+    "squareCatalogId": "EYGIPXMVCHSJ7RQ5ZHXVMBMV",
+    "squareItemId": "LHQYBHS3YZAYAHEGMKVZU3B2",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Scone - Butter Coconut",
+    "category": "other",
+    "squareCatalogId": "LSK2MOZSQKYJ5TYANCOSNT6U",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "White Chocolate Mix - 750g",
+    "category": "Syrup & Powder",
+    "squareCatalogId": "5JXCDZ46FRCXDZORYKIW7KT7",
+    "squareItemId": "K5CRSIKAGWXM3AE5YL6ASCTF",
+    "squareCategoryId": "ICS3QWJ3YMHFCR26V3J55RPJ",
+    "isActive": true
+  },
+  {
+    "name": "Croissant - Cheese",
+    "category": "pastry",
+    "squareCatalogId": "3QMSY223V4374SFVK63LWNWA",
+    "squareItemId": "Y75OSWNHUKAY63CSQKV4CDLT",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Lolli Roll - Lemon",
+    "category": "other",
+    "squareCatalogId": "X6FI2DWX3CXW6HKO2BB7NE3Y",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Lolli Roll - Strawberry",
+    "category": "other",
+    "squareCatalogId": "6C5VIIDBO7DFATBFZJW6MBP6",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Tropical Green",
+    "category": "other",
+    "squareCatalogId": "KI36OGKBLFW65F2WKTXI6GIM",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Iphone 13 Case - NomNom",
+    "category": "Merchandize",
+    "squareCatalogId": "EQXAAU6FT6TRRZOOL2IK2RP5",
+    "squareItemId": "4MBRFMUTM2CGPY3UU7QFSJD7",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Lolli Roll - NomNom",
+    "category": "other",
+    "squareCatalogId": "B4DHX2KOFQGKIKRNP5P5DRRD",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Scone - Triple Cheese",
+    "category": "other",
+    "squareCatalogId": "7XB3CILOSDYXBJTMMMXY5IEN",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Open Price - Merchandize",
+    "category": "Merchandize",
+    "squareCatalogId": "PBQOPZH45VJ3RGTIPYUQDKOX",
+    "squareItemId": "XFAAQD7V4DAMQDV66Q2GQLYI",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Muffin - Lemon Poppy",
+    "category": "pastry",
+    "squareCatalogId": "KAUSJPC3DR4ZH3AC35J6KLGD",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Muffin - Citrus Cornmeal",
+    "category": "pastry",
+    "squareCatalogId": "OXKWLMLN5HVMD2O4SLKV354B",
+    "squareItemId": "T3BRICFWGXEFWCCHPMOGAAZG",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Matcha Powder",
+    "category": "Retail Tea",
+    "squareCatalogId": "VXQJFA27ZSN6OII7RR74NRF2",
+    "squareItemId": "WKT7YT7NZH2CNUJ66OHD7FFQ",
+    "squareCategoryId": "LE5Z4VBDS66FTX4PPRSIOAA5",
+    "isActive": true
+  },
+  {
+    "name": "De Mello Take Away Cup - 12oz (Half Dozen)",
+    "category": "Merchandize",
+    "squareCatalogId": "GDW7YZY5CXNI4ED6AEMDSFLV",
+    "squareItemId": "4X7K2ROOVIH5CDSH7NENGBMG",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Milk - Oat (32oz)",
+    "category": "other",
+    "squareCatalogId": "GKI2ELIOXGFSKM57Y2TL4AWV",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "De Mello Take Away Cup - 12oz (Dozen)",
+    "category": "Merchandize",
+    "squareCatalogId": "V7YTTKRUCPPMOACTSN2BEH7Z",
+    "squareItemId": "TMEVNN7H6PMPU5C75GMJWSIK",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Baked Good Box",
+    "category": "Merchandize",
+    "squareCatalogId": "WWE42EYPI3URR24YTK6EY6EL",
+    "squareItemId": "MTTYSF34NXR5VTF3MAZFUSNH",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "De Mello Take Away Cup - 4oz (Half Dozen)",
+    "category": "Merchandize",
+    "squareCatalogId": "YAM6XOL2EEP5ODD64UP73BWK",
+    "squareItemId": "MLKLWT5D4INO7J4IFM2LGCEJ",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "De Mello Take Away Cup - 16oz (Half Dozen)",
+    "category": "Merchandize",
+    "squareCatalogId": "MJTDEZ2TS3NBAGETZV22XGTI",
+    "squareItemId": "YBWGQLGLE32B5FF7EURJ3NB5",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Muffin - Oat Walnut",
+    "category": "pastry",
+    "squareCatalogId": "WBD5MWHU5MGEZU4DX2IFYRK3",
+    "squareItemId": "GCZKNVD3FPPNN5OX3JK3QRML",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Open Price - Baked Good",
+    "category": "other",
+    "squareCatalogId": "CY5UTOYLKZRUS74PEQVA4MDI",
+    "squareItemId": "IBPCPAMJLT6CSNLYHXG5JPLW",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Coffee Scrub Hand Soap",
+    "category": "Merchandize",
+    "squareCatalogId": "KV2B3E4NFSTQJKWRD7UXAY2L",
+    "squareItemId": "63SXAIW3SRX2CWFA6NOZEHFB",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "OG Sample Set",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "HEFFAD6BRHQEZYICLIIBC7MW",
+    "squareItemId": "3WWL5YSSZFCOYQS5GMV3QNK5",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "Open Price - Wholesale Coffee Bean 5lb Bag",
+    "category": "Wholesale Coffee-5lb",
+    "squareCatalogId": "SK3SHM6UKFODHY2EMZBIKJNW",
+    "squareItemId": "YG653HVOPCKDXPD2QH4VDRKU",
+    "squareCategoryId": "RATAMXGZLMLAHXVZDY6QP56R",
+    "isActive": true
+  },
+  {
+    "name": "Open Price - Syrup & Powder",
+    "category": "Syrup & Powder",
+    "squareCatalogId": "RYVNAZVO3RYUW5BUVSWGFGYN",
+    "squareItemId": "2I6PNL6B65IIVSVVYFZVWTUJ",
+    "squareCategoryId": "ICS3QWJ3YMHFCR26V3J55RPJ",
+    "isActive": true
+  },
+  {
+    "name": "Ultimate Sample Set",
+    "category": "Retail Coffee-227g",
+    "squareCatalogId": "QY23PEYSOF3L7E6FLF43QK3N",
+    "squareItemId": "JVQYCDY7YKSXD4567HKWNEFD",
+    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "isActive": true
+  },
+  {
+    "name": "De Mello Take Away Cup - 8oz (Dozen)",
+    "category": "Merchandize",
+    "squareCatalogId": "DYM5SE2KNN5S2CUUZDN7SYVA",
+    "squareItemId": "FOG7A6TLTB3SVPHF5UHU3NJQ",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Open Price - Retail Coffee Bean 5lb Bag",
+    "category": "Retail Bean-5lb",
+    "squareCatalogId": "FGYDNZEO2SKT6EYPPW7JAHOY",
+    "squareItemId": "WP4H4J2XVDF6EAWCT3CPPUN3",
+    "squareCategoryId": "EG5SRK3VQ3P7DXNT6MFVDKC2",
+    "isActive": true
+  },
+  {
+    "name": "eGift Card",
+    "category": "other",
+    "squareCatalogId": null,
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Espresso Machine Cleaning Powder - 500g",
+    "category": "Merchandize",
+    "squareCatalogId": "4EFQQOEZIR243M2MZGJEN3AI",
+    "squareItemId": "X6NZQIH3P6MNQ4AGHJNJO2W6",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Brewing - Pourover",
+    "category": "Education Class",
+    "squareCatalogId": "PGZAR7QVNEFD522VVDVOV3OB",
+    "squareItemId": "EQQFLOQ4ZTFM63XKF66Z763S",
+    "squareCategoryId": "LE5B5I3QE43P64QWQ6ZZGK3C",
+    "isActive": true
+  },
+  {
+    "name": "Activewear Black",
+    "category": "Apparel",
+    "squareCatalogId": "K2MYNHT2QFAYTTXRTS4SCPSP",
+    "squareItemId": "53FMD2T2MDI4HKE56I5RVDYN",
+    "squareCategoryId": "WZPD4A4JMO5ZOU33TJUXH2CD",
+    "isActive": true
+  },
+  {
+    "name": "Cookie - Chocolate Chip (Tax Free)",
+    "category": "other",
+    "squareCatalogId": "FMKOOIHI7SBTORNNA2ICJ7OY",
+    "squareItemId": "JEC3C4STH263IT534MARSYID",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Gift Card Reload",
+    "category": "other",
+    "squareCatalogId": null,
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "(Cash) Cold Brew x 2",
+    "category": "coffee",
+    "squareCatalogId": "H6GF6OJPQKGLAGN2QFAN347W",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "(Card) Cold Brew x 2",
+    "category": "coffee",
+    "squareCatalogId": "SSVCW6T5DJRNWV7LNJHRSH43",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "(Cash) Ice NomNom",
+    "category": "other",
+    "squareCatalogId": "A2RJFZPX4OHWZU4U7XWWI2VU",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "(Card) Ice NomNom",
+    "category": "other",
+    "squareCatalogId": "2EYIHGFSVYA6ZPLTDKO7QLXB",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "(Card) Iceberg",
+    "category": "other",
+    "squareCatalogId": "XLL7DJ3QU5EUAQQ65W7E7U2U",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "(Cash) Iceberg",
+    "category": "other",
+    "squareCatalogId": "YA6UZIIENOCIGA6R3IQ6BWTY",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Open Price - Apparel",
+    "category": "Apparel",
+    "squareCatalogId": "ZUVEIFQJFOXANSCF45LZVM3Y",
+    "squareItemId": "5ZZW6EGEJD4Z3AU2XSM4GZZN",
+    "squareCategoryId": "WZPD4A4JMO5ZOU33TJUXH2CD",
+    "isActive": true
+  },
+  {
+    "name": "Golden Hour",
+    "category": "other",
+    "squareCatalogId": "MTS35CGKF43YPYWFHRTEVYFB",
+    "squareItemId": null,
+    "squareCategoryId": null,
     "isActive": true
   },
   {
@@ -576,115 +2528,403 @@
     "isActive": true
   },
   {
-    "name": "NOMNOM Canned Coffee - 1 Box / 6 ea",
-    "category": "Beverage",
-    "squareCatalogId": "JRTGAD5PILIH2IWJM5P4SHQF",
-    "squareItemId": "2UMJGETSUY4FRAHAGJNTMJ7J",
-    "squareCategoryId": "M5J6XKVPVUP6QNEGSWFUTZGD",
-    "isActive": true
-  },
-  {
-    "name": "Pain au Chocolat",
+    "name": "Focaccia - Meat",
     "category": "Food Kingston",
-    "squareCatalogId": "IWL5SQED7RCSX4EPRV6TQ54N",
-    "squareItemId": "U3ZLKRQRBBOAZ3DZWYDIF7D7",
+    "squareCatalogId": "HAG2XYM2DO5MM7DFP76VNMXL",
+    "squareItemId": "R7YUZ5XWWQCFHOXYMC77PAJK",
     "squareCategoryId": "J6WFZDKIER2TUPP5XWZPKX2O",
     "isActive": true
   },
   {
-    "name": "Flavour Shot",
-    "category": "Modification",
-    "squareCatalogId": "FHSP65BDYAIA5VBZ6MNMSQWT",
-    "squareItemId": "YLUYZDNR7ZFYCFOEGDY7KYMS",
-    "squareCategoryId": "MYYN6KVN3GUR3DYFJ7RTMMUW",
+    "name": "Breakfast - Bacon & Egg",
+    "category": "Food Kingston",
+    "squareCatalogId": "FSMJ5JRCVKS7HRHIVKLOPVAH",
+    "squareItemId": "OVRRR2LFYHIWJPNG5YW73UAZ",
+    "squareCategoryId": "J6WFZDKIER2TUPP5XWZPKX2O",
     "isActive": true
   },
   {
-    "name": "Earl Grey",
-    "category": "Tea",
-    "squareCatalogId": "NVAXPYF2YONBLEQLS4IQJVUK",
-    "squareItemId": "A25PH5HFAVQ5AGDFH2LI5L57",
-    "squareCategoryId": "DJT2TUYEAYOQJ3PGQ24GTEFC",
+    "name": "Biscotti - Cranberry",
+    "category": "Food Kingston",
+    "squareCatalogId": "FG6K5FZSGDEIF264F53HFAFG",
+    "squareItemId": "ZJVRN43WK4AY6U7APCXTB3V3",
+    "squareCategoryId": "J6WFZDKIER2TUPP5XWZPKX2O",
     "isActive": true
   },
   {
-    "name": "Zumachi Decaf",
-    "category": "Retail Coffee-227g",
-    "squareCatalogId": "5RBNTBNP33AL6LQ5KMLG5QQ7",
-    "squareItemId": "Q6SRMVVNJKFPYLBEPAVZESY6",
-    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "name": "Biscotti - Granola",
+    "category": "Food Kingston",
+    "squareCatalogId": "72IOS4Q2X3P5RQZAHXMSS3IP",
+    "squareItemId": "VPLTUQOEM4OYWJL6ARTDB6MY",
+    "squareCategoryId": "J6WFZDKIER2TUPP5XWZPKX2O",
     "isActive": true
   },
   {
-    "name": "Reusuable Bag",
-    "category": "Merchandize",
-    "squareCatalogId": "PFP45EERK6WERRJOGWHUDWA5",
-    "squareItemId": "LESFOGAU6BA4PYWLEIEV22AB",
-    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "name": "Chocolate Brownies",
+    "category": "Food Kingston",
+    "squareCatalogId": "GGNPH4AY5PUVQBH72SELKEJP",
+    "squareItemId": "5HI2KUNVSWDBCIOLMLZ54QRK",
+    "squareCategoryId": "J6WFZDKIER2TUPP5XWZPKX2O",
     "isActive": true
   },
   {
-    "name": "Water - Sparking",
-    "category": "Beverage",
-    "squareCatalogId": "JKQF6EPTBF3ND7MU6YMZDAXJ",
-    "squareItemId": "OUC4Z4W4GLW4CKAUM5B6SRM4",
-    "squareCategoryId": "M5J6XKVPVUP6QNEGSWFUTZGD",
-    "isActive": true
-  },
-  {
-    "name": "Water - Still",
-    "category": "Beverage",
-    "squareCatalogId": "TWEFGNCZ2OR7OTCLHZZY6XJQ",
-    "squareItemId": "OMPOHEFJU3CIBVR6GQV33YHV",
-    "squareCategoryId": "M5J6XKVPVUP6QNEGSWFUTZGD",
-    "isActive": true
-  },
-  {
-    "name": "Chicken Caesar Wrap",
-    "category": "food",
-    "squareCatalogId": "LZC77VMITKNS7KWTIDWMIDW7",
-    "squareItemId": "5UFJU7V5MONC3PFJES6S5KDZ",
+    "name": "Feast Roasted Turkey Club",
+    "category": "other",
+    "squareCatalogId": "75ZXOJJXSVRXIQB2PEWUIHLC",
+    "squareItemId": "5LH2A4DBLHY242E4AMGQLRCQ",
     "squareCategoryId": null,
     "isActive": true
   },
   {
-    "name": "NomNom - 100 Sachets Box",
-    "category": "Retail Coffee-227g",
-    "squareCatalogId": "Z2WOX3OIRPK2PQMEFUYWXM34",
-    "squareItemId": "2XJML3KNGDLW2VL6GUDNZTKE",
-    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "name": "Feast Chicken Caesar Salad",
+    "category": "food",
+    "squareCatalogId": "AJIEHQLG66ZHQLKFY7G4UQCH",
+    "squareItemId": "FGD4T7FKUA6Z25IHLQNO3G7L",
+    "squareCategoryId": null,
     "isActive": true
   },
   {
-    "name": "Citron Calm",
+    "name": "Vegan Chocolate Energy Bar - Tax Free",
+    "category": "Food C&S - Tax Exempt",
+    "squareCatalogId": "IIOK3XKKCNSBVXIGVNR7FCMV",
+    "squareItemId": "MMFTS5VDH654O6LGFDCK2IVV",
+    "squareCategoryId": "4TBMVWBX7EKDBBZYENC7MZDX",
+    "isActive": true
+  },
+  {
+    "name": "Sundried Tomato Mozzarella Danish - Tax Free",
+    "category": "Food C&S - Tax Exempt",
+    "squareCatalogId": "TK4S7WU5LGFX2JRXJJ7HYGZE",
+    "squareItemId": "6GBAVOMCTRGEXSB73A3WBPLB",
+    "squareCategoryId": "4TBMVWBX7EKDBBZYENC7MZDX",
+    "isActive": true
+  },
+  {
+    "name": "Oatmeal Raisin Cookie - Tax Free",
+    "category": "Food C&S - Tax Exempt",
+    "squareCatalogId": "ZKU6Z675GGGQKTBXFF5VSGFX",
+    "squareItemId": "LSCI5R5TUPBSPV3TRPU7MGV7",
+    "squareCategoryId": "4TBMVWBX7EKDBBZYENC7MZDX",
+    "isActive": true
+  },
+  {
+    "name": "Kouign Amann - Tax Free",
+    "category": "other",
+    "squareCatalogId": "A5AXLGFW5P6H7EY43BYZSUNL",
+    "squareItemId": "4ZADLNRLRJTHXFKKJIWTO5NU",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Feast Maple Roasted Turkey & Havarti Sandwich",
+    "category": "food",
+    "squareCatalogId": "75ZXOJJXSVRXIQB2PEWUIHLC",
+    "squareItemId": "5LH2A4DBLHY242E4AMGQLRCQ",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Feast Chicken Caesar Salad (Tax Free)",
+    "category": "food",
+    "squareCatalogId": "I7HF7EODEIYFE5JCHB3BFLOM",
+    "squareItemId": "KWYLHFAZXFCDOS455LDHP455",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Open Price - Baked Good: 6 or More Purchase - Tax Exempt",
+    "category": "other",
+    "squareCatalogId": "LES7OKLFXHAGFJFLIAYQN3NF",
+    "squareItemId": "SDP43MB6IC2X6CUSO56QW2VN",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Overnight Oat",
+    "category": "other",
+    "squareCatalogId": "DKMND4OZG6ZR7NV7DRNT63WS",
+    "squareItemId": "QNZPBIX6PQ7N2RRDUDAVUI5N",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Feast Winter Citrus Salad",
+    "category": "food",
+    "squareCatalogId": "2WZFK7A6L23643GL2I2OMCI4",
+    "squareItemId": "RUC3B37NMPWTNZCPPNN2D3W3",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "BOOKKEEPER",
+    "category": "other",
+    "squareCatalogId": "GUWNH5LIEVXLX2XY3235FV27",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Granola -150g (Tax Free)",
+    "category": "other",
+    "squareCatalogId": "RNHYYW4YDR3LCNCJAAQU75WE",
+    "squareItemId": "HZHJKIAJVTANYKGRPKVN3GYV",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Vegan Brownie (Tax Free)",
+    "category": "other",
+    "squareCatalogId": "V3VPA73EEODK7DH5QUHE67B4",
+    "squareItemId": "S3SAXECZMZISM63CZOYGZL6O",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Cookie - Miso Walnut Cookie (Tax Free)",
+    "category": "other",
+    "squareCatalogId": "NUO6AZXAI4WX33NKQYLO3GNT",
+    "squareItemId": "A7RCLMNFPQMEBLRY5X43JCGL",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Vegan Date Oat Bar (Tax Free)",
+    "category": "other",
+    "squareCatalogId": "4PYCQQESUFMUZB7QN5LRP5X5",
+    "squareItemId": "VGCTTUNQNLBRKEHYJZQATFYR",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Overnight Oat (Tax Free)",
+    "category": "other",
+    "squareCatalogId": "IIK6HMB5PXPRLRANQT3OVCUI",
+    "squareItemId": "52ZM5USVOP7RKUP6CCMWT6ZG",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Cookie - Pecan (Tax Free)",
+    "category": "other",
+    "squareCatalogId": "2OLAHOOAHTGY23IEDDEYURYT",
+    "squareItemId": "SA7UMVKE2PSZK7HI3VWGIKBW",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Event Opent Price - Taxable",
+    "category": "Event",
+    "squareCatalogId": "3DEMOIX6T6RFHXRXAMIFSI6G",
+    "squareItemId": "HQEYEQCYZHYHDZETC2PN2SWV",
+    "squareCategoryId": "6ZOTV6LIEM4PT46VJS6FOK3L",
+    "isActive": true
+  },
+  {
+    "name": "Sandwich - Tuna Wrap",
+    "category": "food",
+    "squareCatalogId": "HDBJLQVY63XH5JY5AF2EZUVS",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Silk Road Salad",
+    "category": "food",
+    "squareCatalogId": "CCTT7AZXZT4XEL2UEZHEAEFA",
+    "squareItemId": "WH352OY2GJAP532N5WYFOIA6",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Tea Bag",
+    "category": "Modification",
+    "squareCatalogId": "NIM3AOVXWINX3LYP6FHHIBGU",
+    "squareItemId": "U3EP2VKCSECI6TGHPCZE3RES",
+    "squareCategoryId": "MYYN6KVN3GUR3DYFJ7RTMMUW",
+    "isActive": true
+  },
+  {
+    "name": "Rouge Provence",
+    "category": "other",
+    "squareCatalogId": "LBK33MBZXKBMFK4RZJHSRAYF",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Oolong Crème",
+    "category": "other",
+    "squareCatalogId": "OOOUZ3F2OPJJWAYUGLT7O4TM",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Sandwich - Pastry",
+    "category": "food",
+    "squareCatalogId": "2BE6JIIUMEYF3YDUL7GZTS4H",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Milk - Almond (32oz)",
+    "category": "other",
+    "squareCatalogId": "OCVUAKNVPO7S5KSZOWRMDTI6",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Mint Chocolate",
+    "category": "other",
+    "squareCatalogId": "CLAAR4BHXAEWZE3FWU4HH4OT",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Open Price - Tea",
     "category": "Tea",
-    "squareCatalogId": "3OXZP5ZMYTIQLDPCXOYMRHHM",
-    "squareItemId": "DDVFPFC5TVI2DPFTOU42Q3YL",
+    "squareCatalogId": "LWUDMCAGZK76O72XU6GWZY3F",
+    "squareItemId": "R6X6EAV7IRARKV2ITCMTMHPC",
     "squareCategoryId": "DJT2TUYEAYOQJ3PGQ24GTEFC",
     "isActive": true
   },
   {
-    "name": "Heavenly Cream",
-    "category": "Tea",
-    "squareCatalogId": "EVGQ6BKBKY7B7XHKEH6EJK6J",
-    "squareItemId": "RTDB7ZSX43NGMOUKZMSVLUYO",
-    "squareCategoryId": "DJT2TUYEAYOQJ3PGQ24GTEFC",
-    "isActive": true
-  },
-  {
-    "name": "Wild Card - Blood Orange",
+    "name": "Gruvi - Golden Lager",
     "category": "Beverage",
-    "squareCatalogId": "XPMLJLPHISY6ONSEDDGICUBU",
-    "squareItemId": "W6QWLUKCNHE7VSPXOLWNCAGK",
+    "squareCatalogId": "RHVQDAOQUFG2TGQPHFPZMHZJ",
+    "squareItemId": "VR6RVEFUIUKMVHMZ4I4GAH5T",
     "squareCategoryId": "M5J6XKVPVUP6QNEGSWFUTZGD",
     "isActive": true
   },
   {
-    "name": "NomNom Robusta Dark Roast",
-    "category": "Retail Coffee-227g",
-    "squareCatalogId": "WRYE2KGQA65O76QHFIYANKOV",
-    "squareItemId": "GIXUSLDNISKL37BFWCNM6HF2",
-    "squareCategoryId": "BBCR2KJ4KT2FDZTZCBICH6UY",
+    "name": "Tart - Blueberry Almond (Tax Free)",
+    "category": "other",
+    "squareCatalogId": "VL3NADQEVKKFAY5IQJWWD6KV",
+    "squareItemId": "PCAYK4QFITDHWNUCCETNSUNM",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Tart - Pistachio Raspberry (Tax Free)",
+    "category": "other",
+    "squareCatalogId": "CZZOFCI3RN7DBQGCYXGBCHCN",
+    "squareItemId": "AW6JDXPTZL2AWS67ERO5CXLC",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Tart - Classic Pecan (Tax Free)",
+    "category": "other",
+    "squareCatalogId": "K5U7JRNIU4ARY7PTMJT6NBMJ",
+    "squareItemId": "ZTQUD7F3EKVESXPI5DZYOOW2",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Tart - Peach Hamilton Pudding (Tax Free)",
+    "category": "other",
+    "squareCatalogId": "6VMBE3P322MDHCPYBCAYMN4E",
+    "squareItemId": "2K6FENIWL7MSK6EL4QDSWWWU",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Scone - Strawberry (Tax Free)",
+    "category": "other",
+    "squareCatalogId": "DFOYVLEI43JW2SLYOGWG57XN",
+    "squareItemId": "KZLKA3GIKUZIZIZXCQDCC3D5",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Babyccino - 8oz",
+    "category": "other",
+    "squareCatalogId": "F5BYI4AXXECCOT4E433J5OHF",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Sweet Dream - Casper Blend",
+    "category": "other",
+    "squareCatalogId": "XLOYJUJKLRMNNY5CHDEDMEFY",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "De Mello Take Away Cup - 16oz (Dozen)",
+    "category": "Merchandize",
+    "squareCatalogId": "ZU5LEDXOUBZKYIKGSRO46GXW",
+    "squareItemId": "R7PB452VP3AIV6JSOUM7QUIU",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Grinder Cleaning Tablet - 430g",
+    "category": "Merchandize",
+    "squareCatalogId": "22KKOTWMAWGAGATLF7G57SXE",
+    "squareItemId": "7V6WZRILFYUXLNSFWYZG5M7H",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Lolli Roll - Pistachio (Tax Free)",
+    "category": "other",
+    "squareCatalogId": "AJ6W7LWTAOCD4AVC53ZCQRHD",
+    "squareItemId": "SJ7X27FKWGV6R7ZODTS3UHNX",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Lolli Roll - Earl Grey (Tax Free)",
+    "category": "other",
+    "squareCatalogId": "CKSQLIDLZ6J2WNA6T6ATAXSA",
+    "squareItemId": "PXFE24YQYYN4EBL26HUCOEW2",
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Bag - Reusuable",
+    "category": "other",
+    "squareCatalogId": "BHZRNV75RSLCDWS6KD3PG7RU",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "De Mello Take Away Cup - 8oz (Half Dozen)",
+    "category": "Merchandize",
+    "squareCatalogId": "WRQCT7LVVCTKAH6VXZGCKR3O",
+    "squareItemId": "WK5J5TH5K6BR5CZIB62AVMHQ",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Coffee Dripper by OXVC",
+    "category": "Merchandize",
+    "squareCatalogId": "5XAV7VQW4EFAPJKXYBHX6DCZ",
+    "squareItemId": "IH7YRLAAOHMCL6EOA6GVCV6H",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
+    "isActive": true
+  },
+  {
+    "name": "Perfectly Pear",
+    "category": "other",
+    "squareCatalogId": "7DIZZU6ODTOKNTH6MDGUDA73",
+    "squareItemId": null,
+    "squareCategoryId": null,
+    "isActive": true
+  },
+  {
+    "name": "Barista Hemp Hand Lotion",
+    "category": "Merchandize",
+    "squareCatalogId": "4IVAE4C5NJ34TSK5B4XMNPBE",
+    "squareItemId": "ZJTRSKC3C7EKV3YVLTGALAFX",
+    "squareCategoryId": "MB4HJM36APWLXURDQ6KCOQCJ",
     "isActive": true
   }
 ]

@@ -1,14 +1,22 @@
 require('dotenv').config({ path: '.env.development' })
 const fs = require('fs').promises
 const path = require('path')
+const { PrismaClient } = require('./src/generated/prisma')
+
+const prisma = new PrismaClient()
 
 // Square API configuration - use production for real data
 const SQUARE_BASE_URL = 'https://connect.squareup.com'
 const ACCESS_TOKEN = process.env.SQUARE_ACCESS_TOKEN
 const SQUARE_VERSION = '2025-08-20'
 
-// Helper function to make Square API requests
-async function squareApiRequest(endpoint, method = 'GET', body = null) {
+// Helper function to make Square API requests with exponential backoff
+async function squareApiRequest(
+  endpoint,
+  method = 'GET',
+  body = null,
+  retryCount = 0
+) {
   const url = `${SQUARE_BASE_URL}${endpoint}`
   const options = {
     method,
@@ -23,18 +31,69 @@ async function squareApiRequest(endpoint, method = 'GET', body = null) {
     options.body = JSON.stringify(body)
   }
 
-  console.log(`🔗 ${method} ${endpoint}`)
+  console.log(
+    `🔗 ${method} ${endpoint}${retryCount > 0 ? ` (retry ${retryCount})` : ''}`
+  )
 
-  const response = await fetch(url, options)
-  const data = await response.json()
+  try {
+    const response = await fetch(url, options)
+    const data = await response.json()
 
-  if (!response.ok) {
-    throw new Error(
-      `Square API Error: ${response.status} - ${JSON.stringify(data)}`
-    )
+    // Handle rate limiting with exponential backoff
+    if (response.status === 429) {
+      const maxRetries = 5
+      if (retryCount >= maxRetries) {
+        throw new Error(`Rate limit exceeded after ${maxRetries} retries`)
+      }
+
+      // Exponential backoff: 2^retryCount seconds + random jitter
+      const baseDelay = Math.pow(2, retryCount) * 1000 // 1s, 2s, 4s, 8s, 16s
+      const jitter = Math.random() * 1000 // 0-1 second random jitter
+      const totalDelay = baseDelay + jitter
+
+      console.log(
+        `⏳ Rate limited. Waiting ${Math.round(totalDelay)}ms before retry ${
+          retryCount + 1
+        }/${maxRetries}`
+      )
+      await new Promise((resolve) => setTimeout(resolve, totalDelay))
+
+      return squareApiRequest(endpoint, method, body, retryCount + 1)
+    }
+
+    if (!response.ok) {
+      throw new Error(
+        `Square API Error: ${response.status} - ${JSON.stringify(data)}`
+      )
+    }
+
+    return data
+  } catch (error) {
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      // Network error - retry with exponential backoff
+      const maxRetries = 3
+      if (retryCount >= maxRetries) {
+        throw new Error(
+          `Network error after ${maxRetries} retries: ${error.message}`
+        )
+      }
+
+      const baseDelay = Math.pow(2, retryCount) * 1000
+      const jitter = Math.random() * 1000
+      const totalDelay = baseDelay + jitter
+
+      console.log(
+        `🔌 Network error. Waiting ${Math.round(totalDelay)}ms before retry ${
+          retryCount + 1
+        }/${maxRetries}`
+      )
+      await new Promise((resolve) => setTimeout(resolve, totalDelay))
+
+      return squareApiRequest(endpoint, method, body, retryCount + 1)
+    }
+
+    throw error
   }
-
-  return data
 }
 
 // Fetch all locations
@@ -71,17 +130,31 @@ async function fetchAllHistoricalOrders(locations, days = 365) {
 
   let allOrders = []
   let totalOrdersFound = 0
+  const totalLocations = locations.length
 
-  for (const location of locations) {
+  for (
+    let locationIndex = 0;
+    locationIndex < locations.length;
+    locationIndex++
+  ) {
+    const location = locations[locationIndex]
+    const progressPercent = Math.round((locationIndex / totalLocations) * 100)
+
     console.log(
-      `\n🏪 Processing location: ${location.name} (${location.squareLocationId})`
+      `\n🏪 Processing location ${
+        locationIndex + 1
+      }/${totalLocations} (${progressPercent}%): ${location.name} (${
+        location.squareLocationId
+      })`
     )
 
     try {
       let cursor = null
       let locationOrders = []
+      let batchCount = 0
 
       do {
+        batchCount++
         const searchBody = {
           location_ids: [location.squareLocationId],
           query: {
@@ -120,12 +193,22 @@ async function fetchAllHistoricalOrders(locations, days = 365) {
         cursor = ordersResult.cursor
 
         console.log(
-          `   📦 Batch: ${orders.length} orders (Total: ${locationOrders.length})`
+          `   📦 Batch ${batchCount}: ${
+            orders.length
+          } orders (Location total: ${locationOrders.length}, Overall total: ${
+            totalOrdersFound + locationOrders.length
+          })`
         )
 
-        // Rate limiting - Square has limits
+        // Rate limiting with randomness to avoid thundering herd
         if (cursor) {
-          await new Promise((resolve) => setTimeout(resolve, 100))
+          const baseDelay = 200 // Base 200ms delay (5 QPS max)
+          const jitter = Math.random() * 100 // 0-100ms random jitter
+          const totalDelay = baseDelay + jitter
+          console.log(
+            `   ⏳ Rate limiting: waiting ${Math.round(totalDelay)}ms`
+          )
+          await new Promise((resolve) => setTimeout(resolve, totalDelay))
         }
       } while (cursor)
 
@@ -168,6 +251,8 @@ async function fetchAllHistoricalOrders(locations, days = 365) {
   }
 
   console.log(`\n🎉 TOTAL HISTORICAL ORDERS: ${totalOrdersFound}`)
+  console.log(`📍 Processed ${totalLocations} locations`)
+  console.log(`⏱️  Fetch completed successfully`)
   return allOrders
 }
 
@@ -183,12 +268,16 @@ async function extractUniqueItems(orders, catalogMapping) {
       if (!itemsMap.has(itemName)) {
         // Get real category from Square catalog
         const variation = catalogMapping.variations.get(lineItem.category)
-        const parentItem = variation ? catalogMapping.items.get(variation.itemId) : null
+        const parentItem = variation
+          ? catalogMapping.items.get(variation.itemId)
+          : null
 
         // Get the first category from the categories array (Square allows multiple but we found none in practice)
         const categoryIds = parentItem?.categoryIds || []
         const primaryCategoryId = categoryIds.length > 0 ? categoryIds[0] : null
-        const squareCategory = primaryCategoryId ? catalogMapping.categories.get(primaryCategoryId) : null
+        const squareCategory = primaryCategoryId
+          ? catalogMapping.categories.get(primaryCategoryId)
+          : null
 
         itemsMap.set(itemName, {
           name: itemName,
@@ -219,7 +308,9 @@ async function extractUniqueItems(orders, catalogMapping) {
     isActive: item.isActive,
   }))
 
-  console.log(`✅ Found ${items.length} unique items with Square catalog mapping`)
+  console.log(
+    `✅ Found ${items.length} unique items with Square catalog mapping`
+  )
   return items
 }
 
@@ -237,9 +328,19 @@ function categorizeItem(itemName, squareCategory = null) {
     if (categoryLower.includes('signature')) return 'signature-drinks'
     if (categoryLower.includes('retail')) return 'retail'
     if (categoryLower.includes('wholesale')) return 'wholesale'
-    if (categoryLower.includes('apparel') || categoryLower.includes('merchandize')) return 'merchandise'
-    if (categoryLower.includes('syrup') || categoryLower.includes('powder') || categoryLower.includes('modification')) return 'add-ons'
-    if (categoryLower.includes('education') || categoryLower.includes('event')) return 'services'
+    if (
+      categoryLower.includes('apparel') ||
+      categoryLower.includes('merchandize')
+    )
+      return 'merchandise'
+    if (
+      categoryLower.includes('syrup') ||
+      categoryLower.includes('powder') ||
+      categoryLower.includes('modification')
+    )
+      return 'add-ons'
+    if (categoryLower.includes('education') || categoryLower.includes('event'))
+      return 'services'
 
     // If we have a Square category but it doesn't match our mapping, use it as-is
     return squareCategory.toLowerCase().replace(/[^a-z0-9]/g, '-')
@@ -320,11 +421,13 @@ async function saveDataToFiles(locations, orders, items, catalogMapping) {
   )
 
   // Save categories from Square catalog
-  const categoriesData = Array.from(catalogMapping.categories.entries()).map(([id, data]) => ({
-    squareCategoryId: id,
-    name: data.name,
-    isActive: true
-  }))
+  const categoriesData = Array.from(catalogMapping.categories.entries()).map(
+    ([id, data]) => ({
+      squareCategoryId: id,
+      name: data.name,
+      isActive: true,
+    })
+  )
 
   await fs.writeFile(
     path.join(dataDir, 'categories.json'),
@@ -338,10 +441,12 @@ async function saveDataToFiles(locations, orders, items, catalogMapping) {
   )
 
   // Save summary stats
-  const categoriesForSummary = Array.from(catalogMapping.categories.entries()).map(([id, data]) => ({
+  const categoriesForSummary = Array.from(
+    catalogMapping.categories.entries()
+  ).map(([id, data]) => ({
     squareCategoryId: id,
     name: data.name,
-    isActive: true
+    isActive: true,
   }))
 
   const summary = {
@@ -399,7 +504,7 @@ async function fetchCatalogMapping() {
   const catalogMapping = {
     items: new Map(),
     variations: new Map(),
-    categories: new Map()
+    categories: new Map(),
   }
 
   try {
@@ -424,14 +529,16 @@ async function fetchCatalogMapping() {
     console.log(`✅ Retrieved ${allObjects.length} catalog objects`)
 
     // Process catalog objects
-    allObjects.forEach(obj => {
+    allObjects.forEach((obj) => {
       if (obj.type === 'ITEM') {
         const name = obj.item_data?.name || 'Unknown Item'
         // Handle both single category_id and categories array (Square supports both)
         let categoryIds = []
         if (obj.item_data?.categories) {
           // Categories array - extract just the IDs from the objects
-          categoryIds = obj.item_data.categories.map(cat => typeof cat === 'string' ? cat : cat.id)
+          categoryIds = obj.item_data.categories.map((cat) =>
+            typeof cat === 'string' ? cat : cat.id
+          )
         } else if (obj.item_data?.category_id) {
           // Single category_id
           categoryIds = [obj.item_data.category_id]
@@ -440,11 +547,11 @@ async function fetchCatalogMapping() {
 
         // Extract variations from this item
         if (obj.item_data?.variations) {
-          obj.item_data.variations.forEach(variation => {
+          obj.item_data.variations.forEach((variation) => {
             catalogMapping.variations.set(variation.id, {
               name: variation.item_variation_data?.name || 'Regular',
               itemId: obj.id,
-              itemName: name
+              itemName: name,
             })
           })
         }
@@ -454,9 +561,10 @@ async function fetchCatalogMapping() {
       }
     })
 
-    console.log(`✅ Mapped ${catalogMapping.items.size} items, ${catalogMapping.variations.size} variations, ${catalogMapping.categories.size} categories`)
+    console.log(
+      `✅ Mapped ${catalogMapping.items.size} items, ${catalogMapping.variations.size} variations, ${catalogMapping.categories.size} categories`
+    )
     return catalogMapping
-
   } catch (error) {
     console.warn(`⚠️ Failed to fetch catalog data: ${error.message}`)
     console.warn('Will use fallback categorization')
@@ -476,11 +584,16 @@ async function fetchAllHistoricalData() {
 
     // Fetch all data
     const locations = await fetchAllLocations()
-    const orders = await fetchAllHistoricalOrders(locations, 1) // 1 day for testing (will revert to 730 for 2 years)
+    const orders = await fetchAllHistoricalOrders(locations, 1) // 1 day for testing
     const items = await extractUniqueItems(orders, catalogMapping)
 
-    // Save to files
-    const summary = await saveDataToFiles(locations, orders, items, catalogMapping)
+    // Seed directly to Prisma database
+    const summary = await seedDirectlyToPrisma(
+      locations,
+      orders,
+      items,
+      catalogMapping
+    )
 
     console.log('\n🎉 HISTORICAL DATA FETCH COMPLETE!')
     console.log('\nFiles created:')
