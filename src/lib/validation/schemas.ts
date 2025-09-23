@@ -203,8 +203,8 @@ const openaiResponseSchema = z.object({
 // Configuration schemas
 const chatConfigSchema = z.object({
   OPENAI_API_KEY: z.string().min(1),
-  OPENAI_ORGANIZATION: z.string().optional(),
-  DATABASE_URL: z.string().url(ERROR_MESSAGES.INVALID_REQUEST)
+  OPENAI_ORGANIZATION: z.string().optional()
+  // DATABASE_URL removed - not needed for client-side validation
 })
 
 // Export validation helper functions that accept any input type
