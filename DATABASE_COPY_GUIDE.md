@@ -14,6 +14,7 @@ This guide covers copying your Supabase test database to production after seedin
 ### Step 1: Get Connection Strings
 
 1. **Test Database:**
+
    - Go to Supabase Dashboard → Test Project
    - Settings → Database → Connection string
    - Copy the "Direct connection" string
@@ -34,6 +35,7 @@ pg_dump --data-only --no-owner --no-privileges \
 ```
 
 **Flags explained:**
+
 - `--data-only`: Copy only data, not schema (assumes schema already exists)
 - `--no-owner`: Don't set ownership of objects
 - `--no-privileges`: Don't dump access privileges
@@ -108,12 +110,14 @@ ORDER BY n_tup_ins DESC;
 ### Common Issues
 
 1. **Connection timeouts:**
+
    ```bash
    # Add connection timeout
    pg_dump --data-only --connect-timeout=30 ...
    ```
 
 2. **Large datasets:**
+
    ```bash
    # Use compression
    pg_dump --data-only --compress=9 ... > backup.sql.gz
@@ -172,3 +176,16 @@ pg_dump --data-only --no-owner --no-privileges "$TEST_DB_URL" | psql "$PROD_DB_U
 - [ ] Check that category relationships are preserved
 - [ ] Verify line items are connected to orders and items
 - [ ] Update any environment-specific configurations
+
+Option 2: Drop & Recreate Schema (Nuclear Option)
+
+# Complete reset - drops ALL tables and recreates from scratch
+
+dotenv -e .env.production -- npx prisma migrate reset --force
+dotenv -e .env.production -- npx prisma db push
+
+# Then copy data
+
+pg_dump --data-only --no-owner --no-privileges --exclude-table-data="auth.\*" "postgresql://postgres:mbq2njh-tcq2JNU5xwv@db.kdarhqrcdrmuolswqfwi.supabase.co:5432/postgres" > business_data.sql
+
+psql "postgresql://postgres:mbq2njh-tcq2JNU5xwv@db.lfmbzjvcsqdgpteftdmu.supabase.co:5432/postgres" -f business_data.sql

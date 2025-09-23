@@ -54,3 +54,5 @@ node_modules/
 
 # Historical data files
 /historical-data/
+business_data.sql
+data_backup.sql
