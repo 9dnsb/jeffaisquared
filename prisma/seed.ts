@@ -863,7 +863,7 @@ async function seedOrdersInBatches(orders: any[]) {
   console.log(`📊 Seeding ${orders.length} orders in batches...`)
 
   // Separate orders and line items for incremental mode
-  const ordersForDb = orders.map(order => {
+  const ordersForDb = orders.map((order) => {
     const { lineItems, ...orderData } = order
     return orderData
   })
@@ -899,13 +899,13 @@ async function seedIncrementalLineItems(orders: any[]) {
   console.log('📦 Processing line items for incremental orders...')
 
   // Get order IDs from database for the line items
-  const orderIds = orders.map(o => o.squareOrderId)
+  const orderIds = orders.map((o) => o.squareOrderId)
   const dbOrders = await prisma.order.findMany({
     where: { squareOrderId: { in: orderIds } },
-    select: { id: true, squareOrderId: true }
+    select: { id: true, squareOrderId: true },
   })
 
-  const orderIdMap = new Map(dbOrders.map(o => [o.squareOrderId, o.id]))
+  const orderIdMap = new Map(dbOrders.map((o) => [o.squareOrderId, o.id]))
 
   // Extract and flatten all line items
   const allLineItems: any[] = []

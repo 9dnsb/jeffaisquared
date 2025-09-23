@@ -1,50 +1,2146 @@
 {
   "statistics": {
-    "detectionDate": "2025-09-21T16:55:14.896Z",
+    "detectionDate": "2025-09-23T18:49:06.354Z",
     "formats": {
       "typescript": {
         "sources": {
+          "src/app/api/conversations/[id]/route.ts": {
+            "lines": 354,
+            "tokens": 2775,
+            "sources": 1,
+            "clones": 8,
+            "duplicatedLines": 112,
+            "duplicatedTokens": 892,
+            "percentage": 31.64,
+            "percentageTokens": 32.14,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/api/auth/session/route.ts": {
+            "lines": 33,
+            "tokens": 342,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/api/auth/session/route.test.ts": {
+            "lines": 85,
+            "tokens": 699,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/api/auth/reset-password/route.ts": {
+            "lines": 43,
+            "tokens": 363,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/api/auth/reset-password/route.test.ts": {
+            "lines": 201,
+            "tokens": 1192,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/api/auth/register/route.ts": {
+            "lines": 8,
+            "tokens": 85,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/api/auth/register/route.test.ts": {
+            "lines": 45,
+            "tokens": 208,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/api/auth/logout/route.ts": {
+            "lines": 30,
+            "tokens": 264,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/api/auth/logout/route.test.ts": {
+            "lines": 118,
+            "tokens": 975,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/api/auth/login/route.ts": {
+            "lines": 39,
+            "tokens": 400,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/api/auth/login/route.test.ts": {
+            "lines": 184,
+            "tokens": 1277,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/api/auth/forgot-password/route.ts": {
+            "lines": 31,
+            "tokens": 277,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/api/auth/forgot-password/route.test.ts": {
+            "lines": 143,
+            "tokens": 946,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/api/test-query/route.ts": {
+            "lines": 68,
+            "tokens": 577,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/api/conversations/route.ts": {
+            "lines": 201,
+            "tokens": 1545,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/api/chat/route.ts": {
+            "lines": 525,
+            "tokens": 4517,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/validation/schemas.ts": {
+            "lines": 267,
+            "tokens": 3112,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/utils/typeGuards.ts": {
+            "lines": 195,
+            "tokens": 1390,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/utils/serialization.ts": {
+            "lines": 170,
+            "tokens": 1438,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/utils/parameterValidator.ts": {
+            "lines": 404,
+            "tokens": 3833,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 9,
+            "duplicatedTokens": 94,
+            "percentage": 2.23,
+            "percentageTokens": 2.45,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/utils/logger.ts": {
+            "lines": 299,
+            "tokens": 2716,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/utils/dateParser.ts": {
+            "lines": 303,
+            "tokens": 3503,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/utils/conversations.ts": {
+            "lines": 681,
+            "tokens": 5298,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 18,
+            "duplicatedTokens": 184,
+            "percentage": 2.64,
+            "percentageTokens": 3.47,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/types/dynamicQuery.ts": {
+            "lines": 183,
+            "tokens": 1674,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/prisma/safeQueryBuilder.ts": {
+            "lines": 438,
+            "tokens": 3451,
+            "sources": 1,
+            "clones": 7,
+            "duplicatedLines": 113,
+            "duplicatedTokens": 961,
+            "percentage": 25.8,
+            "percentageTokens": 27.85,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/constants/index.ts": {
+            "lines": 88,
+            "tokens": 511,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/constants/errors.ts": {
+            "lines": 115,
+            "tokens": 721,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/constants/ai.ts": {
+            "lines": 45,
+            "tokens": 314,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/ai-v3/types.ts": {
+            "lines": 313,
+            "tokens": 2149,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/ai-v3/rate-limiter.ts": {
+            "lines": 97,
+            "tokens": 747,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/ai-v3/parameter-extractor.ts": {
+            "lines": 690,
+            "tokens": 5772,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/ai-v3/functions.ts": {
+            "lines": 472,
+            "tokens": 3707,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 24,
+            "duplicatedTokens": 244,
+            "percentage": 5.08,
+            "percentageTokens": 6.58,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/ai-v3/function-caller.ts": {
+            "lines": 533,
+            "tokens": 4588,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/ai-v3/data-query-handler.ts": {
+            "lines": 183,
+            "tokens": 1318,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/ai-v3/config.ts": {
+            "lines": 191,
+            "tokens": 1131,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/ai-v2/types.ts": {
+            "lines": 107,
+            "tokens": 667,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/ai-v2/responseFormatter.ts": {
+            "lines": 272,
+            "tokens": 2304,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/ai-v2/queryBuilder.ts": {
+            "lines": 525,
+            "tokens": 4601,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/ai-v2/parameterExtractor.ts": {
+            "lines": 403,
+            "tokens": 2965,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/ai-v2/openaiClient.ts": {
+            "lines": 79,
+            "tokens": 631,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/ai-v2/locationMapper.ts": {
+            "lines": 152,
+            "tokens": 1206,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/ai-v2/dataQueryHandler.ts": {
+            "lines": 269,
+            "tokens": 2314,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/ai/intentClassifier.ts": {
+            "lines": 573,
+            "tokens": 3731,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/ai/generalChatHandler.ts": {
+            "lines": 662,
+            "tokens": 5460,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 23,
+            "duplicatedTokens": 224,
+            "percentage": 3.47,
+            "percentageTokens": 4.1,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/ai/enhancedParameterExtractor.ts": {
+            "lines": 384,
+            "tokens": 2322,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 9,
+            "duplicatedTokens": 94,
+            "percentage": 2.34,
+            "percentageTokens": 4.05,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/ai/dataQueryHandler.ts": {
+            "lines": 799,
+            "tokens": 6769,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 9,
+            "duplicatedTokens": 163,
+            "percentage": 1.13,
+            "percentageTokens": 2.41,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/ai/clarificationHandler.ts": {
+            "lines": 581,
+            "tokens": 4669,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 23,
+            "duplicatedTokens": 224,
+            "percentage": 3.96,
+            "percentageTokens": 4.8,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/types/prisma-extensions.ts": {
+            "lines": 123,
+            "tokens": 935,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/types/openai.ts": {
+            "lines": 97,
+            "tokens": 593,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/types/chat.ts": {
+            "lines": 346,
+            "tokens": 2585,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/test/test-utils.ts": {
+            "lines": 473,
+            "tokens": 4042,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/test/setup.ts": {
+            "lines": 33,
+            "tokens": 283,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/test/ground-truth-v3.ts": {
+            "lines": 698,
+            "tokens": 5489,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 8,
+            "duplicatedTokens": 117,
+            "percentage": 1.15,
+            "percentageTokens": 2.13,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
           "src/test/ai-test-utils.ts": {
             "lines": 299,
             "tokens": 2684,
             "sources": 1,
-            "clones": 2,
-            "duplicatedLines": 22,
-            "duplicatedTokens": 204,
-            "percentage": 7.36,
-            "percentageTokens": 7.6,
+            "clones": 3,
+            "duplicatedLines": 30,
+            "duplicatedTokens": 321,
+            "percentage": 10.03,
+            "percentageTokens": 11.96,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/test/ai-test-matchers.ts": {
+            "lines": 171,
+            "tokens": 1675,
+            "sources": 1,
+            "clones": 4,
+            "duplicatedLines": 50,
+            "duplicatedTokens": 476,
+            "percentage": 29.24,
+            "percentageTokens": 28.42,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/test/ai-static.test.ts": {
+            "lines": 274,
+            "tokens": 2659,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/test/ai-dynamic.test.ts": {
+            "lines": 354,
+            "tokens": 3796,
+            "sources": 1,
+            "clones": 20,
+            "duplicatedLines": 152,
+            "duplicatedTokens": 1592,
+            "percentage": 42.94,
+            "percentageTokens": 41.94,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/registration-handler.ts": {
+            "lines": 74,
+            "tokens": 643,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/registration-handler.test.ts": {
+            "lines": 209,
+            "tokens": 1731,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/profile-utils.ts": {
+            "lines": 40,
+            "tokens": 271,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/profile-utils.test.ts": {
+            "lines": 92,
+            "tokens": 533,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/auth-api-utils.ts": {
+            "lines": 102,
+            "tokens": 942,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/auth-api-utils.test.ts": {
+            "lines": 306,
+            "tokens": 2855,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/hooks/useAuthRedirect.ts": {
+            "lines": 34,
+            "tokens": 265,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/hooks/useAuthForm.ts": {
+            "lines": 69,
+            "tokens": 649,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/middleware.ts": {
+            "lines": 72,
+            "tokens": 520,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/middleware.test.ts": {
+            "lines": 150,
+            "tokens": 1254,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
             "newDuplicatedLines": 0,
             "newClones": 0
           }
         },
         "total": {
-          "lines": 299,
-          "tokens": 2684,
-          "sources": 1,
+          "lines": 16597,
+          "tokens": 135858,
+          "sources": 67,
+          "clones": 27,
+          "duplicatedLines": 290,
+          "duplicatedTokens": 2793,
+          "percentage": 1.75,
+          "percentageTokens": 2.06,
+          "newDuplicatedLines": 0,
+          "newClones": 0
+        }
+      },
+      "javascript": {
+        "sources": {
+          "src/app/auth/reset-password/page.tsx": {
+            "lines": 51,
+            "tokens": 366,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/auth/register/page.tsx": {
+            "lines": 36,
+            "tokens": 239,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/auth/login/page.tsx": {
+            "lines": 18,
+            "tokens": 107,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/auth/forgot-password/page.tsx": {
+            "lines": 17,
+            "tokens": 120,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/navbar/NavLinkItem.tsx": {
+            "lines": 16,
+            "tokens": 84,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/navbar/Navbar.tsx": {
+            "lines": 7,
+            "tokens": 62,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/navbar/MobileNav.tsx": {
+            "lines": 16,
+            "tokens": 119,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/navbar/LogoLink.tsx": {
+            "lines": 1,
+            "tokens": 9,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/navbar/HamburgerToggle.tsx": {
+            "lines": 18,
+            "tokens": 107,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/navbar/DesktopNav.tsx": {
+            "lines": 3,
+            "tokens": 27,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/common/LoadingSpinner.tsx": {
+            "lines": 0,
+            "tokens": 7,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthMessages.test.tsx": {
+            "lines": 100,
+            "tokens": 839,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthLayout.test.tsx": {
+            "lines": 0,
+            "tokens": 3,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthInput.tsx": {
+            "lines": 9,
+            "tokens": 57,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthInput.test.tsx": {
+            "lines": 40,
+            "tokens": 353,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthFormFooter.tsx": {
+            "lines": 7,
+            "tokens": 53,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthFormFooter.test.tsx": {
+            "lines": 96,
+            "tokens": 826,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthEmailPasswordInputs.test.tsx": {
+            "lines": 89,
+            "tokens": 749,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthButton.tsx": {
+            "lines": 0,
+            "tokens": 5,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthButton.test.tsx": {
+            "lines": 10,
+            "tokens": 77,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/dashboard/page.tsx": {
+            "lines": 0,
+            "tokens": 9,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/chat/page.tsx": {
+            "lines": 0,
+            "tokens": 3,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/MarkdownMessage.tsx": {
+            "lines": 19,
+            "tokens": 285,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/ConversationList.tsx": {
+            "lines": 130,
+            "tokens": 974,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/ChatInterface.tsx": {
+            "lines": 104,
+            "tokens": 833,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/ChatGPTInterface.tsx": {
+            "lines": 205,
+            "tokens": 1787,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/layout.tsx": {
+            "lines": 0,
+            "tokens": 27,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          }
+        },
+        "total": {
+          "lines": 992,
+          "tokens": 8127,
+          "sources": 27,
+          "clones": 0,
+          "duplicatedLines": 0,
+          "duplicatedTokens": 0,
+          "percentage": 0,
+          "percentageTokens": 0,
+          "newDuplicatedLines": 0,
+          "newClones": 0
+        }
+      },
+      "tsx": {
+        "sources": {
+          "src/app/auth/reset-password/page.tsx": {
+            "lines": 143,
+            "tokens": 1231,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/auth/register/page.tsx": {
+            "lines": 85,
+            "tokens": 707,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/auth/login/page.tsx": {
+            "lines": 56,
+            "tokens": 458,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/auth/forgot-password/page.tsx": {
+            "lines": 65,
+            "tokens": 551,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/navbar/NavLinkItem.tsx": {
+            "lines": 70,
+            "tokens": 395,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/navbar/Navbar.tsx": {
+            "lines": 96,
+            "tokens": 770,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 11,
+            "duplicatedTokens": 127,
+            "percentage": 11.46,
+            "percentageTokens": 16.49,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/navbar/MobileNav.tsx": {
+            "lines": 44,
+            "tokens": 261,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/navbar/LogoLink.tsx": {
+            "lines": 18,
+            "tokens": 113,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/navbar/HamburgerToggle.tsx": {
+            "lines": 36,
+            "tokens": 193,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/navbar/DesktopNav.tsx": {
+            "lines": 26,
+            "tokens": 167,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/common/LoadingSpinner.tsx": {
+            "lines": 10,
+            "tokens": 90,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/common/LoadingSpinner.test.tsx": {
+            "lines": 28,
+            "tokens": 325,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthMessages.tsx": {
+            "lines": 20,
+            "tokens": 147,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthMessages.test.tsx": {
+            "lines": 117,
+            "tokens": 1005,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthLayout.tsx": {
+            "lines": 18,
+            "tokens": 138,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthLayout.test.tsx": {
+            "lines": 148,
+            "tokens": 1191,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthInput.tsx": {
+            "lines": 39,
+            "tokens": 252,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthInput.test.tsx": {
+            "lines": 95,
+            "tokens": 874,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthFormFooter.tsx": {
+            "lines": 49,
+            "tokens": 313,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthFormFooter.test.tsx": {
+            "lines": 129,
+            "tokens": 1138,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthEmailPasswordInputs.tsx": {
+            "lines": 70,
+            "tokens": 596,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthEmailPasswordInputs.test.tsx": {
+            "lines": 144,
+            "tokens": 1218,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthButton.tsx": {
+            "lines": 17,
+            "tokens": 128,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/auth/AuthButton.test.tsx": {
+            "lines": 99,
+            "tokens": 682,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/dashboard/page.tsx": {
+            "lines": 55,
+            "tokens": 499,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 11,
+            "duplicatedTokens": 127,
+            "percentage": 20,
+            "percentageTokens": 25.45,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/chat/page.tsx": {
+            "lines": 13,
+            "tokens": 92,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/hooks/useAuthRedirect.test.tsx": {
+            "lines": 118,
+            "tokens": 562,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/hooks/useAuthForm.test.tsx": {
+            "lines": 184,
+            "tokens": 1485,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/MarkdownMessage.tsx": {
+            "lines": 63,
+            "tokens": 615,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/ConversationList.tsx": {
+            "lines": 378,
+            "tokens": 2946,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/ChatInterface.tsx": {
+            "lines": 399,
+            "tokens": 3194,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/ChatGPTInterface.tsx": {
+            "lines": 297,
+            "tokens": 2560,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/page.tsx": {
+            "lines": 49,
+            "tokens": 326,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/app/layout.tsx": {
+            "lines": 47,
+            "tokens": 355,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          }
+        },
+        "total": {
+          "lines": 3225,
+          "tokens": 25577,
+          "sources": 34,
           "clones": 1,
           "duplicatedLines": 11,
-          "duplicatedTokens": 102,
-          "percentage": 3.68,
-          "percentageTokens": 3.8,
+          "duplicatedTokens": 127,
+          "percentage": 0.34,
+          "percentageTokens": 0.5,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
       }
     },
     "total": {
-      "lines": 299,
-      "tokens": 2684,
-      "sources": 1,
-      "clones": 1,
-      "duplicatedLines": 11,
-      "duplicatedTokens": 102,
-      "percentage": 3.68,
-      "percentageTokens": 3.8,
+      "lines": 20814,
+      "tokens": 169562,
+      "sources": 128,
+      "clones": 28,
+      "duplicatedLines": 301,
+      "duplicatedTokens": 2920,
+      "percentage": 1.45,
+      "percentageTokens": 1.72,
       "newDuplicatedLines": 0,
       "newClones": 0
     }
   },
   "duplicates": [
+    {
+      "format": "typescript",
+      "lines": 17,
+      "fragment": ", undefined, {\n        processingTime: duration,\n        conversationId\n      })\n      return sessionResult.error || NextResponse.json(\n        { error: AUTHENTICATION_REQUIRED_ERROR },\n        { status: 401 }\n      )\n    }\n\n    const userId = sessionResult.session.user.id\n\n    // Validate conversation ownership\n    const ownershipResult = await validateConversationOwnership(conversationId, userId)\n    if (!ownershipResult.success || !ownershipResult.isOwner) {\n      const duration = timer()\n      logger.warn('Conversation update access denied'",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\app\\api\\conversations\\[id]\\route.ts",
+        "start": 159,
+        "end": 175,
+        "startLoc": {
+          "line": 159,
+          "column": 40,
+          "position": 1251
+        },
+        "endLoc": {
+          "line": 175,
+          "column": 36,
+          "position": 1385
+        }
+      },
+      "secondFile": {
+        "name": "src\\app\\api\\conversations\\[id]\\route.ts",
+        "start": 37,
+        "end": 53,
+        "startLoc": {
+          "line": 37,
+          "column": 37,
+          "position": 274
+        },
+        "endLoc": {
+          "line": 53,
+          "column": 29,
+          "position": 408
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 13,
+      "fragment": ", undefined, {\n        processingTime: duration,\n        conversationId,\n        userId,\n        ...(ownershipResult.error && { error: new Error(ownershipResult.error) })\n      })\n      return NextResponse.json(\n        { error: CONVERSATION_NOT_FOUND_ERROR },\n        { status: 404 }\n      )\n    }\n\n    // Parse and validate request body",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\app\\api\\conversations\\[id]\\route.ts",
+        "start": 175,
+        "end": 187,
+        "startLoc": {
+          "line": 175,
+          "column": 36,
+          "position": 1386
+        },
+        "endLoc": {
+          "line": 187,
+          "column": 35,
+          "position": 1475
+        }
+      },
+      "secondFile": {
+        "name": "src\\app\\api\\conversations\\[id]\\route.ts",
+        "start": 53,
+        "end": 65,
+        "startLoc": {
+          "line": 53,
+          "column": 29,
+          "position": 409
+        },
+        "endLoc": {
+          "line": 65,
+          "column": 24,
+          "position": 498
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 17,
+      "fragment": ", undefined, {\n        processingTime: duration,\n        conversationId\n      })\n      return sessionResult.error || NextResponse.json(\n        { error: AUTHENTICATION_REQUIRED_ERROR },\n        { status: 401 }\n      )\n    }\n\n    const userId = sessionResult.session.user.id\n\n    // Validate conversation ownership\n    const ownershipResult = await validateConversationOwnership(conversationId, userId)\n    if (!ownershipResult.success || !ownershipResult.isOwner) {\n      const duration = timer()\n      logger.warn('Conversation delete access denied'",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\app\\api\\conversations\\[id]\\route.ts",
+        "start": 282,
+        "end": 298,
+        "startLoc": {
+          "line": 282,
+          "column": 40,
+          "position": 2215
+        },
+        "endLoc": {
+          "line": 298,
+          "column": 36,
+          "position": 2349
+        }
+      },
+      "secondFile": {
+        "name": "src\\app\\api\\conversations\\[id]\\route.ts",
+        "start": 37,
+        "end": 53,
+        "startLoc": {
+          "line": 37,
+          "column": 37,
+          "position": 274
+        },
+        "endLoc": {
+          "line": 53,
+          "column": 29,
+          "position": 408
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 13,
+      "fragment": ", undefined, {\n        processingTime: duration,\n        conversationId,\n        userId,\n        ...(ownershipResult.error && { error: new Error(ownershipResult.error) })\n      })\n      return NextResponse.json(\n        { error: CONVERSATION_NOT_FOUND_ERROR },\n        { status: 404 }\n      )\n    }\n\n    logger",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\app\\api\\conversations\\[id]\\route.ts",
+        "start": 298,
+        "end": 310,
+        "startLoc": {
+          "line": 298,
+          "column": 36,
+          "position": 2350
+        },
+        "endLoc": {
+          "line": 310,
+          "column": 7,
+          "position": 2439
+        }
+      },
+      "secondFile": {
+        "name": "src\\app\\api\\conversations\\[id]\\route.ts",
+        "start": 53,
+        "end": 65,
+        "startLoc": {
+          "line": 53,
+          "column": 29,
+          "position": 409
+        },
+        "endLoc": {
+          "line": 65,
+          "column": 24,
+          "position": 498
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 10,
+      "fragment": ", 'conversation', conversationId, undefined, {\n      processingTime: duration\n    })\n\n    return { success: true }\n  } catch (err) {\n    const duration = timer()\n    const error = err instanceof Error ? err : new Error(CONVERSATION_MESSAGES.UNKNOWN_ERROR)\n\n    logger.error('Failed to archive conversation'",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\lib\\utils\\conversations.ts",
+        "start": 597,
+        "end": 606,
+        "startLoc": {
+          "line": 597,
+          "column": 11,
+          "position": 4631
+        },
+        "endLoc": {
+          "line": 606,
+          "column": 33,
+          "position": 4723
+        }
+      },
+      "secondFile": {
+        "name": "src\\lib\\utils\\conversations.ts",
+        "start": 258,
+        "end": 267,
+        "startLoc": {
+          "line": 258,
+          "column": 10,
+          "position": 1957
+        },
+        "endLoc": {
+          "line": 267,
+          "column": 32,
+          "position": 2049
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 14,
+      "fragment": "if (filters?.dateRange) {\r\n      where.date = {\r\n        gte: filters.dateRange.start,\r\n        lte: filters.dateRange.end\r\n      }\r\n    }\r\n\r\n    if (filters?.locationIds && filters.locationIds.length > 0) {\r\n      where.locationId = {\r\n        in: filters.locationIds\r\n      }\r\n    }\r\n\r\n    // Add item filtering - if specific items are requested, filter by those items",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\lib\\prisma\\safeQueryBuilder.ts",
+        "start": 248,
+        "end": 261,
+        "startLoc": {
+          "line": 248,
+          "column": 5,
+          "position": 2003
+        },
+        "endLoc": {
+          "line": 261,
+          "column": 79,
+          "position": 2113
+        }
+      },
+      "secondFile": {
+        "name": "src\\lib\\prisma\\safeQueryBuilder.ts",
+        "start": 169,
+        "end": 182,
+        "startLoc": {
+          "line": 169,
+          "column": 5,
+          "position": 1332
+        },
+        "endLoc": {
+          "line": 182,
+          "column": 3,
+          "position": 1442
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 23,
+      "fragment": "if (filters?.itemNames && filters.itemNames.length > 0) {\r\n      where.lineItems = {\r\n        some: {\r\n          OR: [\r\n            {\r\n              name: {\r\n                in: filters.itemNames\r\n              }\r\n            },\r\n            {\r\n              item: {\r\n                name: {\r\n                  in: filters.itemNames\r\n                }\r\n              }\r\n            }\r\n          ]\r\n        }\r\n      }\r\n    }\r\n\r\n    return this.executeWithLogging(\r\n      'GET_ORDERS_SUMMARY'",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\lib\\prisma\\safeQueryBuilder.ts",
+        "start": 262,
+        "end": 284,
+        "startLoc": {
+          "line": 262,
+          "column": 5,
+          "position": 2117
+        },
+        "endLoc": {
+          "line": 284,
+          "column": 21,
+          "position": 2261
+        }
+      },
+      "secondFile": {
+        "name": "src\\lib\\prisma\\safeQueryBuilder.ts",
+        "start": 193,
+        "end": 215,
+        "startLoc": {
+          "line": 193,
+          "column": 5,
+          "position": 1581
+        },
+        "endLoc": {
+          "line": 215,
+          "column": 18,
+          "position": 1725
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 18,
+      "fragment": ", undefined, this.serializeFilters(filters))\r\n\r\n    const where: Prisma.OrderWhereInput = {}\r\n\r\n    if (filters?.dateRange) {\r\n      where.date = {\r\n        gte: filters.dateRange.start,\r\n        lte: filters.dateRange.end\r\n      }\r\n    }\r\n\r\n    if (filters?.locationIds && filters.locationIds.length > 0) {\r\n      where.locationId = {\r\n        in: filters.locationIds\r\n      }\r\n    }\r\n\r\n    return",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\lib\\prisma\\safeQueryBuilder.ts",
+        "start": 381,
+        "end": 398,
+        "startLoc": {
+          "line": 381,
+          "column": 29,
+          "position": 3016
+        },
+        "endLoc": {
+          "line": 398,
+          "column": 7,
+          "position": 3161
+        }
+      },
+      "secondFile": {
+        "name": "src\\lib\\prisma\\safeQueryBuilder.ts",
+        "start": 244,
+        "end": 182,
+        "startLoc": {
+          "line": 244,
+          "column": 32,
+          "position": 1968
+        },
+        "endLoc": {
+          "line": 182,
+          "column": 3,
+          "position": 1442
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 13,
+      "fragment": "},\r\n        timeframe: {\r\n          type: 'string',\r\n          enum: ['today', 'yesterday', 'last_week', 'last_month', 'all_time'],\r\n          description: 'Time period for analysis'\r\n        },\r\n        location: {\r\n          type: ['string', 'null'],\r\n          enum: ['HQ', 'Yonge', 'Bloor', 'Kingston', 'The Well', 'Broadway', null],\r\n          description: 'Specific location to analyze or null for all locations'\r\n        }\r\n      },\r\n      required: ['analysis_type'",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\lib\\ai-v3\\functions.ts",
+        "start": 346,
+        "end": 358,
+        "startLoc": {
+          "line": 346,
+          "column": 9,
+          "position": 2792
+        },
+        "endLoc": {
+          "line": 358,
+          "column": 16,
+          "position": 2914
+        }
+      },
+      "secondFile": {
+        "name": "src\\lib\\ai-v3\\functions.ts",
+        "start": 280,
+        "end": 292,
+        "startLoc": {
+          "line": 280,
+          "column": 9,
+          "position": 2231
+        },
+        "endLoc": {
+          "line": 292,
+          "column": 17,
+          "position": 2353
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 10,
+      "fragment": ".toLowerCase()\r\n    const locationIds: string[] = []\r\n\r\n    for (const [locationId, keywords] of Object.entries(LOCATION_KEYWORDS)) {\r\n      if (keywords.some(keyword => messageLower.includes(keyword))) {\r\n        locationIds.push(locationId)\r\n      }\r\n    }\r\n\r\n    // Determine likely metrics based on keywords",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\lib\\ai\\enhancedParameterExtractor.ts",
+        "start": 334,
+        "end": 343,
+        "startLoc": {
+          "line": 334,
+          "column": 12,
+          "position": 1828
+        },
+        "endLoc": {
+          "line": 343,
+          "column": 46,
+          "position": 1922
+        }
+      },
+      "secondFile": {
+        "name": "src\\lib\\utils\\parameterValidator.ts",
+        "start": 310,
+        "end": 319,
+        "startLoc": {
+          "line": 310,
+          "column": 8,
+          "position": 2919
+        },
+        "endLoc": {
+          "line": 319,
+          "column": 7,
+          "position": 3013
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 10,
+      "fragment": ")) {\r\n    if (value === null || value === undefined) {\r\n      serialized[key] = null\r\n    } else if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {\r\n      serialized[key] = value\r\n    } else if (value instanceof Date) {\r\n      serialized[key] = value.toISOString()\r\n    } else if (Array.isArray(value)) {\r\n      serialized[key] = value.join(', ')\r\n    } else if",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\lib\\ai\\dataQueryHandler.ts",
+        "start": 64,
+        "end": 73,
+        "startLoc": {
+          "line": 64,
+          "column": 8,
+          "position": 534
+        },
+        "endLoc": {
+          "line": 73,
+          "column": 3,
+          "position": 697
+        }
+      },
+      "secondFile": {
+        "name": "src\\lib\\prisma\\safeQueryBuilder.ts",
+        "start": 67,
+        "end": 76,
+        "startLoc": {
+          "line": 67,
+          "column": 2,
+          "position": 511
+        },
+        "endLoc": {
+          "line": 76,
+          "column": 2,
+          "position": 674
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 12,
+      "fragment": ",\r\n        model: this.model,\r\n        tokens: result.metadata.tokens,\r\n        cost: result.metadata.cost\r\n      })\r\n\r\n      return result\r\n    } catch (err) {\r\n      const duration = timer()\r\n      const error = err instanceof Error ? err : new Error(UNKNOWN_ERROR_MESSAGE)\r\n\r\n      logger.error('Clarification processing failed'",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\lib\\ai\\clarificationHandler.ts",
+        "start": 139,
+        "end": 150,
+        "startLoc": {
+          "line": 139,
+          "column": 17,
+          "position": 1011
+        },
+        "endLoc": {
+          "line": 150,
+          "column": 34,
+          "position": 1118
+        }
+      },
+      "secondFile": {
+        "name": "src\\lib\\ai\\generalChatHandler.ts",
+        "start": 152,
+        "end": 163,
+        "startLoc": {
+          "line": 152,
+          "column": 2,
+          "position": 1234
+        },
+        "endLoc": {
+          "line": 163,
+          "column": 35,
+          "position": 1341
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 13,
+      "fragment": ",\r\n        metadata: {\r\n          model: this.model,\r\n          tokens: response.metadata.tokens,\r\n          cost: response.metadata.cost,\r\n          processingTime: duration\r\n        }\r\n      }\r\n    } catch (err) {\r\n      const duration = timer()\r\n      const error = err instanceof Error ? err : new Error(UNKNOWN_ERROR_MESSAGE)\r\n\r\n      logger.error('Clarifying questions generation failed'",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\lib\\ai\\clarificationHandler.ts",
+        "start": 406,
+        "end": 418,
+        "startLoc": {
+          "line": 406,
+          "column": 2,
+          "position": 3387
+        },
+        "endLoc": {
+          "line": 418,
+          "column": 41,
+          "position": 3504
+        }
+      },
+      "secondFile": {
+        "name": "src\\lib\\ai\\generalChatHandler.ts",
+        "start": 464,
+        "end": 476,
+        "startLoc": {
+          "line": 464,
+          "column": 12,
+          "position": 4122
+        },
+        "endLoc": {
+          "line": 476,
+          "column": 36,
+          "position": 4239
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 12,
+      "fragment": ")\r\n  const router = useRouter()\r\n\r\n  useEffect(() => {\r\n    const getUser = async () => {\r\n      try {\r\n        const response = await fetch('/api/auth/session', {\r\n          credentials: 'include'\r\n        })\r\n        const data = await response.json() as { authenticated: boolean; user?: User; error?: string }\r\n\r\n        if (!",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\app\\dashboard\\page.tsx",
+        "start": 12,
+        "end": 23,
+        "startLoc": {
+          "line": 12,
+          "column": 5,
+          "position": 135
+        },
+        "endLoc": {
+          "line": 23,
+          "column": 2,
+          "position": 262
+        }
+      },
+      "secondFile": {
+        "name": "src\\components\\navbar\\Navbar.tsx",
+        "start": 16,
+        "end": 27,
+        "startLoc": {
+          "line": 16,
+          "column": 2,
+          "position": 171
+        },
+        "endLoc": {
+          "line": 27,
+          "column": 9,
+          "position": 287
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 9,
+      "fragment": "const now = new Date()\r\n  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())\r\n  const yesterday = new Date(today)\r\n  yesterday.setDate(yesterday.getDate() - 1)\r\n\r\n  const lastWeekStart = new Date(today)\r\n  lastWeekStart.setDate(lastWeekStart.getDate() - 7)\r\n\r\n  const thisMonthStart",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\test\\ai-test-utils.ts",
+        "start": 41,
+        "end": 49,
+        "startLoc": {
+          "line": 41,
+          "column": 3,
+          "position": 258
+        },
+        "endLoc": {
+          "line": 49,
+          "column": 15,
+          "position": 375
+        }
+      },
+      "secondFile": {
+        "name": "src\\test\\ground-truth-v3.ts",
+        "start": 160,
+        "end": 166,
+        "startLoc": {
+          "line": 160,
+          "column": 3,
+          "position": 1002
+        },
+        "endLoc": {
+          "line": 166,
+          "column": 15,
+          "position": 1115
+        }
+      }
+    },
     {
       "format": "typescript",
       "lines": 12,
@@ -78,6 +2174,438 @@
           "line": 142,
           "column": 10,
           "position": 1091
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 11,
+      "fragment": ": string) {\r\n    const { isNot } = this\r\n\r\n    if (!received?.data || !Array.isArray(received.data) || received.data.length === 0) {\r\n      return {\r\n        pass: false,\r\n        message: () => 'AI response missing valid data array or empty'\r\n      }\r\n    }\r\n\r\n    const topItem",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\test\\ai-test-matchers.ts",
+        "start": 115,
+        "end": 125,
+        "startLoc": {
+          "line": 115,
+          "column": 13,
+          "position": 1136
+        },
+        "endLoc": {
+          "line": 125,
+          "column": 8,
+          "position": 1237
+        }
+      },
+      "secondFile": {
+        "name": "src\\test\\ai-test-matchers.ts",
+        "start": 95,
+        "end": 105,
+        "startLoc": {
+          "line": 95,
+          "column": 17,
+          "position": 925
+        },
+        "endLoc": {
+          "line": 105,
+          "column": 12,
+          "position": 1026
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 16,
+      "fragment": "(received, expectedCount: number) {\r\n    const { isNot } = this\r\n\r\n    if (!received?.data || !Array.isArray(received.data)) {\r\n      return {\r\n        pass: false,\r\n        message: () => 'AI response missing valid data array'\r\n      }\r\n    }\r\n\r\n    const pass = received.data.length === expectedCount\r\n\r\n    return {\r\n      pass,\r\n      message: () =>\r\n        `Expected ${expectedCount} items, got ",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\test\\ai-test-matchers.ts",
+        "start": 154,
+        "end": 169,
+        "startLoc": {
+          "line": 154,
+          "column": 16,
+          "position": 1508
+        },
+        "endLoc": {
+          "line": 169,
+          "column": 13,
+          "position": 1645
+        }
+      },
+      "secondFile": {
+        "name": "src\\test\\ai-test-matchers.ts",
+        "start": 135,
+        "end": 150,
+        "startLoc": {
+          "line": 135,
+          "column": 20,
+          "position": 1337
+        },
+        "endLoc": {
+          "line": 150,
+          "column": 17,
+          "position": 1474
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 8,
+      "fragment": ")\r\n\r\n      expect(response).toHaveValidAIStructure()\r\n      expect(response).toHaveMetrics(['revenue'])\r\n      expect(response).toHaveGroupBy([])\r\n\r\n      const total = calculateRangeValue(response.data, 'revenue', 'total')\r\n      const expectedRange = createDynamicRange(groundTruth.yesterdaySales",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\test\\ai-dynamic.test.ts",
+        "start": 95,
+        "end": 102,
+        "startLoc": {
+          "line": 95,
+          "column": 39,
+          "position": 1010
+        },
+        "endLoc": {
+          "line": 102,
+          "column": 15,
+          "position": 1087
+        }
+      },
+      "secondFile": {
+        "name": "src\\test\\ai-dynamic.test.ts",
+        "start": 19,
+        "end": 26,
+        "startLoc": {
+          "line": 19,
+          "column": 34,
+          "position": 197
+        },
+        "endLoc": {
+          "line": 26,
+          "column": 11,
+          "position": 274
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 8,
+      "fragment": ")\r\n\r\n      expect(response).toHaveValidAIStructure()\r\n      expect(response).toHaveMetrics(['count'])\r\n      expect(response).toHaveGroupBy([])\r\n\r\n      const total = calculateRangeValue(response.data, 'count', 'total')\r\n      const expectedRange = createDynamicRange(groundTruth.yesterdayTransactions",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\test\\ai-dynamic.test.ts",
+        "start": 107,
+        "end": 114,
+        "startLoc": {
+          "line": 107,
+          "column": 47,
+          "position": 1148
+        },
+        "endLoc": {
+          "line": 114,
+          "column": 22,
+          "position": 1225
+        }
+      },
+      "secondFile": {
+        "name": "src\\test\\ai-dynamic.test.ts",
+        "start": 31,
+        "end": 38,
+        "startLoc": {
+          "line": 31,
+          "column": 43,
+          "position": 335
+        },
+        "endLoc": {
+          "line": 38,
+          "column": 18,
+          "position": 412
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 11,
+      "fragment": ": 0\r\n\r\n      if (expectedAvg > 0) {\r\n        const expectedRange = createDynamicRange(expectedAvg, 0.1)\r\n        expect(avgValue).toBeInRange(expectedRange.min, expectedRange.max)\r\n      } else {\r\n        expect(avgValue).toBe(0)\r\n      }\r\n    })\r\n\r\n    it('should identify busiest location yesterday'",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\test\\ai-dynamic.test.ts",
+        "start": 128,
+        "end": 138,
+        "startLoc": {
+          "line": 128,
+          "column": 9,
+          "position": 1383
+        },
+        "endLoc": {
+          "line": 138,
+          "column": 45,
+          "position": 1473
+        }
+      },
+      "secondFile": {
+        "name": "src\\test\\ai-dynamic.test.ts",
+        "start": 52,
+        "end": 62,
+        "startLoc": {
+          "line": 52,
+          "column": 9,
+          "position": 570
+        },
+        "endLoc": {
+          "line": 62,
+          "column": 41,
+          "position": 660
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 8,
+      "fragment": ")\r\n\r\n      expect(response).toHaveValidAIStructure()\r\n      expect(response).toHaveMetrics(['revenue'])\r\n      expect(response).toHaveGroupBy([])\r\n\r\n      const total = calculateRangeValue(response.data, 'revenue', 'total')\r\n      const expectedRange = createDynamicRange(groundTruth.lastWeekSales",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\test\\ai-dynamic.test.ts",
+        "start": 169,
+        "end": 176,
+        "startLoc": {
+          "line": 169,
+          "column": 46,
+          "position": 1813
+        },
+        "endLoc": {
+          "line": 176,
+          "column": 14,
+          "position": 1890
+        }
+      },
+      "secondFile": {
+        "name": "src\\test\\ai-dynamic.test.ts",
+        "start": 19,
+        "end": 26,
+        "startLoc": {
+          "line": 19,
+          "column": 34,
+          "position": 197
+        },
+        "endLoc": {
+          "line": 26,
+          "column": 11,
+          "position": 274
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 8,
+      "fragment": ")\r\n\r\n      expect(response).toHaveValidAIStructure()\r\n      expect(response).toHaveMetrics(['count'])\r\n      expect(response).toHaveGroupBy([])\r\n\r\n      const total = calculateRangeValue(response.data, 'count', 'total')\r\n      const expectedRange = createDynamicRange(groundTruth.lastWeekTransactions",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\test\\ai-dynamic.test.ts",
+        "start": 181,
+        "end": 188,
+        "startLoc": {
+          "line": 181,
+          "column": 54,
+          "position": 1951
+        },
+        "endLoc": {
+          "line": 188,
+          "column": 21,
+          "position": 2028
+        }
+      },
+      "secondFile": {
+        "name": "src\\test\\ai-dynamic.test.ts",
+        "start": 31,
+        "end": 38,
+        "startLoc": {
+          "line": 31,
+          "column": 43,
+          "position": 335
+        },
+        "endLoc": {
+          "line": 38,
+          "column": 18,
+          "position": 412
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 11,
+      "fragment": ": 0\r\n\r\n      if (expectedAvg > 0) {\r\n        const expectedRange = createDynamicRange(expectedAvg, 0.1)\r\n        expect(avgValue).toBeInRange(expectedRange.min, expectedRange.max)\r\n      } else {\r\n        expect(avgValue).toBe(0)\r\n      }\r\n    })\r\n\r\n    it('should identify busiest location in the last week'",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\test\\ai-dynamic.test.ts",
+        "start": 202,
+        "end": 212,
+        "startLoc": {
+          "line": 202,
+          "column": 9,
+          "position": 2186
+        },
+        "endLoc": {
+          "line": 212,
+          "column": 52,
+          "position": 2276
+        }
+      },
+      "secondFile": {
+        "name": "src\\test\\ai-dynamic.test.ts",
+        "start": 52,
+        "end": 62,
+        "startLoc": {
+          "line": 52,
+          "column": 9,
+          "position": 570
+        },
+        "endLoc": {
+          "line": 62,
+          "column": 41,
+          "position": 660
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 8,
+      "fragment": ")\r\n\r\n      expect(response).toHaveValidAIStructure()\r\n      expect(response).toHaveMetrics(['revenue'])\r\n      expect(response).toHaveGroupBy([])\r\n\r\n      const total = calculateRangeValue(response.data, 'revenue', 'total')\r\n      const expectedRange = createDynamicRange(groundTruth.thisMonthSales",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\test\\ai-dynamic.test.ts",
+        "start": 256,
+        "end": 263,
+        "startLoc": {
+          "line": 256,
+          "column": 34,
+          "position": 2751
+        },
+        "endLoc": {
+          "line": 263,
+          "column": 15,
+          "position": 2828
+        }
+      },
+      "secondFile": {
+        "name": "src\\test\\ai-dynamic.test.ts",
+        "start": 19,
+        "end": 26,
+        "startLoc": {
+          "line": 19,
+          "column": 34,
+          "position": 197
+        },
+        "endLoc": {
+          "line": 26,
+          "column": 11,
+          "position": 274
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 8,
+      "fragment": ")\r\n\r\n      expect(response).toHaveValidAIStructure()\r\n      expect(response).toHaveMetrics(['count'])\r\n      expect(response).toHaveGroupBy([])\r\n\r\n      const total = calculateRangeValue(response.data, 'count', 'total')\r\n      const expectedRange = createDynamicRange(groundTruth.thisMonthTransactions",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\test\\ai-dynamic.test.ts",
+        "start": 268,
+        "end": 275,
+        "startLoc": {
+          "line": 268,
+          "column": 48,
+          "position": 2889
+        },
+        "endLoc": {
+          "line": 275,
+          "column": 22,
+          "position": 2966
+        }
+      },
+      "secondFile": {
+        "name": "src\\test\\ai-dynamic.test.ts",
+        "start": 31,
+        "end": 38,
+        "startLoc": {
+          "line": 31,
+          "column": 43,
+          "position": 335
+        },
+        "endLoc": {
+          "line": 38,
+          "column": 18,
+          "position": 412
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 8,
+      "fragment": ")\r\n\r\n      expect(response).toHaveValidAIStructure()\r\n      expect(response).toHaveMetrics(['revenue'])\r\n      expect(response).toHaveGroupBy([])\r\n\r\n      const total = calculateRangeValue(response.data, 'revenue', 'total')\r\n      const expectedRange = createDynamicRange(groundTruth.last30DaysSales",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\test\\ai-dynamic.test.ts",
+        "start": 282,
+        "end": 289,
+        "startLoc": {
+          "line": 282,
+          "column": 43,
+          "position": 3046
+        },
+        "endLoc": {
+          "line": 289,
+          "column": 16,
+          "position": 3123
+        }
+      },
+      "secondFile": {
+        "name": "src\\test\\ai-dynamic.test.ts",
+        "start": 19,
+        "end": 26,
+        "startLoc": {
+          "line": 19,
+          "column": 34,
+          "position": 197
+        },
+        "endLoc": {
+          "line": 26,
+          "column": 11,
+          "position": 274
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 8,
+      "fragment": ")\r\n\r\n      expect(response).toHaveValidAIStructure()\r\n      expect(response).toHaveMetrics(['count'])\r\n      expect(response).toHaveGroupBy([])\r\n\r\n      const total = calculateRangeValue(response.data, 'count', 'total')\r\n      const expectedRange = createDynamicRange(groundTruth.last30DaysTransactions",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\test\\ai-dynamic.test.ts",
+        "start": 294,
+        "end": 301,
+        "startLoc": {
+          "line": 294,
+          "column": 57,
+          "position": 3184
+        },
+        "endLoc": {
+          "line": 301,
+          "column": 23,
+          "position": 3261
+        }
+      },
+      "secondFile": {
+        "name": "src\\test\\ai-dynamic.test.ts",
+        "start": 31,
+        "end": 38,
+        "startLoc": {
+          "line": 31,
+          "column": 43,
+          "position": 335
+        },
+        "endLoc": {
+          "line": 38,
+          "column": 18,
+          "position": 412
         }
       }
     }

@@ -38,7 +38,9 @@
       "Bash(npx dotenv -e:*)",
       "Bash(timeout:*)",
       "WebFetch(domain:developer.squareup.com)",
-      "WebFetch(domain:vitest.dev)"
+      "WebFetch(domain:vitest.dev)",
+      "WebFetch(domain:platform.openai.com)",
+      "WebFetch(domain:cookbook.openai.com)"
     ],
     "deny": [],
     "ask": []

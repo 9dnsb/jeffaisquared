@@ -21,10 +21,14 @@ beforeEach(() => {
   }
 })
 
-afterEach(() => {
+afterEach(async () => {
   cleanup()
   // Restore original console.error
   if (originalConsoleError) {
     console.error = originalConsoleError
   }
+
+  // Add delay between tests to prevent OpenAI rate limiting
+  // OpenAI Tier 2: Higher limits, but still need some spacing for test stability
+  await new Promise(resolve => setTimeout(resolve, 3000)) // 3 second delay
 })

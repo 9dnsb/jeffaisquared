@@ -8,17 +8,22 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     globals: true,
     css: true,
-    testTimeout: 15000, // 15 second timeout for database-heavy tests
-    // Configure for database testing
+    testTimeout: 700000, // 11.67 minute timeout for comprehensive test suite (623.29s runtime)
+    hookTimeout: 300000, // 5 minute timeout for setup/teardown hooks
+    // Configure for database testing with Tier 2 rate limit considerations
     pool: 'forks',
     poolOptions: {
       forks: {
-        maxForks: 3,        // Limit concurrent test processes to avoid connection exhaustion
+        maxForks: 2, // Allow 2 forks for Tier 2 limits
         minForks: 1,
-        isolate: true       // Ensure test isolation
-      }
+        isolate: true, // Ensure test isolation
+      },
     },
-    maxConcurrency: 3,      // Limit concurrent tests within each process
+    maxConcurrency: 2, // Allow 2 concurrent tests for better performance
+    sequence: {
+      concurrent: false, // Keep sequential for stability
+      shuffle: false, // Keep test order predictable
+    },
     coverage: {
       provider: 'v8',
       exclude: [
