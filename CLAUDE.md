@@ -93,11 +93,11 @@ Before tests, run:
 
 **Database Operations:**
 
-- `npm run db:migrate:dev -- --name <migration_name>` - Create and apply development migration
-- `npm run db:migrate:prod` - Deploy migrations to production
-- `npm run db:generate` - Generate Prisma client
-- `npm run db:seed` - Seed database with sample data (requires 5m timeout)
-- `npm run db:reset` - Reset database and re-seed
+- `npm run db:migrate:dev -- --name <migration_name>` - Create and apply development migration**DO NOT RUN IN CLAUDE CODE**
+- `npm run db:migrate:prod` - Deploy migrations to production**DO NOT RUN IN CLAUDE CODE**
+- `npm run db:generate` - Generate Prisma client**DO NOT RUN IN CLAUDE CODE**
+- `npm run db:seed` - Seed database with sample data (requires 5m timeout)**DO NOT RUN IN CLAUDE CODE**
+- `npm run db:reset` - Reset database and re-seed**DO NOT RUN IN CLAUDE CODE**
 - `npm run db:studio` - Open Prisma Studio (database GUI) - **DO NOT RUN IN CLAUDE CODE**
 - `npm run db:setup-triggers` - Set up database triggers for user profile creation
 
@@ -297,17 +297,19 @@ export function validateAuthState(user: User | null) {
 **🚨 CRITICAL: Before creating new constants, ALWAYS review existing centralized constants:**
 
 **MANDATORY Steps:**
+
 1. **Check `src/test/test-utils.ts`** - Contains `TEST_CONSTANTS` with common test values
 2. **Search existing codebase** - Use `rg "constant_value"` to find existing definitions
 3. **Use centralized constants** - Import from `TEST_CONSTANTS` instead of creating local ones
 4. **Add to centralized location** - If constant doesn't exist, add it to appropriate shared module
 
 **Examples of what to check before creating:**
+
 ```typescript
 // ❌ DON'T create local constants that may already exist
-const TEST_EMAIL = 'test@example.com'           // Already in TEST_CONSTANTS.EMAIL
-const HTTP_500 = 500                            // Already in TEST_CONSTANTS.HTTP_500
-const LOGIN_ENDPOINT = '/api/auth/login'        // Already in TEST_CONSTANTS.LOGIN_ENDPOINT
+const TEST_EMAIL = 'test@example.com' // Already in TEST_CONSTANTS.EMAIL
+const HTTP_500 = 500 // Already in TEST_CONSTANTS.HTTP_500
+const LOGIN_ENDPOINT = '/api/auth/login' // Already in TEST_CONSTANTS.LOGIN_ENDPOINT
 
 // ✅ DO use existing centralized constants
 import { TEST_CONSTANTS } from '../test/test-utils'
@@ -317,6 +319,7 @@ const endpoint = TEST_CONSTANTS.LOGIN_ENDPOINT
 ```
 
 **Centralized Locations:**
+
 - **Test constants:** `src/test/test-utils.ts` → `TEST_CONSTANTS`
 - **API constants:** Consider `lib/constants/api.ts`
 - **Business constants:** Consider `lib/constants/business.ts`
@@ -356,12 +359,14 @@ const specificTestPattern = () => {
 ```
 
 **Usage Guidelines:**
+
 - **Use sparingly** - Only when abstraction would create more complexity than the duplication
 - **Always include a comment** explaining why abstraction is not appropriate
 - **Prefer abstraction** - Try to create shared patterns first before using ignore
 - **Review regularly** - Ignored duplicates should be re-evaluated during code reviews
 
 **Valid reasons for ignore comments:**
+
 - Edge case tests with very specific setup that don't fit standard patterns
 - Platform-specific implementations that cannot be unified
 - Generated code or third-party code snippets
@@ -384,12 +389,14 @@ duplicated code here
 ```
 
 **Rules for jscpd ignore comments:**
+
 - **Exact format only:** `// jscpd:ignore-start` and `// jscpd:ignore-end`
 - **No additional text:** Comments or explanations break the ignore functionality
 - **Use sparingly:** Only for unavoidable duplicates after exhausting abstraction options
 - **Document separately:** Add explanation comments on separate lines if needed
 
 **Example usage:**
+
 ```typescript
 // This test pattern is inherently repetitive due to test isolation requirements
 // jscpd:ignore-start
@@ -399,7 +406,7 @@ it('should handle error case', async () => {
 
   mockParser.mockResolvedValue({
     data: null,
-    error: mockError
+    error: mockError,
   })
 
   const response = await handler(request)
@@ -435,7 +442,7 @@ const handleSubmit = async (data: FormData) => {
   try {
     const response = await fetch('/api/login', {
       method: 'POST',
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
     if (!response.ok) throw new Error('Login failed')
     return response.json()
@@ -449,7 +456,7 @@ const submitForm = async (formData: FormData) => {
   try {
     const response = await fetch('/api/register', {
       method: 'POST',
-      body: JSON.stringify(formData)
+      body: JSON.stringify(formData),
     })
     if (!response.ok) throw new Error('Registration failed')
     return response.json()
@@ -468,7 +475,7 @@ export async function apiPost(endpoint: string, data: unknown) {
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
     if (!response.ok) throw new Error(`Request failed: ${response.status}`)
     return response.json()

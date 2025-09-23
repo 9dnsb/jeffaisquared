@@ -775,7 +775,11 @@ function loadIncrementalData() {
         const incrementalData = JSON.parse(
           fs.readFileSync(path.join(dataDir, sync.incrementalFile), 'utf-8')
         )
-        if (incrementalData.orders) {
+        // Incremental files contain arrays of orders directly, not wrapped in an object
+        if (Array.isArray(incrementalData)) {
+          allIncrementalOrders.push(...incrementalData)
+        } else if (incrementalData.orders) {
+          // Fallback for files that might be wrapped in an object
           allIncrementalOrders.push(...incrementalData.orders)
         }
       } catch (error) {

@@ -8,6 +8,17 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     globals: true,
     css: true,
+    testTimeout: 15000, // 15 second timeout for database-heavy tests
+    // Configure for database testing
+    pool: 'forks',
+    poolOptions: {
+      forks: {
+        maxForks: 3,        // Limit concurrent test processes to avoid connection exhaustion
+        minForks: 1,
+        isolate: true       // Ensure test isolation
+      }
+    },
+    maxConcurrency: 3,      // Limit concurrent tests within each process
     coverage: {
       provider: 'v8',
       exclude: [

@@ -51,3 +51,6 @@ node_modules/
 
 # Code duplication reports
 /reports/jscpd/
+
+# Historical data files
+/historical-data/

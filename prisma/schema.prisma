@@ -61,6 +61,9 @@ model Item {
   categoryRel      Category?   @relation(fields: [squareCategoryId], references: [squareCategoryId])
   lineItems        LineItem[]
 
+  // Performance indexes for AI v3 queries
+  @@index([name]) // Item name lookups for AI parameter extraction
+  @@index([category]) // Category-based queries
   @@map("items")
 }
 
@@ -79,6 +82,12 @@ model Order {
   location        Location   @relation(fields: [locationId], references: [squareLocationId])
   lineItems       LineItem[]
 
+  // Performance indexes for AI v3 queries
+  @@index([date]) // Time-based filtering
+  @@index([locationId, date]) // Location + time queries
+  @@index([date, locationId]) // Alternative order for different query patterns
+  @@index([locationId, totalAmount]) // Location aggregations
+  @@index([date, totalAmount]) // Time-based aggregations
   @@map("orders")
 }
 
@@ -101,6 +110,10 @@ model LineItem {
   order                Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   item                 Item?    @relation(fields: [itemId], references: [id])
 
+  // Performance indexes for AI v3 queries
+  @@index([orderId, itemId]) // Order + item queries
+  @@index([itemId, totalPriceAmount]) // Item revenue calculations
+  @@index([orderId, itemId, quantity, unitPriceAmount, totalPriceAmount]) // Covering index for common queries
   @@map("line_items")
 }
 
