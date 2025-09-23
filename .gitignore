@@ -56,3 +56,6 @@ node_modules/
 /historical-data/
 business_data.sql
 data_backup.sql
+
+# Large backup files
+backups/*.sql.gz
