@@ -1,5 +1,9 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
-import { calculateGroundTruthV3, disconnectPrismaV3, type GroundTruthV3 } from './ground-truth-v3'
+import {
+  calculateGroundTruthV3,
+  disconnectPrismaV3,
+  type GroundTruthV3,
+} from './ground-truth-v3'
 
 // Helper function to make AI requests to the test endpoint
 async function makeAIRequest(prompt: string) {
@@ -10,12 +14,14 @@ async function makeAIRequest(prompt: string) {
     },
     body: JSON.stringify({
       message: prompt,
-      conversationHistory: []
-    })
+      conversationHistory: [],
+    }),
   })
 
   if (!response.ok) {
-    throw new Error(`AI request failed: ${response.status} ${response.statusText}`)
+    throw new Error(
+      `AI request failed: ${response.status} ${response.statusText}`
+    )
   }
 
   return response.json()
@@ -23,7 +29,11 @@ async function makeAIRequest(prompt: string) {
 
 // Helper function to extract numeric value from AI response
 function extractValue(response: any, metric: string): number {
-  if (!response?.data || !Array.isArray(response.data) || response.data.length === 0) {
+  if (
+    !response?.data ||
+    !Array.isArray(response.data) ||
+    response.data.length === 0
+  ) {
     return 0
   }
 
@@ -36,11 +46,20 @@ function extractValue(response: any, metric: string): number {
 
     // Field mapping fallbacks for common patterns
     const fieldMappings: Record<string, string[]> = {
-      'revenue': ['total_revenue', 'totalRevenue', 'revenue_total'],
-      'count': ['total_count', 'totalCount', 'transaction_count', 'total_transactions'],
-      'quantity': ['total_quantity', 'totalQuantity', 'quantity_sold'],
-      'avg_transaction': ['average_transaction', 'avg_transaction_value', 'average_value'],
-      'unique_items': ['unique_item_count', 'distinct_items', 'item_count']
+      revenue: ['total_revenue', 'totalRevenue', 'revenue_total'],
+      count: [
+        'total_count',
+        'totalCount',
+        'transaction_count',
+        'total_transactions',
+      ],
+      quantity: ['total_quantity', 'totalQuantity', 'quantity_sold'],
+      avg_transaction: [
+        'average_transaction',
+        'avg_transaction_value',
+        'average_value',
+      ],
+      unique_items: ['unique_item_count', 'distinct_items', 'item_count'],
     }
 
     // Try fallback patterns
@@ -99,8 +118,9 @@ function extractValue(response: any, metric: string): number {
   }
 
   // Fallback: If all items have the same structure, sum them (for aggregated results)
-  const hasConsistentStructure = response.data.every((item: any) =>
-    Object.keys(item).length === Object.keys(response.data[0]).length
+  const hasConsistentStructure = response.data.every(
+    (item: any) =>
+      Object.keys(item).length === Object.keys(response.data[0]).length
   )
 
   if (hasConsistentStructure) {
@@ -111,7 +131,9 @@ function extractValue(response: any, metric: string): number {
   }
 
   // Final fallback: Return first available value
-  const firstItemWithMetric = response.data.find((item: any) => getFieldValue(item, metric) !== null)
+  const firstItemWithMetric = response.data.find(
+    (item: any) => getFieldValue(item, metric) !== null
+  )
   if (firstItemWithMetric) {
     const value = getFieldValue(firstItemWithMetric, metric)
     return value !== null ? value : 0
@@ -160,7 +182,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should count transactions today', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How many transactions did we have today?")
+      const response = await makeAIRequest(
+        'How many transactions did we have today?'
+      )
       expectPerformance(start)
 
       const count = extractValue(response, 'count')
@@ -169,7 +193,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate average transaction value today', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's our average transaction value today?")
+      const response = await makeAIRequest(
+        "What's our average transaction value today?"
+      )
       expectPerformance(start)
 
       const avg = extractValue(response, 'avg_transaction')
@@ -178,7 +204,7 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate total quantity sold today', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How many items did we sell today?")
+      const response = await makeAIRequest('How many items did we sell today?')
       expectPerformance(start)
 
       const quantity = extractValue(response, 'quantity')
@@ -187,7 +213,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should identify top performing location today', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Which location had the highest sales today?")
+      const response = await makeAIRequest(
+        'Which location had the highest sales today?'
+      )
       expectPerformance(start)
 
       // DEBUG: Show what the AI function returned vs ground truth expectation
@@ -195,17 +223,24 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
       console.log('  AI Response data:', response.data)
       console.log('  AI Response summary:', response.summary)
       console.log('  Ground truth expects:', groundTruth.todayTopLocation)
-      console.log('  AI returned location:', response.data[0]?.location || response.data[0]?.name)
+      console.log(
+        '  AI returned location:',
+        response.data[0]?.location || response.data[0]?.name
+      )
 
       expect(response.data).toBeDefined()
       if (groundTruth.todayRevenue > 0 && groundTruth.todayTopLocation) {
-        expect(response.data[0]?.location || response.data[0]?.name).toContain(groundTruth.todayTopLocation)
+        expect(response.data[0]?.location || response.data[0]?.name).toContain(
+          groundTruth.todayTopLocation
+        )
       }
     })
 
     it('should calculate top location revenue today', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What was the revenue of our best performing location today?")
+      const response = await makeAIRequest(
+        'What was the revenue of our best performing location today?'
+      )
       expectPerformance(start)
 
       if (groundTruth.todayTopLocationRevenue > 0) {
@@ -216,7 +251,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should count unique items sold today', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How many different items did we sell today?")
+      const response = await makeAIRequest(
+        'How many different items did we sell today?'
+      )
       expectPerformance(start)
 
       if (groundTruth.todayUniqueItemCount > 0) {
@@ -224,12 +261,52 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
         expectInTolerance(count, groundTruth.todayUniqueItemCount)
       }
     })
+
+    it('should give a breakdown of revenue sales by location today', async () => {
+      const start = Date.now()
+      const response = await makeAIRequest(
+        'Give me a breakdown of revenue sales by location today'
+      )
+      expectPerformance(start)
+
+      // DEBUG: Show what the AI function returned for location breakdown
+      console.log('🔍 DEBUG AI Response for location breakdown today:')
+      console.log('  AI Response data:', response.data)
+      console.log('  AI Response summary:', response.summary)
+
+      // Should return data for multiple locations if there are sales today
+      expect(response.data).toBeDefined()
+
+      if (groundTruth.todayRevenue > 0) {
+        // Should have at least one location with revenue data
+        expect(response.data.length).toBeGreaterThan(0)
+
+        // Each location should have location name and revenue fields
+        const hasLocationData = response.data.some((item: any) =>
+          (item.location || item.name) &&
+          (item.revenue !== undefined || item.total_revenue !== undefined || item.totalRevenue !== undefined)
+        )
+        expect(hasLocationData).toBe(true)
+
+        // Total of all location revenues should match today's total revenue (within tolerance)
+        const locationRevenues = response.data.map((item: any) =>
+          extractValue(item, 'revenue') || 0
+        )
+        const totalLocationRevenue = locationRevenues.reduce((sum: number, rev: number) => sum + rev, 0)
+
+        if (totalLocationRevenue > 0) {
+          expectInTolerance(totalLocationRevenue, groundTruth.todayRevenue)
+        }
+      }
+    })
   })
 
   describe('Yesterday Analysis (7 tests)', () => {
     it('should calculate total revenue yesterday', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What was our total revenue yesterday?")
+      const response = await makeAIRequest(
+        'What was our total revenue yesterday?'
+      )
       expectPerformance(start)
 
       const revenue = extractValue(response, 'revenue')
@@ -238,7 +315,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should count transactions yesterday', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How many transactions did we have yesterday?")
+      const response = await makeAIRequest(
+        'How many transactions did we have yesterday?'
+      )
       expectPerformance(start)
 
       const count = extractValue(response, 'count')
@@ -247,7 +326,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate average transaction value yesterday', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What was our average transaction value yesterday?")
+      const response = await makeAIRequest(
+        'What was our average transaction value yesterday?'
+      )
       expectPerformance(start)
 
       const avg = extractValue(response, 'avg_transaction')
@@ -256,7 +337,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate total quantity sold yesterday', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How many items did we sell yesterday?")
+      const response = await makeAIRequest(
+        'How many items did we sell yesterday?'
+      )
       expectPerformance(start)
 
       const quantity = extractValue(response, 'quantity')
@@ -265,17 +348,26 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should identify top performing location yesterday', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Which location had the highest sales yesterday?")
+      const response = await makeAIRequest(
+        'Which location had the highest sales yesterday?'
+      )
       expectPerformance(start)
 
-      if (groundTruth.yesterdayRevenue > 0 && groundTruth.yesterdayTopLocation) {
-        expect(response.data[0]?.location || response.data[0]?.name).toContain(groundTruth.yesterdayTopLocation)
+      if (
+        groundTruth.yesterdayRevenue > 0 &&
+        groundTruth.yesterdayTopLocation
+      ) {
+        expect(response.data[0]?.location || response.data[0]?.name).toContain(
+          groundTruth.yesterdayTopLocation
+        )
       }
     })
 
     it('should calculate top location revenue yesterday', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What was the revenue of our best performing location yesterday?")
+      const response = await makeAIRequest(
+        'What was the revenue of our best performing location yesterday?'
+      )
       expectPerformance(start)
 
       if (groundTruth.yesterdayTopLocationRevenue > 0) {
@@ -286,7 +378,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should count unique items sold yesterday', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How many different items did we sell yesterday?")
+      const response = await makeAIRequest(
+        'How many different items did we sell yesterday?'
+      )
       expectPerformance(start)
 
       if (groundTruth.yesterdayUniqueItemCount > 0) {
@@ -299,7 +393,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
   describe('Last Week Analysis (8 tests)', () => {
     it('should calculate total revenue last week', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What was our total revenue in the last week?")
+      const response = await makeAIRequest(
+        'What was our total revenue in the last week?'
+      )
       expectPerformance(start)
 
       const revenue = extractValue(response, 'revenue')
@@ -308,7 +404,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should count transactions last week', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How many transactions did we have in the last week?")
+      const response = await makeAIRequest(
+        'How many transactions did we have in the last week?'
+      )
       expectPerformance(start)
 
       const count = extractValue(response, 'count')
@@ -317,7 +415,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate average transaction value last week', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What was our average transaction value in the last week?")
+      const response = await makeAIRequest(
+        'What was our average transaction value in the last week?'
+      )
       expectPerformance(start)
 
       const avg = extractValue(response, 'avg_transaction')
@@ -326,7 +426,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate total quantity sold last week', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How many items did we sell in the last week?")
+      const response = await makeAIRequest(
+        'How many items did we sell in the last week?'
+      )
       expectPerformance(start)
 
       const quantity = extractValue(response, 'quantity')
@@ -335,17 +437,23 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should identify top performing location last week', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Which location had the highest sales in the last week?")
+      const response = await makeAIRequest(
+        'Which location had the highest sales in the last week?'
+      )
       expectPerformance(start)
 
       if (groundTruth.lastWeekRevenue > 0 && groundTruth.lastWeekTopLocation) {
-        expect(response.data[0]?.location || response.data[0]?.name).toContain(groundTruth.lastWeekTopLocation)
+        expect(response.data[0]?.location || response.data[0]?.name).toContain(
+          groundTruth.lastWeekTopLocation
+        )
       }
     })
 
     it('should calculate top location revenue last week', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What was the revenue of our best performing location last week?")
+      const response = await makeAIRequest(
+        'What was the revenue of our best performing location last week?'
+      )
       expectPerformance(start)
 
       if (groundTruth.lastWeekTopLocationRevenue > 0) {
@@ -356,10 +464,15 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should identify best performing day last week', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Which day had the highest sales last week?")
+      const response = await makeAIRequest(
+        'Which day had the highest sales last week?'
+      )
       expectPerformance(start)
 
-      if (groundTruth.lastWeekBestDay && groundTruth.lastWeekBestDayRevenue > 0) {
+      if (
+        groundTruth.lastWeekBestDay &&
+        groundTruth.lastWeekBestDayRevenue > 0
+      ) {
         expect(response.data).toBeDefined()
         // Date format might vary, just check we get results
         expect(response.data.length).toBeGreaterThan(0)
@@ -368,7 +481,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate best day revenue last week', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What was the revenue on our best day last week?")
+      const response = await makeAIRequest(
+        'What was the revenue on our best day last week?'
+      )
       expectPerformance(start)
 
       if (groundTruth.lastWeekBestDayRevenue > 0) {
@@ -381,7 +496,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
   describe('Last Month Analysis (8 tests)', () => {
     it('should calculate total revenue last month', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What was our total revenue in the last month?")
+      const response = await makeAIRequest(
+        'What was our total revenue in the last month?'
+      )
       expectPerformance(start)
 
       const revenue = extractValue(response, 'revenue')
@@ -390,7 +507,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should count transactions last month', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How many transactions did we have in the last month?")
+      const response = await makeAIRequest(
+        'How many transactions did we have in the last month?'
+      )
       expectPerformance(start)
 
       const count = extractValue(response, 'count')
@@ -399,7 +518,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate average transaction value last month', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What was our average transaction value in the last month?")
+      const response = await makeAIRequest(
+        'What was our average transaction value in the last month?'
+      )
       expectPerformance(start)
 
       const avg = extractValue(response, 'avg_transaction')
@@ -408,7 +529,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate total quantity sold last month', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How many items did we sell in the last month?")
+      const response = await makeAIRequest(
+        'How many items did we sell in the last month?'
+      )
       expectPerformance(start)
 
       const quantity = extractValue(response, 'quantity')
@@ -417,17 +540,26 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should identify top performing location last month', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Which location had the highest sales in the last month?")
+      const response = await makeAIRequest(
+        'Which location had the highest sales in the last month?'
+      )
       expectPerformance(start)
 
-      if (groundTruth.lastMonthRevenue > 0 && groundTruth.lastMonthTopLocation) {
-        expect(response.data[0]?.location || response.data[0]?.name).toContain(groundTruth.lastMonthTopLocation)
+      if (
+        groundTruth.lastMonthRevenue > 0 &&
+        groundTruth.lastMonthTopLocation
+      ) {
+        expect(response.data[0]?.location || response.data[0]?.name).toContain(
+          groundTruth.lastMonthTopLocation
+        )
       }
     })
 
     it('should calculate top location revenue last month', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What was the revenue of our best performing location last month?")
+      const response = await makeAIRequest(
+        'What was the revenue of our best performing location last month?'
+      )
       expectPerformance(start)
 
       if (groundTruth.lastMonthTopLocationRevenue > 0) {
@@ -438,7 +570,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should compare last month vs previous month', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How did last month compare to the previous month?")
+      const response = await makeAIRequest(
+        'How did last month compare to the previous month?'
+      )
       expectPerformance(start)
 
       // Should return comparison data
@@ -448,7 +582,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate month-over-month growth', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What was our month-over-month revenue growth?")
+      const response = await makeAIRequest(
+        'What was our month-over-month revenue growth?'
+      )
       expectPerformance(start)
 
       // Should return growth metrics
@@ -460,7 +596,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
   describe('Individual Location Performance (12 tests)', () => {
     it('should calculate HQ total revenue', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's the total revenue at our HQ location?")
+      const response = await makeAIRequest(
+        "What's the total revenue at our HQ location?"
+      )
       expectPerformance(start)
 
       const revenue = extractValue(response, 'revenue')
@@ -469,7 +607,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate Yonge location total revenue', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's the total revenue at our Yonge location?")
+      const response = await makeAIRequest(
+        "What's the total revenue at our Yonge location?"
+      )
       expectPerformance(start)
 
       const revenue = extractValue(response, 'revenue')
@@ -478,7 +618,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate Bloor location total revenue', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's the total revenue at our Bloor location?")
+      const response = await makeAIRequest(
+        "What's the total revenue at our Bloor location?"
+      )
       expectPerformance(start)
 
       const revenue = extractValue(response, 'revenue')
@@ -487,7 +629,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate Kingston location total revenue', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's the total revenue at our Kingston location?")
+      const response = await makeAIRequest(
+        "What's the total revenue at our Kingston location?"
+      )
       expectPerformance(start)
 
       const revenue = extractValue(response, 'revenue')
@@ -496,7 +640,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate The Well location total revenue', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's the total revenue at The Well location?")
+      const response = await makeAIRequest(
+        "What's the total revenue at The Well location?"
+      )
       expectPerformance(start)
 
       const revenue = extractValue(response, 'revenue')
@@ -505,7 +651,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate Broadway location total revenue', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's the total revenue at our Broadway location?")
+      const response = await makeAIRequest(
+        "What's the total revenue at our Broadway location?"
+      )
       expectPerformance(start)
 
       const revenue = extractValue(response, 'revenue')
@@ -514,7 +662,7 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate HQ transaction count', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How many transactions has HQ had?")
+      const response = await makeAIRequest('How many transactions has HQ had?')
       expectPerformance(start)
 
       const count = extractValue(response, 'count')
@@ -523,7 +671,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate Yonge transaction count', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How many transactions has Yonge had?")
+      const response = await makeAIRequest(
+        'How many transactions has Yonge had?'
+      )
       expectPerformance(start)
 
       const count = extractValue(response, 'count')
@@ -532,7 +682,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate Bloor transaction count', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How many transactions has Bloor had?")
+      const response = await makeAIRequest(
+        'How many transactions has Bloor had?'
+      )
       expectPerformance(start)
 
       const count = extractValue(response, 'count')
@@ -541,7 +693,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate Kingston transaction count', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How many transactions has Kingston had?")
+      const response = await makeAIRequest(
+        'How many transactions has Kingston had?'
+      )
       expectPerformance(start)
 
       const count = extractValue(response, 'count')
@@ -550,7 +704,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate The Well transaction count', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How many transactions has The Well had?")
+      const response = await makeAIRequest(
+        'How many transactions has The Well had?'
+      )
       expectPerformance(start)
 
       const count = extractValue(response, 'count')
@@ -559,7 +715,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate Broadway transaction count', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How many transactions has Broadway had?")
+      const response = await makeAIRequest(
+        'How many transactions has Broadway had?'
+      )
       expectPerformance(start)
 
       const count = extractValue(response, 'count')
@@ -570,17 +728,23 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
   describe('Location Rankings and Comparisons (13 tests)', () => {
     it('should identify top performing location overall', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Which location has the highest total revenue?")
+      const response = await makeAIRequest(
+        'Which location has the highest total revenue?'
+      )
       expectPerformance(start)
 
       if (groundTruth.topPerformingLocation) {
-        expect(response.data[0]?.location || response.data[0]?.name).toContain(groundTruth.topPerformingLocation)
+        expect(response.data[0]?.location || response.data[0]?.name).toContain(
+          groundTruth.topPerformingLocation
+        )
       }
     })
 
     it('should calculate top location revenue', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's the revenue of our top performing location?")
+      const response = await makeAIRequest(
+        "What's the revenue of our top performing location?"
+      )
       expectPerformance(start)
 
       const revenue = extractValue(response, 'revenue')
@@ -589,17 +753,23 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should identify lowest performing location', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Which location has the lowest total revenue?")
+      const response = await makeAIRequest(
+        'Which location has the lowest total revenue?'
+      )
       expectPerformance(start)
 
       if (groundTruth.lowestPerformingLocation) {
-        expect(response.data[0]?.location || response.data[0]?.name).toContain(groundTruth.lowestPerformingLocation)
+        expect(response.data[0]?.location || response.data[0]?.name).toContain(
+          groundTruth.lowestPerformingLocation
+        )
       }
     })
 
     it('should calculate lowest location revenue', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's the revenue of our lowest performing location?")
+      const response = await makeAIRequest(
+        "What's the revenue of our lowest performing location?"
+      )
       expectPerformance(start)
 
       const revenue = extractValue(response, 'revenue')
@@ -608,7 +778,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should compare HQ vs Yonge revenue', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Compare revenue between HQ and Yonge locations")
+      const response = await makeAIRequest(
+        'Compare revenue between HQ and Yonge locations'
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -617,7 +789,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should compare Bloor vs Kingston revenue', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Compare revenue between Bloor and Kingston locations")
+      const response = await makeAIRequest(
+        'Compare revenue between Bloor and Kingston locations'
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -626,7 +800,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate top three locations total revenue', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's the combined revenue of our top 3 locations?")
+      const response = await makeAIRequest(
+        "What's the combined revenue of our top 3 locations?"
+      )
       expectPerformance(start)
 
       const revenue = extractValue(response, 'revenue')
@@ -635,46 +811,64 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate average location revenue', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's the average revenue per location?")
+      const response = await makeAIRequest(
+        "What's the average revenue per location?"
+      )
       expectPerformance(start)
 
-      const avg = extractValue(response, 'avg_transaction') || extractValue(response, 'revenue')
+      const avg =
+        extractValue(response, 'avg_transaction') ||
+        extractValue(response, 'revenue')
       expectInTolerance(avg, groundTruth.averageLocationRevenue)
     })
 
     it('should identify busiest location by transaction count', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Which location has the most transactions?")
+      const response = await makeAIRequest(
+        'Which location has the most transactions?'
+      )
       expectPerformance(start)
 
       if (groundTruth.busiesLocationByTransactionCount) {
-        expect(response.data[0]?.location || response.data[0]?.name).toContain(groundTruth.busiesLocationByTransactionCount)
+        expect(response.data[0]?.location || response.data[0]?.name).toContain(
+          groundTruth.busiesLocationByTransactionCount
+        )
       }
     })
 
     it('should identify quietest location by transaction count', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Which location has the fewest transactions?")
+      const response = await makeAIRequest(
+        'Which location has the fewest transactions?'
+      )
       expectPerformance(start)
 
       if (groundTruth.quietestLocationByTransactionCount) {
-        expect(response.data[0]?.location || response.data[0]?.name).toContain(groundTruth.quietestLocationByTransactionCount)
+        expect(response.data[0]?.location || response.data[0]?.name).toContain(
+          groundTruth.quietestLocationByTransactionCount
+        )
       }
     })
 
     it('should identify location with highest average transaction', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Which location has the highest average transaction value?")
+      const response = await makeAIRequest(
+        'Which location has the highest average transaction value?'
+      )
       expectPerformance(start)
 
       if (groundTruth.locationWithHighestAverageTransaction) {
-        expect(response.data[0]?.location || response.data[0]?.name).toContain(groundTruth.locationWithHighestAverageTransaction)
+        expect(response.data[0]?.location || response.data[0]?.name).toContain(
+          groundTruth.locationWithHighestAverageTransaction
+        )
       }
     })
 
     it('should rank all locations by performance', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Rank all locations by revenue from highest to lowest")
+      const response = await makeAIRequest(
+        'Rank all locations by revenue from highest to lowest'
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -683,7 +877,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate location market share', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's each location's market share percentage?")
+      const response = await makeAIRequest(
+        "What's each location's market share percentage?"
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -695,17 +891,23 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
   describe('Top Product Analysis (10 tests)', () => {
     it('should identify top selling item by revenue', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's our top selling item by revenue?")
+      const response = await makeAIRequest(
+        "What's our top selling item by revenue?"
+      )
       expectPerformance(start)
 
       if (groundTruth.topSellingItemByRevenue) {
-        expect(response.data[0]?.item || response.data[0]?.name).toBe(groundTruth.topSellingItemByRevenue)
+        expect(response.data[0]?.item || response.data[0]?.name).toBe(
+          groundTruth.topSellingItemByRevenue
+        )
       }
     })
 
     it('should calculate top item revenue', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How much revenue did our top selling item generate?")
+      const response = await makeAIRequest(
+        'How much revenue did our top selling item generate?'
+      )
       expectPerformance(start)
 
       const revenue = extractValue(response, 'revenue')
@@ -714,17 +916,23 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should identify top selling item by quantity', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's our top selling item by quantity?")
+      const response = await makeAIRequest(
+        "What's our top selling item by quantity?"
+      )
       expectPerformance(start)
 
       if (groundTruth.topSellingItemByQuantity) {
-        expect(response.data[0]?.item || response.data[0]?.name).toBe(groundTruth.topSellingItemByQuantity)
+        expect(response.data[0]?.item || response.data[0]?.name).toBe(
+          groundTruth.topSellingItemByQuantity
+        )
       }
     })
 
     it('should calculate top item quantity sold', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How many units of our top item did we sell?")
+      const response = await makeAIRequest(
+        'How many units of our top item did we sell?'
+      )
       expectPerformance(start)
 
       const quantity = extractValue(response, 'quantity')
@@ -733,7 +941,7 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should show top 5 items by revenue', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Show me the top 5 items by revenue")
+      const response = await makeAIRequest('Show me the top 5 items by revenue')
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -743,7 +951,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should show top 10 items by quantity', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Show me the top 10 items by quantity sold")
+      const response = await makeAIRequest(
+        'Show me the top 10 items by quantity sold'
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -753,26 +963,36 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate average quantity per transaction', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's the average number of items per transaction?")
+      const response = await makeAIRequest(
+        "What's the average number of items per transaction?"
+      )
       expectPerformance(start)
 
-      const avg = extractValue(response, 'quantity') || extractValue(response, 'avg_transaction')
+      const avg =
+        extractValue(response, 'quantity') ||
+        extractValue(response, 'avg_transaction')
       expectInTolerance(avg, groundTruth.averageQuantityPerTransaction)
     })
 
     it('should identify most popular category', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's our most popular product category?")
+      const response = await makeAIRequest(
+        "What's our most popular product category?"
+      )
       expectPerformance(start)
 
       if (groundTruth.mostPopularCategory) {
-        expect(response.data[0]?.category || response.data[0]?.name).toContain(groundTruth.mostPopularCategory)
+        expect(response.data[0]?.category || response.data[0]?.name).toContain(
+          groundTruth.mostPopularCategory
+        )
       }
     })
 
     it('should calculate total unique items sold', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How many different unique items have we sold?")
+      const response = await makeAIRequest(
+        'How many different unique items have we sold?'
+      )
       expectPerformance(start)
 
       if (groundTruth.totalUniqueItemsSold > 0) {
@@ -783,11 +1003,15 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate average item price', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's the average price of our items?")
+      const response = await makeAIRequest(
+        "What's the average price of our items?"
+      )
       expectPerformance(start)
 
       if (groundTruth.averageItemPrice > 0) {
-        const avg = extractValue(response, 'avg_transaction') || extractValue(response, 'revenue')
+        const avg =
+          extractValue(response, 'avg_transaction') ||
+          extractValue(response, 'revenue')
         expectInTolerance(avg, groundTruth.averageItemPrice)
       }
     })
@@ -800,33 +1024,45 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
       expectPerformance(start)
 
       if (groundTruth.topItemAtHQ) {
-        expect(response.data[0]?.item || response.data[0]?.name).toBe(groundTruth.topItemAtHQ)
+        expect(response.data[0]?.item || response.data[0]?.name).toBe(
+          groundTruth.topItemAtHQ
+        )
       }
     })
 
     it('should identify top item at Yonge', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's the top selling item at Yonge?")
+      const response = await makeAIRequest(
+        "What's the top selling item at Yonge?"
+      )
       expectPerformance(start)
 
       if (groundTruth.topItemAtYonge) {
-        expect(response.data[0]?.item || response.data[0]?.name).toBe(groundTruth.topItemAtYonge)
+        expect(response.data[0]?.item || response.data[0]?.name).toBe(
+          groundTruth.topItemAtYonge
+        )
       }
     })
 
     it('should identify top item at Bloor', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's the top selling item at Bloor?")
+      const response = await makeAIRequest(
+        "What's the top selling item at Bloor?"
+      )
       expectPerformance(start)
 
       if (groundTruth.topItemAtBloor) {
-        expect(response.data[0]?.item || response.data[0]?.name).toBe(groundTruth.topItemAtBloor)
+        expect(response.data[0]?.item || response.data[0]?.name).toBe(
+          groundTruth.topItemAtBloor
+        )
       }
     })
 
     it('should calculate top item revenue at HQ', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How much revenue did the top item at HQ generate?")
+      const response = await makeAIRequest(
+        'How much revenue did the top item at HQ generate?'
+      )
       expectPerformance(start)
 
       if (groundTruth.topItemRevenueAtHQ > 0) {
@@ -837,7 +1073,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate top item revenue at Yonge', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How much revenue did the top item at Yonge generate?")
+      const response = await makeAIRequest(
+        'How much revenue did the top item at Yonge generate?'
+      )
       expectPerformance(start)
 
       if (groundTruth.topItemRevenueAtYonge > 0) {
@@ -848,7 +1086,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate top item revenue at Bloor', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How much revenue did the top item at Bloor generate?")
+      const response = await makeAIRequest(
+        'How much revenue did the top item at Bloor generate?'
+      )
       expectPerformance(start)
 
       if (groundTruth.topItemRevenueAtBloor > 0) {
@@ -859,7 +1099,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should compare item performance across locations', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Compare Latte sales across all locations")
+      const response = await makeAIRequest(
+        'Compare Latte sales across all locations'
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -868,7 +1110,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should identify which items are sold at all locations', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Which items are sold at every location?")
+      const response = await makeAIRequest(
+        'Which items are sold at every location?'
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -876,17 +1120,23 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should find location with most unique items', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Which location sells the most different items?")
+      const response = await makeAIRequest(
+        'Which location sells the most different items?'
+      )
       expectPerformance(start)
 
       if (groundTruth.locationWithMostUniqueItems) {
-        expect(response.data[0]?.location || response.data[0]?.name).toContain(groundTruth.locationWithMostUniqueItems)
+        expect(response.data[0]?.location || response.data[0]?.name).toContain(
+          groundTruth.locationWithMostUniqueItems
+        )
       }
     })
 
     it('should analyze item distribution across locations', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Show me how Coffee sales are distributed across locations")
+      const response = await makeAIRequest(
+        'Show me how Coffee sales are distributed across locations'
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -898,7 +1148,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
   describe('Overall Business Performance (8 tests)', () => {
     it('should calculate total all-time revenue', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's our total revenue across all time?")
+      const response = await makeAIRequest(
+        "What's our total revenue across all time?"
+      )
       expectPerformance(start)
 
       const revenue = extractValue(response, 'revenue')
@@ -907,7 +1159,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate total all-time transactions', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How many total transactions have we had?")
+      const response = await makeAIRequest(
+        'How many total transactions have we had?'
+      )
       expectPerformance(start)
 
       const count = extractValue(response, 'count')
@@ -916,7 +1170,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate overall average transaction value', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's our overall average transaction value?")
+      const response = await makeAIRequest(
+        "What's our overall average transaction value?"
+      )
       expectPerformance(start)
 
       const avg = extractValue(response, 'avg_transaction')
@@ -929,7 +1185,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
       expectPerformance(start)
 
       if (groundTruth.averageDailyRevenue > 0) {
-        const avg = extractValue(response, 'revenue') || extractValue(response, 'avg_transaction')
+        const avg =
+          extractValue(response, 'revenue') ||
+          extractValue(response, 'avg_transaction')
         expectInTolerance(avg, groundTruth.averageDailyRevenue)
       }
     })
@@ -944,7 +1202,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate average monthly revenue', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's our average monthly revenue?")
+      const response = await makeAIRequest(
+        "What's our average monthly revenue?"
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -952,7 +1212,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should show revenue trend over time', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Show me our revenue trend over the last 6 months")
+      const response = await makeAIRequest(
+        'Show me our revenue trend over the last 6 months'
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -971,7 +1233,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
   describe('Performance Comparisons (7 tests)', () => {
     it('should compare this week vs last week', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Compare this week's revenue to last week")
+      const response = await makeAIRequest(
+        "Compare this week's revenue to last week"
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -979,7 +1243,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should compare this month vs last month', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Compare this month's revenue to last month")
+      const response = await makeAIRequest(
+        "Compare this month's revenue to last month"
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -987,7 +1253,7 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should show weekend vs weekday performance', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Compare weekend vs weekday sales")
+      const response = await makeAIRequest('Compare weekend vs weekday sales')
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -1003,7 +1269,7 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should analyze seasonal trends', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Show me seasonal sales trends")
+      const response = await makeAIRequest('Show me seasonal sales trends')
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -1011,7 +1277,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate month-over-month growth', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's our month-over-month growth rate?")
+      const response = await makeAIRequest(
+        "What's our month-over-month growth rate?"
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -1019,7 +1287,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should show year-over-year comparison', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Compare this year's performance to last year")
+      const response = await makeAIRequest(
+        "Compare this year's performance to last year"
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -1030,7 +1300,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
   describe('Multi-dimensional Analysis (10 tests)', () => {
     it('should analyze revenue by location and time', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Show me revenue by location and month")
+      const response = await makeAIRequest(
+        'Show me revenue by location and month'
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -1039,7 +1311,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should analyze product performance by location and time', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Show me Coffee sales by location and week")
+      const response = await makeAIRequest(
+        'Show me Coffee sales by location and week'
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -1047,7 +1321,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate market share by location', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What's each location's market share percentage?")
+      const response = await makeAIRequest(
+        "What's each location's market share percentage?"
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -1057,15 +1333,23 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
           (row.location || row.name || '').includes('HQ')
         )
         if (hqData) {
-          const percentage = Number(hqData.percentage || hqData.market_share || 0)
-          expectInTolerance(percentage, groundTruth.hqMarketSharePercentage, 0.05) // 5% tolerance for percentages
+          const percentage = Number(
+            hqData.percentage || hqData.market_share || 0
+          )
+          expectInTolerance(
+            percentage,
+            groundTruth.hqMarketSharePercentage,
+            0.05
+          ) // 5% tolerance for percentages
         }
       }
     })
 
     it('should perform cross-location item analysis', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Which items perform best at each location?")
+      const response = await makeAIRequest(
+        'Which items perform best at each location?'
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -1074,7 +1358,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should analyze customer behavior patterns', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("What are the most common purchase patterns?")
+      const response = await makeAIRequest(
+        'What are the most common purchase patterns?'
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -1082,7 +1368,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should calculate location efficiency metrics', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Which locations are most efficient per transaction?")
+      const response = await makeAIRequest(
+        'Which locations are most efficient per transaction?'
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -1091,7 +1379,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should analyze product mix by location', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("How does product mix vary by location?")
+      const response = await makeAIRequest(
+        'How does product mix vary by location?'
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -1099,7 +1389,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should perform time-series forecasting analysis', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Based on trends, what's the projected revenue for next month?")
+      const response = await makeAIRequest(
+        "Based on trends, what's the projected revenue for next month?"
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -1107,7 +1399,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should analyze correlation between locations', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Is there a correlation between HQ and Yonge performance?")
+      const response = await makeAIRequest(
+        'Is there a correlation between HQ and Yonge performance?'
+      )
       expectPerformance(start)
 
       expect(response.data).toBeDefined()
@@ -1115,7 +1409,9 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
     it('should perform comprehensive business health analysis', async () => {
       const start = Date.now()
-      const response = await makeAIRequest("Give me a comprehensive analysis of our business performance")
+      const response = await makeAIRequest(
+        'Give me a comprehensive analysis of our business performance'
+      )
       expectPerformance(start, 15) // Allow up to 15 seconds for complex analysis
 
       expect(response.data).toBeDefined()

@@ -128,24 +128,48 @@ export class FunctionExecutor {
       }>
 
       if (startDate && endDate) {
-        aggregateResult = await prisma.$queryRaw`
+        // Separate queries to avoid duplication from LEFT JOIN
+        const revenueResult = await prisma.$queryRaw<Array<{revenue: bigint, count: bigint}>>`
           SELECT
-            COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue,
-            COUNT(o.id)::bigint as count,
+            COALESCE(SUM("totalAmount"), 0)::bigint as revenue,
+            COUNT(id)::bigint as count
+          FROM orders
+          WHERE date >= ${startDate} AND date < ${endDate}
+        `
+
+        const quantityResult = await prisma.$queryRaw<Array<{quantity: bigint}>>`
+          SELECT
             COALESCE(SUM(li.quantity), 0)::bigint as quantity
-          FROM orders o
-          LEFT JOIN line_items li ON o.id = li."orderId"
+          FROM line_items li
+          JOIN orders o ON li."orderId" = o.id
           WHERE o.date >= ${startDate} AND o.date < ${endDate}
         `
+
+        aggregateResult = [{
+          revenue: revenueResult[0]?.revenue || BigInt(0),
+          count: revenueResult[0]?.count || BigInt(0),
+          quantity: quantityResult[0]?.quantity || BigInt(0)
+        }]
       } else {
-        aggregateResult = await prisma.$queryRaw`
+        // Separate queries to avoid duplication from LEFT JOIN
+        const revenueResult = await prisma.$queryRaw<Array<{revenue: bigint, count: bigint}>>`
           SELECT
-            COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue,
-            COUNT(o.id)::bigint as count,
-            COALESCE(SUM(li.quantity), 0)::bigint as quantity
-          FROM orders o
-          LEFT JOIN line_items li ON o.id = li."orderId"
+            COALESCE(SUM("totalAmount"), 0)::bigint as revenue,
+            COUNT(id)::bigint as count
+          FROM orders
         `
+
+        const quantityResult = await prisma.$queryRaw<Array<{quantity: bigint}>>`
+          SELECT
+            COALESCE(SUM(quantity), 0)::bigint as quantity
+          FROM line_items
+        `
+
+        aggregateResult = [{
+          revenue: revenueResult[0]?.revenue || BigInt(0),
+          count: revenueResult[0]?.count || BigInt(0),
+          quantity: quantityResult[0]?.quantity || BigInt(0)
+        }]
       }
 
       const data = aggregateResult[0]
@@ -317,7 +341,7 @@ export class FunctionExecutor {
       args.metric === 'revenue'
         ? 'COALESCE(SUM(o."totalAmount"), 0)::bigint as value'
         : args.metric === 'count'
-        ? 'COUNT(o.id)::bigint as value'
+        ? 'COUNT(DISTINCT o.id)::bigint as value'
         : 'COALESCE(SUM(li.quantity), 0)::bigint as value'
 
     let results: Array<{
@@ -388,77 +412,66 @@ export class FunctionExecutor {
       ? this.getTimeframeDates(args.timeframe)
       : { startDate: null, endDate: null }
 
-    const locationFilter =
-      args.locations && args.locations.length > 0
-        ? `AND l.name = ANY(ARRAY[${args.locations
-            .map((l) => `'${l}'`)
-            .join(',')}])`
-        : ''
+    // Build location filter for partial name matching using Prisma ORM
+    const locationNameFilters = args.locations?.map(locationName => ({
+      name: {
+        contains: locationName,
+        mode: 'insensitive' as const
+      }
+    })) || []
 
-    let results: Array<{
-      location_name: string
-      revenue: bigint
-      count: bigint
-      avg_transaction: number
-    }>
+    // Get all locations with their orders using Prisma ORM
+    const locations = await prisma.location.findMany({
+      where: locationNameFilters.length > 0 ? {
+        OR: locationNameFilters
+      } : undefined,
+      include: {
+        orders: {
+          where: startDate && endDate ? {
+            date: {
+              gte: startDate,
+              lt: endDate
+            }
+          } : undefined
+        }
+      }
+    })
 
-    if (startDate && endDate) {
-      results = await prisma.$queryRaw`
-        SELECT
-          l.name as location_name,
-          COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue,
-          COUNT(o.id)::bigint as count,
-          CASE
-            WHEN COUNT(o.id) > 0 THEN COALESCE(SUM(o."totalAmount"), 0)::float / COUNT(o.id) / 100
-            ELSE 0
-          END as avg_transaction
-        FROM locations l
-        LEFT JOIN orders o ON l."squareLocationId" = o."locationId"
-        WHERE o.date >= ${startDate} AND o.date < ${endDate} ${Prisma.raw(locationFilter)}
-        GROUP BY l.name
-        ORDER BY revenue DESC
-      `
-    } else {
-      results = await prisma.$queryRaw`
-        SELECT
-          l.name as location_name,
-          COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue,
-          COUNT(o.id)::bigint as count,
-          CASE
-            WHEN COUNT(o.id) > 0 THEN COALESCE(SUM(o."totalAmount"), 0)::float / COUNT(o.id) / 100
-            ELSE 0
-          END as avg_transaction
-        FROM locations l
-        LEFT JOIN orders o ON l."squareLocationId" = o."locationId"
-        WHERE 1=1 ${Prisma.raw(locationFilter)}
-        GROUP BY l.name
-        ORDER BY revenue DESC
-      `
-    }
+    // Calculate metrics for each location
+    const results = locations.map(location => {
+      const orders = location.orders
+      const revenue = orders.reduce((sum, order) => sum + order.totalAmount, 0)
+      const count = orders.length
+      const avgTransaction = count > 0 ? revenue / count / 100 : 0
+
+      return {
+        location: location.name,
+        revenue: revenue / 100, // Convert cents to dollars
+        count: count,
+        avg_transaction: avgTransaction
+      }
+    })
+
+    // Sort by revenue descending
+    results.sort((a, b) => b.revenue - a.revenue)
 
     // Calculate market share if requested
-    const totalRevenue = results.reduce(
-      (sum, row) => sum + Number(row.revenue),
-      0
-    )
+    const totalRevenue = results.reduce((sum, r) => sum + r.revenue, 0)
 
     return results.map((row) => {
-      const revenue = Number(row.revenue) / 100
-      const count = Number(row.count)
-
       const result: QueryResultRow = {
-        location: row.location_name,
+        location: row.location,
       }
 
-      if (args.metrics.includes('revenue')) result.revenue = revenue
-      if (args.metrics.includes('count')) result.count = count
+      if (args.metrics.includes('revenue')) result.revenue = row.revenue
+      if (args.metrics.includes('count')) result.count = row.count
       if (args.metrics.includes('avg_transaction'))
         result.avg_transaction = row.avg_transaction
       if (args.metrics.includes('market_share') && totalRevenue > 0) {
-        result.market_share = (revenue / (totalRevenue / 100)) * 100
+        result.market_share = (row.revenue / totalRevenue) * 100
       }
       if (args.metrics.includes('efficiency')) {
-        result.efficiency = count > 0 ? revenue / count : 0
+        result.efficiency = row.count > 0 ? row.revenue / row.count : 0
       }
 
       return result
@@ -773,27 +786,41 @@ export class FunctionExecutor {
   }): Promise<QueryResultRow[]> {
     const results: QueryResultRow[] = []
 
-    // Get overall business metrics
-    const overallStats = await prisma.$queryRaw<
-      Array<{
+    // Get overall business metrics using separated queries to avoid duplication
+    const [overallOrderStats, overallLineItemStats] = await Promise.all([
+      prisma.$queryRaw<Array<{
         total_revenue: bigint
         total_transactions: bigint
-        total_quantity: bigint
         earliest_date: Date
         latest_date: Date
+      }>>`
+        SELECT
+          COALESCE(SUM("totalAmount"), 0)::bigint as total_revenue,
+          COUNT(id)::bigint as total_transactions,
+          MIN(date) as earliest_date,
+          MAX(date) as latest_date
+        FROM orders
+      `,
+      prisma.$queryRaw<Array<{
+        total_quantity: bigint
         total_line_items: bigint
-      }>
-    >`
-      SELECT
-        COALESCE(SUM(o."totalAmount"), 0)::bigint as total_revenue,
-        COUNT(o.id)::bigint as total_transactions,
-        COALESCE(SUM(li.quantity), 0)::bigint as total_quantity,
-        MIN(o.date) as earliest_date,
-        MAX(o.date) as latest_date,
-        COUNT(li.id)::bigint as total_line_items
-      FROM orders o
-      LEFT JOIN line_items li ON o.id = li."orderId"
-    `
+      }>>`
+        SELECT
+          COALESCE(SUM(quantity), 0)::bigint as total_quantity,
+          COUNT(id)::bigint as total_line_items
+        FROM line_items
+      `
+    ])
+
+    // Combine the results
+    const overallStats = [{
+      total_revenue: overallOrderStats[0]?.total_revenue || BigInt(0),
+      total_transactions: overallOrderStats[0]?.total_transactions || BigInt(0),
+      total_quantity: overallLineItemStats[0]?.total_quantity || BigInt(0),
+      earliest_date: overallOrderStats[0]?.earliest_date,
+      latest_date: overallOrderStats[0]?.latest_date,
+      total_line_items: overallLineItemStats[0]?.total_line_items || BigInt(0)
+    }]
 
     const data = overallStats[0]
     const totalRevenue = Number(data.total_revenue) / 100
@@ -984,24 +1011,48 @@ export class FunctionExecutor {
     }>
 
     if (startDate && endDate) {
-      result = await prisma.$queryRaw`
+      // Separate queries to avoid duplication from LEFT JOIN
+      const revenueResult = await prisma.$queryRaw<Array<{revenue: bigint, count: bigint}>>`
         SELECT
-          COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue,
-          COUNT(o.id)::bigint as count,
+          COALESCE(SUM("totalAmount"), 0)::bigint as revenue,
+          COUNT(id)::bigint as count
+        FROM orders
+        WHERE date >= ${startDate} AND date < ${endDate}
+      `
+
+      const quantityResult = await prisma.$queryRaw<Array<{quantity: bigint}>>`
+        SELECT
           COALESCE(SUM(li.quantity), 0)::bigint as quantity
-        FROM orders o
-        LEFT JOIN line_items li ON o.id = li."orderId"
+        FROM line_items li
+        JOIN orders o ON li."orderId" = o.id
         WHERE o.date >= ${startDate} AND o.date < ${endDate}
       `
+
+      result = [{
+        revenue: revenueResult[0]?.revenue || BigInt(0),
+        count: revenueResult[0]?.count || BigInt(0),
+        quantity: quantityResult[0]?.quantity || BigInt(0)
+      }]
     } else {
-      result = await prisma.$queryRaw`
+      // Separate queries to avoid duplication from LEFT JOIN
+      const revenueResult = await prisma.$queryRaw<Array<{revenue: bigint, count: bigint}>>`
         SELECT
-          COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue,
-          COUNT(o.id)::bigint as count,
-          COALESCE(SUM(li.quantity), 0)::bigint as quantity
-        FROM orders o
-        LEFT JOIN line_items li ON o.id = li."orderId"
+          COALESCE(SUM("totalAmount"), 0)::bigint as revenue,
+          COUNT(id)::bigint as count
+        FROM orders
       `
+
+      const quantityResult = await prisma.$queryRaw<Array<{quantity: bigint}>>`
+        SELECT
+          COALESCE(SUM(quantity), 0)::bigint as quantity
+        FROM line_items
+      `
+
+      result = [{
+        revenue: revenueResult[0]?.revenue || BigInt(0),
+        count: revenueResult[0]?.count || BigInt(0),
+        quantity: quantityResult[0]?.quantity || BigInt(0)
+      }]
     }
 
     const data = result[0]

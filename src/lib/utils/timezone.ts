@@ -4,16 +4,21 @@
  */
 
 /**
- * Get current date in Toronto timezone
+ * Get current date in Toronto timezone, converted to UTC for database queries
+ * This matches the logic in get-todays-sales.js
  */
 export function getTorontoDate(): Date {
   const now = new Date()
+  const torontoToday = new Date(now.toLocaleString("en-US", { timeZone: "America/Toronto" }))
 
-  // Convert to Toronto timezone
-  const torontoTime = new Date(now.toLocaleString("en-US", {timeZone: "America/Toronto"}))
+  // Set to start of day in Toronto (00:00:00)
+  const startOfDayToronto = new Date(torontoToday)
+  startOfDayToronto.setHours(0, 0, 0, 0)
 
-  // Create date at midnight Toronto time
-  return new Date(torontoTime.getFullYear(), torontoTime.getMonth(), torontoTime.getDate())
+  // Convert Toronto time to UTC for database query (matches get-todays-sales.js logic)
+  const startOfDayUTC = new Date(startOfDayToronto.getTime() + (startOfDayToronto.getTimezoneOffset() * 60000))
+
+  return startOfDayUTC
 }
 
 /**
@@ -66,11 +71,14 @@ export function debugTorontoTimes() {
   const torontoNow = new Date(utcNow.toLocaleString("en-US", {timeZone: "America/Toronto"}))
   const torontoToday = getTorontoDate()
 
+  // Calculate end of day boundaries to match get-todays-sales.js logic
+  const torontoTodayEnd = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Toronto" }))
+  torontoTodayEnd.setHours(23, 59, 59, 999)
+  const todayEndUTC = new Date(torontoTodayEnd.getTime() + (torontoTodayEnd.getTimezoneOffset() * 60000))
+
   console.log('🕐 Timezone Debug:')
   console.log('  UTC Now:', utcNow.toISOString())
   console.log('  Toronto Now:', torontoNow.toString())
   console.log('  Toronto Today (midnight):', torontoToday.toISOString())
-
-  const { startDate, endDate } = getTorontoTimeframeDates('today')
-  console.log('  Today range:', startDate.toISOString(), 'to', endDate.toISOString())
+  console.log('  Today range:', torontoToday.toISOString(), 'to', todayEndUTC.toISOString())
 }

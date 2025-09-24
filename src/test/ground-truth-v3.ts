@@ -172,60 +172,99 @@ export async function calculateGroundTruthV3(): Promise<GroundTruthV3> {
   const twoMonthsAgo = new Date(today)
   twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2)
 
+  // Calculate end of day boundaries to match get-todays-sales.js logic
+  const todayEnd = new Date(today)
+  const torontoTodayEnd = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Toronto" }))
+  torontoTodayEnd.setHours(23, 59, 59, 999)
+  const todayEndUTC = new Date(torontoTodayEnd.getTime() + (torontoTodayEnd.getTimezoneOffset() * 60000))
+
   // Batch query strategy: Execute related queries in parallel for performance
   console.log('⚡ Executing batch queries for optimal performance...')
 
-  // BATCH 1: Time-based aggregations using optimized database queries
+  // BATCH 1: Time-based aggregations using separated revenue and quantity queries
   const [
-    todayStats,
-    yesterdayStats,
-    lastWeekStats,
-    lastMonthStats,
+    todayRevenueStats,
+    todayQuantityStats,
+    yesterdayRevenueStats,
+    yesterdayQuantityStats,
+    lastWeekRevenueStats,
+    lastWeekQuantityStats,
+    lastMonthRevenueStats,
+    lastMonthQuantityStats,
     previousWeekStats,
     previousMonthStats,
-    overallStats
+    overallRevenueStats,
+    overallQuantityStats
   ] = await Promise.all([
-    // Today
-    prisma.$queryRaw<Array<{revenue: bigint, count: bigint, quantity: bigint}>>`
+    // Today - Revenue and count from orders only
+    prisma.$queryRaw<Array<{revenue: bigint, count: bigint}>>`
       SELECT
-        COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue,
-        COUNT(o.id)::bigint as count,
-        COALESCE(SUM(li.quantity), 0)::bigint as quantity
-      FROM orders o
-      LEFT JOIN line_items li ON o.id = li."orderId"
-      WHERE o.date >= ${today} AND o.date < ${new Date(today.getTime() + 24 * 60 * 60 * 1000)}
+        COALESCE(SUM("totalAmount"), 0)::bigint as revenue,
+        COUNT(id)::bigint as count
+      FROM orders
+      WHERE date >= ${today} AND date <= ${todayEndUTC}
     `,
 
-    // Yesterday
-    prisma.$queryRaw<Array<{revenue: bigint, count: bigint, quantity: bigint}>>`
+    // Today - Quantity from line items
+    prisma.$queryRaw<Array<{quantity: bigint}>>`
       SELECT
-        COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue,
-        COUNT(o.id)::bigint as count,
         COALESCE(SUM(li.quantity), 0)::bigint as quantity
-      FROM orders o
-      LEFT JOIN line_items li ON o.id = li."orderId"
+      FROM line_items li
+      JOIN orders o ON li."orderId" = o.id
+      WHERE o.date >= ${today} AND o.date <= ${todayEndUTC}
+    `,
+
+    // Yesterday - Revenue and count from orders only
+    prisma.$queryRaw<Array<{revenue: bigint, count: bigint}>>`
+      SELECT
+        COALESCE(SUM("totalAmount"), 0)::bigint as revenue,
+        COUNT(id)::bigint as count
+      FROM orders
+      WHERE date >= ${yesterday} AND date < ${today}
+    `,
+
+    // Yesterday - Quantity from line items
+    prisma.$queryRaw<Array<{quantity: bigint}>>`
+      SELECT
+        COALESCE(SUM(li.quantity), 0)::bigint as quantity
+      FROM line_items li
+      JOIN orders o ON li."orderId" = o.id
       WHERE o.date >= ${yesterday} AND o.date < ${today}
     `,
 
-    // Last week
-    prisma.$queryRaw<Array<{revenue: bigint, count: bigint, quantity: bigint}>>`
+    // Last week - Revenue and count from orders only
+    prisma.$queryRaw<Array<{revenue: bigint, count: bigint}>>`
       SELECT
-        COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue,
-        COUNT(o.id)::bigint as count,
+        COALESCE(SUM("totalAmount"), 0)::bigint as revenue,
+        COUNT(id)::bigint as count
+      FROM orders
+      WHERE date >= ${lastWeekStart} AND date < ${today}
+    `,
+
+    // Last week - Quantity from line items
+    prisma.$queryRaw<Array<{quantity: bigint}>>`
+      SELECT
         COALESCE(SUM(li.quantity), 0)::bigint as quantity
-      FROM orders o
-      LEFT JOIN line_items li ON o.id = li."orderId"
+      FROM line_items li
+      JOIN orders o ON li."orderId" = o.id
       WHERE o.date >= ${lastWeekStart} AND o.date < ${today}
     `,
 
-    // Last month
-    prisma.$queryRaw<Array<{revenue: bigint, count: bigint, quantity: bigint}>>`
+    // Last month - Revenue and count from orders only
+    prisma.$queryRaw<Array<{revenue: bigint, count: bigint}>>`
       SELECT
-        COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue,
-        COUNT(o.id)::bigint as count,
+        COALESCE(SUM("totalAmount"), 0)::bigint as revenue,
+        COUNT(id)::bigint as count
+      FROM orders
+      WHERE date >= ${lastMonthStart} AND date < ${today}
+    `,
+
+    // Last month - Quantity from line items
+    prisma.$queryRaw<Array<{quantity: bigint}>>`
+      SELECT
         COALESCE(SUM(li.quantity), 0)::bigint as quantity
-      FROM orders o
-      LEFT JOIN line_items li ON o.id = li."orderId"
+      FROM line_items li
+      JOIN orders o ON li."orderId" = o.id
       WHERE o.date >= ${lastMonthStart} AND o.date < ${today}
     `,
 
@@ -243,24 +282,30 @@ export async function calculateGroundTruthV3(): Promise<GroundTruthV3> {
       WHERE date >= ${twoMonthsAgo} AND date < ${lastMonthStart}
     `,
 
-    // Overall statistics
+    // Overall statistics - Revenue and count from orders
     prisma.$queryRaw<Array<{
       revenue: bigint,
       count: bigint,
-      quantity: bigint,
       earliest_date: Date,
-      latest_date: Date,
+      latest_date: Date
+    }>>`
+      SELECT
+        COALESCE(SUM("totalAmount"), 0)::bigint as revenue,
+        COUNT(id)::bigint as count,
+        MIN(date) as earliest_date,
+        MAX(date) as latest_date
+      FROM orders
+    `,
+
+    // Overall statistics - Quantity and line item count
+    prisma.$queryRaw<Array<{
+      quantity: bigint,
       total_line_items: bigint
     }>>`
       SELECT
-        COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue,
-        COUNT(o.id)::bigint as count,
-        COALESCE(SUM(li.quantity), 0)::bigint as quantity,
-        MIN(o.date) as earliest_date,
-        MAX(o.date) as latest_date,
-        COUNT(li.id)::bigint as total_line_items
-      FROM orders o
-      LEFT JOIN line_items li ON o.id = li."orderId"
+        COALESCE(SUM(quantity), 0)::bigint as quantity,
+        COUNT(id)::bigint as total_line_items
+      FROM line_items
     `
   ])
 
@@ -286,7 +331,7 @@ export async function calculateGroundTruthV3(): Promise<GroundTruthV3> {
         l."squareLocationId" as location_id,
         l.name as location_name,
         COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue,
-        COUNT(o.id)::bigint as count
+        COUNT(DISTINCT o.id)::bigint as count
       FROM locations l
       LEFT JOIN orders o ON l."squareLocationId" = o."locationId"
       GROUP BY l."squareLocationId", l.name
@@ -298,7 +343,7 @@ export async function calculateGroundTruthV3(): Promise<GroundTruthV3> {
       SELECT l.name as location_name, COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue
       FROM locations l
       LEFT JOIN orders o ON l."squareLocationId" = o."locationId"
-      WHERE o.date >= ${today} AND o.date < ${new Date(today.getTime() + 24 * 60 * 60 * 1000)}
+      WHERE o.date >= ${today} AND o.date <= ${todayEndUTC}
       GROUP BY l.name
       ORDER BY revenue DESC
       LIMIT 1
@@ -432,7 +477,7 @@ export async function calculateGroundTruthV3(): Promise<GroundTruthV3> {
       WITH period_items AS (
         SELECT DISTINCT
           CASE
-            WHEN o.date >= ${today} THEN 'today'
+            WHEN o.date >= ${today} AND o.date <= ${todayEndUTC} THEN 'today'
             WHEN o.date >= ${yesterday} AND o.date < ${today} THEN 'yesterday'
             WHEN o.date >= ${lastWeekStart} AND o.date < ${today} THEN 'last_week'
             WHEN o.date >= ${lastMonthStart} AND o.date < ${today} THEN 'last_month'
@@ -454,11 +499,38 @@ export async function calculateGroundTruthV3(): Promise<GroundTruthV3> {
   console.log('⚡ Calculating derived metrics and complex aggregations...')
 
   // Process raw query results and convert BigInt to number
-  const todayData = todayStats[0]
-  const yesterdayData = yesterdayStats[0]
-  const lastWeekData = lastWeekStats[0]
-  const lastMonthData = lastMonthStats[0]
-  const overallData = overallStats[0]
+  const todayData = {
+    revenue: todayRevenueStats[0]?.revenue,
+    count: todayRevenueStats[0]?.count,
+    quantity: todayQuantityStats[0]?.quantity
+  }
+
+  const yesterdayData = {
+    revenue: yesterdayRevenueStats[0]?.revenue,
+    count: yesterdayRevenueStats[0]?.count,
+    quantity: yesterdayQuantityStats[0]?.quantity
+  }
+
+  const lastWeekData = {
+    revenue: lastWeekRevenueStats[0]?.revenue,
+    count: lastWeekRevenueStats[0]?.count,
+    quantity: lastWeekQuantityStats[0]?.quantity
+  }
+
+  const lastMonthData = {
+    revenue: lastMonthRevenueStats[0]?.revenue,
+    count: lastMonthRevenueStats[0]?.count,
+    quantity: lastMonthQuantityStats[0]?.quantity
+  }
+
+  const overallData = {
+    revenue: overallRevenueStats[0]?.revenue,
+    count: overallRevenueStats[0]?.count,
+    quantity: overallQuantityStats[0]?.quantity,
+    earliest_date: overallRevenueStats[0]?.earliest_date,
+    latest_date: overallRevenueStats[0]?.latest_date,
+    total_line_items: overallQuantityStats[0]?.total_line_items
+  }
 
   // Helper function to safely convert BigInt to number (in cents to dollars)
   const toNumber = (bigintValue: bigint | null | undefined): number => {
