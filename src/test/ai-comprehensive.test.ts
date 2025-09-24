@@ -265,7 +265,7 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
     it('should give a breakdown of revenue sales by location today', async () => {
       const start = Date.now()
       const response = await makeAIRequest(
-        'Give me a breakdown of revenue sales by location today'
+        'Show me the revenue for each location today'
       )
       expectPerformance(start)
 
