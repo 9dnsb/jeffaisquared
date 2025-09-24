@@ -1,6 +1,6 @@
 {
   "statistics": {
-    "detectionDate": "2025-09-23T18:49:06.354Z",
+    "detectionDate": "2025-09-24T18:25:49.359Z",
     "formats": {
       "typescript": {
         "sources": {
@@ -198,7 +198,7 @@
           },
           "src/lib/validation/schemas.ts": {
             "lines": 267,
-            "tokens": 3112,
+            "tokens": 3097,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -211,6 +211,18 @@
           "src/lib/utils/typeGuards.ts": {
             "lines": 195,
             "tokens": 1390,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/lib/utils/timezone.ts": {
+            "lines": 83,
+            "tokens": 755,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -353,7 +365,7 @@
             "newClones": 0
           },
           "src/lib/ai-v3/rate-limiter.ts": {
-            "lines": 97,
+            "lines": 99,
             "tokens": 747,
             "sources": 1,
             "clones": 0,
@@ -389,8 +401,8 @@
             "newClones": 0
           },
           "src/lib/ai-v3/function-caller.ts": {
-            "lines": 533,
-            "tokens": 4588,
+            "lines": 603,
+            "tokens": 4952,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -629,14 +641,14 @@
             "newClones": 0
           },
           "src/test/ground-truth-v3.ts": {
-            "lines": 698,
-            "tokens": 5489,
+            "lines": 772,
+            "tokens": 5969,
             "sources": 1,
-            "clones": 1,
-            "duplicatedLines": 8,
-            "duplicatedTokens": 117,
-            "percentage": 1.15,
-            "percentageTokens": 2.13,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -644,11 +656,11 @@
             "lines": 299,
             "tokens": 2684,
             "sources": 1,
-            "clones": 3,
-            "duplicatedLines": 30,
-            "duplicatedTokens": 321,
-            "percentage": 10.03,
-            "percentageTokens": 11.96,
+            "clones": 2,
+            "duplicatedLines": 22,
+            "duplicatedTokens": 204,
+            "percentage": 7.36,
+            "percentageTokens": 7.6,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
@@ -810,14 +822,14 @@
           }
         },
         "total": {
-          "lines": 16597,
-          "tokens": 135858,
-          "sources": 67,
-          "clones": 27,
-          "duplicatedLines": 290,
-          "duplicatedTokens": 2793,
-          "percentage": 1.75,
-          "percentageTokens": 2.06,
+          "lines": 16826,
+          "tokens": 137442,
+          "sources": 68,
+          "clones": 26,
+          "duplicatedLines": 282,
+          "duplicatedTokens": 2676,
+          "percentage": 1.68,
+          "percentageTokens": 1.95,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -1588,14 +1600,14 @@
       }
     },
     "total": {
-      "lines": 20814,
-      "tokens": 169562,
-      "sources": 128,
-      "clones": 28,
-      "duplicatedLines": 301,
-      "duplicatedTokens": 2920,
-      "percentage": 1.45,
-      "percentageTokens": 1.72,
+      "lines": 21043,
+      "tokens": 171146,
+      "sources": 129,
+      "clones": 27,
+      "duplicatedLines": 293,
+      "duplicatedTokens": 2803,
+      "percentage": 1.39,
+      "percentageTokens": 1.64,
       "newDuplicatedLines": 0,
       "newClones": 0
     }
@@ -2102,42 +2114,6 @@
           "line": 27,
           "column": 9,
           "position": 287
-        }
-      }
-    },
-    {
-      "format": "typescript",
-      "lines": 9,
-      "fragment": "const now = new Date()\r\n  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())\r\n  const yesterday = new Date(today)\r\n  yesterday.setDate(yesterday.getDate() - 1)\r\n\r\n  const lastWeekStart = new Date(today)\r\n  lastWeekStart.setDate(lastWeekStart.getDate() - 7)\r\n\r\n  const thisMonthStart",
-      "tokens": 0,
-      "firstFile": {
-        "name": "src\\test\\ai-test-utils.ts",
-        "start": 41,
-        "end": 49,
-        "startLoc": {
-          "line": 41,
-          "column": 3,
-          "position": 258
-        },
-        "endLoc": {
-          "line": 49,
-          "column": 15,
-          "position": 375
-        }
-      },
-      "secondFile": {
-        "name": "src\\test\\ground-truth-v3.ts",
-        "start": 160,
-        "end": 166,
-        "startLoc": {
-          "line": 160,
-          "column": 3,
-          "position": 1002
-        },
-        "endLoc": {
-          "line": 166,
-          "column": 15,
-          "position": 1115
         }
       }
     },

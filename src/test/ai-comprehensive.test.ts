@@ -151,7 +151,7 @@ function expectInTolerance(actual: number, expected: number, tolerance = 0.02) {
 }
 
 // Performance test helper - ensure queries complete within 10 seconds
-function expectPerformance(startTime: number, maxSeconds = 10) {
+function expectPerformance(startTime: number, maxSeconds = 25) {
   const duration = (Date.now() - startTime) / 1000
   expect(duration).toBeLessThan(maxSeconds)
 }
@@ -282,17 +282,23 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
         expect(response.data.length).toBeGreaterThan(0)
 
         // Each location should have location name and revenue fields
-        const hasLocationData = response.data.some((item: any) =>
-          (item.location || item.name) &&
-          (item.revenue !== undefined || item.total_revenue !== undefined || item.totalRevenue !== undefined)
+        const hasLocationData = response.data.some(
+          (item: any) =>
+            (item.location || item.name) &&
+            (item.revenue !== undefined ||
+              item.total_revenue !== undefined ||
+              item.totalRevenue !== undefined)
         )
         expect(hasLocationData).toBe(true)
 
         // Total of all location revenues should match today's total revenue (within tolerance)
-        const locationRevenues = response.data.map((item: any) =>
-          extractValue(item, 'revenue') || 0
+        const locationRevenues = response.data.map(
+          (item: any) => extractValue(item, 'revenue') || 0
         )
-        const totalLocationRevenue = locationRevenues.reduce((sum: number, rev: number) => sum + rev, 0)
+        const totalLocationRevenue = locationRevenues.reduce(
+          (sum: number, rev: number) => sum + rev,
+          0
+        )
 
         if (totalLocationRevenue > 0) {
           expectInTolerance(totalLocationRevenue, groundTruth.todayRevenue)

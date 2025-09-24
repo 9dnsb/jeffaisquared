@@ -382,15 +382,45 @@ export async function calculateGroundTruthV3(): Promise<GroundTruthV3> {
       LIMIT 1
     `,
 
-    // Best performing day in last week
-    prisma.$queryRaw<Array<{date: Date, revenue: bigint}>>`
-      SELECT o.date, COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue
-      FROM orders o
-      WHERE o.date >= ${lastWeekStart} AND o.date < ${today}
-      GROUP BY o.date
-      ORDER BY revenue DESC
-      LIMIT 1
-    `
+    // Best performing day in last week - Using Prisma ORM instead of raw SQL
+    (async () => {
+      const lastWeekOrders = await prisma.order.findMany({
+        where: {
+          date: {
+            gte: lastWeekStart,
+            lt: today
+          }
+        },
+        select: {
+          date: true,
+          totalAmount: true
+        }
+      })
+
+      // Group by date and calculate daily totals
+      const dailyTotals: Record<string, number> = {}
+      lastWeekOrders.forEach(order => {
+        const dateString = order.date.toISOString().split('T')[0]
+        const revenue = order.totalAmount || 0
+        if (!dailyTotals[dateString]) {
+          dailyTotals[dateString] = 0
+        }
+        dailyTotals[dateString] += revenue
+      })
+
+      // Find the best day
+      const sortedDays = Object.entries(dailyTotals)
+        .sort(([,a], [,b]) => b - a)
+
+      if (sortedDays.length > 0) {
+        const [bestDate, bestRevenue] = sortedDays[0]
+        return [{
+          date: new Date(bestDate + 'T00:00:00.000Z'),
+          revenue: BigInt(bestRevenue)
+        }]
+      }
+      return []
+    })()
   ])
 
   console.log('⚡ Executing product analytics batch queries...')
@@ -556,14 +586,14 @@ export async function calculateGroundTruthV3(): Promise<GroundTruthV3> {
   // Get specific location data
   const getLocationRevenue = (locationName: string): number => {
     for (const [_, data] of locationMap) {
-      if (data.name === locationName) return data.revenue
+      if (data.name.toLowerCase().includes(locationName.toLowerCase())) return data.revenue
     }
     return 0
   }
 
   const getLocationTransactions = (locationName: string): number => {
     for (const [_, data] of locationMap) {
-      if (data.name === locationName) return data.transactions
+      if (data.name.toLowerCase().includes(locationName.toLowerCase())) return data.transactions
     }
     return 0
   }

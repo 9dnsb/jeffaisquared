@@ -317,14 +317,72 @@ export class FunctionExecutor {
     const { startDate, endDate } = this.getTimeframeDates(args.timeframe)
     const limit = args.limit || 1
 
+    // Handle only 'day' grouping with Prisma ORM for now (most common use case)
+    if (args.group_by === 'day') {
+      // Use Prisma ORM to fetch orders and group by date manually
+      const whereClause = startDate && endDate ? {
+        date: {
+          gte: startDate,
+          lt: endDate
+        }
+      } : {}
+
+      const orders = await prisma.order.findMany({
+        where: whereClause,
+        select: {
+          date: true,
+          totalAmount: true,
+          lineItems: args.metric === 'quantity' ? {
+            select: {
+              quantity: true
+            }
+          } : undefined
+        }
+      })
+
+      // Group by calendar date (not timestamp)
+      const dailyTotals: Record<string, { revenue: number, count: number, quantity: number }> = {}
+
+      orders.forEach(order => {
+        const dateString = order.date.toISOString().split('T')[0] // YYYY-MM-DD format
+
+        if (!dailyTotals[dateString]) {
+          dailyTotals[dateString] = { revenue: 0, count: 0, quantity: 0 }
+        }
+
+        dailyTotals[dateString].revenue += order.totalAmount || 0
+        dailyTotals[dateString].count += 1
+
+        if (order.lineItems) {
+          dailyTotals[dateString].quantity += order.lineItems.reduce((sum, li) => sum + (li.quantity || 0), 0)
+        }
+      })
+
+      // Sort by the requested metric and take top results
+      const sortedDays = Object.entries(dailyTotals)
+        .sort(([, a], [, b]) => {
+          const aValue = args.metric === 'revenue' ? a.revenue :
+                        args.metric === 'count' ? a.count : a.quantity
+          const bValue = args.metric === 'revenue' ? b.revenue :
+                        args.metric === 'count' ? b.count : b.quantity
+          return bValue - aValue
+        })
+        .slice(0, limit)
+
+      return sortedDays.map(([date, totals], index) => ({
+        day: date,
+        [args.metric]: args.metric === 'revenue' ? totals.revenue / 100 : // Convert cents to dollars
+                     args.metric === 'count' ? totals.count :
+                     totals.quantity,
+        rank: index + 1,
+      })) as QueryResultRow[]
+    }
+
+    // Fallback to original raw SQL for other groupings (week, month)
     let groupByClause: string
     let selectClause: string
 
     switch (args.group_by) {
-      case 'day':
-        groupByClause = 'o.date'
-        selectClause = 'o.date::text as date'
-        break
       case 'week':
         groupByClause = "DATE_TRUNC('week', o.date)"
         selectClause = "DATE_TRUNC('week', o.date)::text as week"
