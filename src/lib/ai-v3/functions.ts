@@ -293,6 +293,39 @@ export const getLocationRankings: ChatCompletionTool = {
   }
 }
 
+export const getLocationBreakdownByMonth: ChatCompletionTool = {
+  type: 'function',
+  function: {
+    name: 'get_location_breakdown_by_month',
+    description: 'IMPORTANT: Use this function when user asks for location breakdown or sales by location for any specific month (e.g., "breakdown of sales by location for August 2025", "location performance in July 2025", "which locations performed best in August"). Returns detailed location-by-location revenue, transaction, and performance metrics.',
+    parameters: {
+      type: 'object',
+      properties: {
+        month_year: {
+          type: 'string',
+          description: 'Month and year in natural language format (e.g., "August 2025", "July 2025", "December 2024", "January 2025")'
+        },
+        include_performance_metrics: {
+          type: 'boolean',
+          description: 'Whether to include average order value, market share percentages, and performance rankings for each location'
+        },
+        sort_by: {
+          type: 'string',
+          enum: ['revenue', 'transactions', 'avg_order_value'],
+          description: 'How to sort the location breakdown results (default: revenue)'
+        },
+        include_totals: {
+          type: 'boolean',
+          description: 'Whether to include overall totals and summary statistics across all locations'
+        }
+      },
+      required: ['month_year', 'include_performance_metrics', 'sort_by', 'include_totals'],
+      additionalProperties: false
+    },
+    strict: true
+  }
+}
+
 // ===== PRODUCT ANALYTICS FUNCTIONS =====
 
 export const getTopProducts: ChatCompletionTool = {
@@ -480,6 +513,7 @@ export const ALL_SALES_FUNCTIONS: ChatCompletionTool[] = [
   getLocationMetrics,
   compareLocations,
   getLocationRankings,
+  getLocationBreakdownByMonth,
 
   // Product functions (20 tests)
   getTopProducts,
@@ -501,6 +535,7 @@ export const FUNCTION_HANDLERS = {
   'get_location_metrics': 'handleLocationMetrics',
   'compare_locations': 'handleCompareLocations',
   'get_location_rankings': 'handleLocationRankings',
+  'get_location_breakdown_by_month': 'handleLocationBreakdownByMonth',
   'get_top_products': 'handleTopProducts',
   'get_product_location_analysis': 'handleProductLocationAnalysis',
   'get_product_categories': 'handleProductCategories',

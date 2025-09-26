@@ -65,6 +65,9 @@ export class FunctionExecutor {
         case 'get_location_rankings':
           result = await this.handleLocationRankings(args)
           break
+        case 'get_location_breakdown_by_month':
+          result = await this.handleLocationBreakdownByMonth(args)
+          break
         case 'get_top_products':
           result = await this.handleTopProducts(args)
           break
@@ -808,6 +811,126 @@ export class FunctionExecutor {
           ? Number(row.metric_value) / 100
           : Number(row.metric_value),
     })) as QueryResultRow[]
+  }
+
+  private async handleLocationBreakdownByMonth(args: {
+    month_year: string
+    include_performance_metrics: boolean
+    sort_by: 'revenue' | 'transactions' | 'avg_order_value'
+    include_totals: boolean
+  }): Promise<QueryResultRow[]> {
+    console.log('🔍 DEBUG handleLocationBreakdownByMonth called with args:', JSON.stringify(args, null, 2))
+
+    // Parse the month_year into a date range
+    const parseResult = parseDynamicTimeframe(args.month_year)
+
+    if (!parseResult.success) {
+      logger.error(`Failed to parse month_year: ${args.month_year}`, new Error(parseResult.error))
+      throw new Error(`Unable to parse month: ${parseResult.error}`)
+    }
+
+    const { startDate, endDate, description } = parseResult.dateRange!
+    console.log('🔍 DEBUG parsed date range:', { startDate, endDate, description })
+
+    logger.data(`Getting location breakdown for: ${description}`, undefined, {
+      originalInput: args.month_year,
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
+      sortBy: args.sort_by
+    })
+
+    // Get location breakdown with revenue, transaction count, and averages
+    const locationBreakdown = await prisma.$queryRaw<Array<{
+      location_name: string
+      revenue: bigint
+      transaction_count: bigint
+    }>>`
+      SELECT
+        l.name as location_name,
+        COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue,
+        COUNT(o.id)::bigint as transaction_count
+      FROM locations l
+      LEFT JOIN orders o ON l."squareLocationId" = o."locationId"
+                         AND o.date >= ${startDate}
+                         AND o.date <= ${endDate}
+      GROUP BY l.name
+      HAVING COUNT(o.id) > 0
+      ORDER BY
+        CASE
+          WHEN '${args.sort_by}' = 'revenue' THEN COALESCE(SUM(o."totalAmount"), 0)
+          WHEN '${args.sort_by}' = 'transactions' THEN COUNT(o.id)
+          WHEN '${args.sort_by}' = 'avg_order_value' THEN
+            CASE WHEN COUNT(o.id) > 0 THEN COALESCE(SUM(o."totalAmount"), 0) / COUNT(o.id) ELSE 0 END
+          ELSE COALESCE(SUM(o."totalAmount"), 0)
+        END DESC
+    `
+
+    const results: QueryResultRow[] = []
+
+    // Calculate totals if requested
+    let totalRevenue = BigInt(0)
+    let totalTransactions = BigInt(0)
+
+    // Process each location
+    locationBreakdown.forEach((location, index) => {
+      const revenue = Number(location.revenue) / 100 // Convert from cents
+      const transactions = Number(location.transaction_count)
+      const avgOrderValue = transactions > 0 ? revenue / transactions : 0
+
+      totalRevenue += location.revenue
+      totalTransactions += location.transaction_count
+
+      const locationData: QueryResultRow = {
+        location: location.location_name,
+        revenue: revenue,
+        count: transactions, // Use 'count' instead of 'transactions'
+        avg_transaction: avgOrderValue, // Use standard field name
+        rank: index + 1
+      }
+
+      if (args.include_performance_metrics) {
+        // Calculate market share (will be updated after we know total)
+        locationData.market_share = 0 // Calculated below, use 'market_share' instead of 'market_share_percent'
+      }
+
+      results.push(locationData)
+    })
+
+    // Calculate market shares if performance metrics are requested
+    if (args.include_performance_metrics && totalRevenue > 0) {
+      const totalRevenueNum = Number(totalRevenue) / 100
+      results.forEach(location => {
+        if (typeof location.revenue === 'number') {
+          location.market_share = Number(((location.revenue / totalRevenueNum) * 100).toFixed(2))
+        }
+      })
+    }
+
+    // Add totals if requested
+    if (args.include_totals) {
+      const totalRevenueNum = Number(totalRevenue) / 100
+      const totalTransactionsNum = Number(totalTransactions)
+      const overallAvgOrder = totalTransactionsNum > 0 ? totalRevenueNum / totalTransactionsNum : 0
+
+      results.push({
+        location: '*** TOTALS ***',
+        revenue: totalRevenueNum,
+        count: totalTransactionsNum, // Use 'count' instead of 'transactions'
+        avg_transaction: overallAvgOrder, // Use standard field name
+        quantity: locationBreakdown.length, // Use quantity field for location count
+        period: description
+      })
+    }
+
+    console.log('🔍 DEBUG location breakdown results:', {
+      locationsFound: locationBreakdown.length,
+      totalRevenue: Number(totalRevenue) / 100,
+      sortBy: args.sort_by,
+      includePerformanceMetrics: args.include_performance_metrics,
+      includeTotals: args.include_totals
+    })
+
+    return results
   }
 
   // ===== PRODUCT ANALYSIS HANDLERS =====

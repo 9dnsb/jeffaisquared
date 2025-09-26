@@ -171,6 +171,26 @@ export interface GroundTruthV3 {
   july2025TransactionCount: number
   july2025QuantitySold: number
   july2025TopLocation: string
+
+  // August 2025 location breakdown (6 metrics)
+  august2025LocationBreakdown: Array<{
+    location: string
+    revenue: number
+    transactions: number
+    avgOrderValue: number
+  }>
+  august2025LocationCount: number
+  august2025TopLocationByRevenue: string
+
+  // July 2025 location breakdown (6 metrics)
+  july2025LocationBreakdown: Array<{
+    location: string
+    revenue: number
+    transactions: number
+    avgOrderValue: number
+  }>
+  july2025LocationCount: number
+  july2025TopLocationByRevenue: string
 }
 
 export async function calculateGroundTruthV3(): Promise<GroundTruthV3> {
@@ -828,7 +848,16 @@ export async function calculateGroundTruthV3(): Promise<GroundTruthV3> {
     july2025Revenue: 0,
     july2025TransactionCount: 0,
     july2025QuantitySold: 0,
-    july2025TopLocation: null
+    july2025TopLocation: null,
+
+    // Location breakdown defaults
+    august2025LocationBreakdown: [],
+    august2025LocationCount: 0,
+    august2025TopLocationByRevenue: null,
+
+    july2025LocationBreakdown: [],
+    july2025LocationCount: 0,
+    july2025TopLocationByRevenue: null
   }
 
   // ===== DYNAMIC TIME PERIODS CALCULATIONS =====
@@ -919,7 +948,65 @@ export async function calculateGroundTruthV3(): Promise<GroundTruthV3> {
   groundTruth.july2025QuantitySold = Number(jul2025QuantityData[0]?.quantity || BigInt(0))
   groundTruth.july2025TopLocation = jul2025TopLocationData[0]?.location_name || null
 
+  // Calculate location breakdowns
+  console.log('📍 Calculating location breakdowns...')
+
+  // August 2025 location breakdown
+  const aug2025LocationBreakdown = await prisma.$queryRaw<Array<{
+    location_name: string
+    revenue: bigint
+    transaction_count: bigint
+  }>>`
+    SELECT l.name as location_name,
+           COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue,
+           COUNT(o.id)::bigint as transaction_count
+    FROM locations l
+    LEFT JOIN orders o ON l."squareLocationId" = o."locationId"
+                       AND o.date >= ${aug2025Start}
+                       AND o.date <= ${aug2025End}
+    GROUP BY l.name
+    HAVING COUNT(o.id) > 0
+    ORDER BY revenue DESC
+  `
+
+  groundTruth.august2025LocationBreakdown = aug2025LocationBreakdown.map(item => ({
+    location: item.location_name,
+    revenue: Number(item.revenue) / 100,
+    transactions: Number(item.transaction_count),
+    avgOrderValue: Number(item.revenue) / Number(item.transaction_count) / 100
+  }))
+  groundTruth.august2025LocationCount = aug2025LocationBreakdown.length
+  groundTruth.august2025TopLocationByRevenue = aug2025LocationBreakdown[0]?.location_name || null
+
+  // July 2025 location breakdown
+  const jul2025LocationBreakdown = await prisma.$queryRaw<Array<{
+    location_name: string
+    revenue: bigint
+    transaction_count: bigint
+  }>>`
+    SELECT l.name as location_name,
+           COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue,
+           COUNT(o.id)::bigint as transaction_count
+    FROM locations l
+    LEFT JOIN orders o ON l."squareLocationId" = o."locationId"
+                       AND o.date >= ${jul2025Start}
+                       AND o.date <= ${jul2025End}
+    GROUP BY l.name
+    HAVING COUNT(o.id) > 0
+    ORDER BY revenue DESC
+  `
+
+  groundTruth.july2025LocationBreakdown = jul2025LocationBreakdown.map(item => ({
+    location: item.location_name,
+    revenue: Number(item.revenue) / 100,
+    transactions: Number(item.transaction_count),
+    avgOrderValue: Number(item.revenue) / Number(item.transaction_count) / 100
+  }))
+  groundTruth.july2025LocationCount = jul2025LocationBreakdown.length
+  groundTruth.july2025TopLocationByRevenue = jul2025LocationBreakdown[0]?.location_name || null
+
   console.log(`✅ Dynamic time periods calculated (This month: $${groundTruth.thisMonthRevenue.toLocaleString()}, Aug 2025: $${groundTruth.august2025Revenue.toLocaleString()}, Jul 2025: $${groundTruth.july2025Revenue.toLocaleString()})`)
+  console.log(`✅ Location breakdowns calculated (Aug 2025: ${groundTruth.august2025LocationCount} locations, Jul 2025: ${groundTruth.july2025LocationCount} locations)`)
 
   return groundTruth
 }

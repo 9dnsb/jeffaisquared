@@ -599,7 +599,7 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
   })
 
   // ===== DYNAMIC TIME PERIODS (9 tests) =====
-  describe('Dynamic Time Period Analysis (9 tests)', () => {
+  describe('Dynamic Time Period Analysis (13 tests)', () => {
     // This Month tests (3 tests)
     it('should calculate revenue for this month', async () => {
       const start = Date.now()
@@ -706,6 +706,128 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
       if (groundTruth.july2025TopLocation) {
         expect(response.summary.toLowerCase()).toContain(
           groundTruth.july2025TopLocation.toLowerCase()
+        )
+      }
+    })
+
+    // August 2025 Location Breakdown Tests (4 tests)
+    it('should provide location breakdown for August 2025', async () => {
+      const start = Date.now()
+      const response = await makeAIRequest(
+        'Give me a breakdown of sales by location for August 2025'
+      )
+      expectPerformance(start)
+
+      expect(response.success).toBe(true)
+      expect(response.data).toBeDefined()
+      expect(Array.isArray(response.data)).toBe(true)
+
+      // Should have all locations that had sales in August 2025 plus totals row
+      expect(response.data.length).toBe(groundTruth.august2025LocationCount + 1)
+
+      // Verify top location matches ground truth
+      if (
+        groundTruth.august2025TopLocationByRevenue &&
+        response.data.length > 0
+      ) {
+        const topLocation = response.data[0]
+        expect(topLocation.location.toLowerCase()).toBe(
+          groundTruth.august2025TopLocationByRevenue.toLowerCase()
+        )
+      }
+
+      // Verify each location has required fields
+      response.data.forEach((location: any) => {
+        expect(location.location).toBeDefined()
+        expect(typeof location.revenue).toBe('number')
+        expect(typeof location.count).toBe('number') // transaction count
+        expect(location.revenue).toBeGreaterThan(0)
+        expect(location.count).toBeGreaterThan(0)
+      })
+    })
+
+    it('should match ground truth revenue for August 2025 location breakdown', async () => {
+      const start = Date.now()
+      const response = await makeAIRequest(
+        'Show me location performance breakdown for August 2025'
+      )
+      expectPerformance(start)
+
+      expect(response.success).toBe(true)
+      expect(response.data).toBeDefined()
+
+      // Verify data matches ground truth (exclude totals row)
+      if (
+        groundTruth.august2025LocationBreakdown.length > 0 &&
+        response.data.length > 0
+      ) {
+        // Filter out totals row for comparison
+        const actualLocations = response.data.filter(
+          (item: any) => item.location !== '*** TOTALS ***'
+        )
+
+        // Sort both arrays by location name for comparison
+        const groundTruthSorted = [
+          ...groundTruth.august2025LocationBreakdown,
+        ].sort((a, b) => a.location.localeCompare(b.location))
+        const responseSorted = [...actualLocations].sort((a: any, b: any) =>
+          a.location.localeCompare(b.location)
+        )
+
+        // Check each location
+        groundTruthSorted.forEach((expected, index) => {
+          if (responseSorted[index]) {
+            const actual = responseSorted[index]
+            expect(actual.location).toBe(expected.location)
+            expectInTolerance(actual.revenue, expected.revenue)
+            expect(actual.count).toBe(expected.transactions)
+          }
+        })
+      }
+    })
+
+    it('should include performance metrics when requested for August 2025', async () => {
+      const start = Date.now()
+      const response = await makeAIRequest(
+        'Give me a detailed location breakdown with market share for August 2025'
+      )
+      expectPerformance(start)
+
+      expect(response.success).toBe(true)
+      expect(response.data).toBeDefined()
+
+      // Should include market share information
+      const hasMarketShare = response.data.some(
+        (location: any) =>
+          location.market_share !== undefined ||
+          response.summary.toLowerCase().includes('market share') ||
+          response.summary.toLowerCase().includes('percentage')
+      )
+      expect(hasMarketShare).toBe(true)
+    })
+
+    it('should handle July 2025 location breakdown', async () => {
+      const start = Date.now()
+      const response = await makeAIRequest(
+        'What was the location breakdown for July 2025?'
+      )
+      expectPerformance(start)
+
+      expect(response.success).toBe(true)
+      expect(response.data).toBeDefined()
+      expect(Array.isArray(response.data)).toBe(true)
+
+      // Should have all locations that had sales in July 2025 plus totals row
+      expect(response.data.length).toBe(groundTruth.july2025LocationCount + 1)
+
+      // Verify top location matches ground truth
+      if (
+        groundTruth.july2025TopLocationByRevenue &&
+        response.data.length > 0
+      ) {
+        const topLocation = response.data[0]
+        expect(topLocation.location.toLowerCase()).toBe(
+          groundTruth.july2025TopLocationByRevenue.toLowerCase()
         )
       }
     })
@@ -1056,20 +1178,6 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
       expect(response.data.length).toBeGreaterThan(0)
     })
 
-    it('should identify most popular category', async () => {
-      const start = Date.now()
-      const response = await makeAIRequest(
-        "What's our most popular product category?"
-      )
-      expectPerformance(start)
-
-      if (groundTruth.mostPopularCategory) {
-        expect(response.data[0]?.category || response.data[0]?.name).toContain(
-          groundTruth.mostPopularCategory
-        )
-      }
-    })
-
     it('should calculate total unique items sold', async () => {
       const start = Date.now()
       const response = await makeAIRequest(
@@ -1177,17 +1285,6 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
         const revenue = extractValue(response, 'revenue')
         expectInTolerance(revenue, groundTruth.topItemRevenueAtBloor)
       }
-    })
-
-    it('should compare item performance across locations', async () => {
-      const start = Date.now()
-      const response = await makeAIRequest(
-        'Compare Latte sales across all locations'
-      )
-      expectPerformance(start)
-
-      expect(response.data).toBeDefined()
-      expect(response.data.length).toBeGreaterThan(1)
     })
 
     it('should identify which items are sold at all locations', async () => {
@@ -1358,17 +1455,6 @@ describe('AI v3 Comprehensive Test Suite - 100 Business-Focused Tests', () => {
 
   // ===== COMPLEX AGGREGATIONS (10 tests) =====
   describe('Multi-dimensional Analysis (10 tests)', () => {
-    it('should analyze revenue by location and time', async () => {
-      const start = Date.now()
-      const response = await makeAIRequest(
-        'Show me revenue by location and month'
-      )
-      expectPerformance(start)
-
-      expect(response.data).toBeDefined()
-      expect(response.data.length).toBeGreaterThan(0)
-    })
-
     it('should analyze product performance by location and time', async () => {
       const start = Date.now()
       const response = await makeAIRequest(

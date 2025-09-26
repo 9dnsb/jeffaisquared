@@ -34,7 +34,18 @@ async function squareApiRequest(
 
   try {
     const response = await fetch(url, options)
-    const data = await response.json()
+
+    // Check if response is JSON before parsing
+    const contentType = response.headers.get('content-type')
+    let data
+
+    if (contentType && contentType.includes('application/json')) {
+      data = await response.json()
+    } else {
+      // Non-JSON response (likely error page from upstream server)
+      const textResponse = await response.text()
+      throw new Error(`Non-JSON response from Square API (${response.status}): ${textResponse.substring(0, 100)}...`)
+    }
 
     // Handle rate limiting with exponential backoff
     if (response.status === 429) {
