@@ -151,6 +151,26 @@ export interface GroundTruthV3 {
       latest: Date
     }
   }
+
+  // ===== DYNAMIC TIME PERIODS (9 test categories) =====
+
+  // This month metrics (3 metrics)
+  thisMonthRevenue: number
+  thisMonthTransactionCount: number
+  thisMonthQuantitySold: number
+  thisMonthTopLocation: string
+
+  // August 2025 metrics (3 metrics)
+  august2025Revenue: number
+  august2025TransactionCount: number
+  august2025QuantitySold: number
+  august2025TopLocation: string
+
+  // July 2025 metrics (3 metrics)
+  july2025Revenue: number
+  july2025TransactionCount: number
+  july2025QuantitySold: number
+  july2025TopLocation: string
 }
 
 export async function calculateGroundTruthV3(): Promise<GroundTruthV3> {
@@ -792,8 +812,114 @@ export async function calculateGroundTruthV3(): Promise<GroundTruthV3> {
         earliest: overallData.earliest_date,
         latest: overallData.latest_date
       }
-    }
+    },
+
+    // ===== DYNAMIC TIME PERIODS (initialized, calculated later) =====
+    thisMonthRevenue: 0,
+    thisMonthTransactionCount: 0,
+    thisMonthQuantitySold: 0,
+    thisMonthTopLocation: null,
+
+    august2025Revenue: 0,
+    august2025TransactionCount: 0,
+    august2025QuantitySold: 0,
+    august2025TopLocation: null,
+
+    july2025Revenue: 0,
+    july2025TransactionCount: 0,
+    july2025QuantitySold: 0,
+    july2025TopLocation: null
   }
+
+  // ===== DYNAMIC TIME PERIODS CALCULATIONS =====
+  console.log('📅 Calculating dynamic time periods...')
+
+  // Current date for "this month" calculation
+  const now = getTorontoDate()
+
+  // This month
+  const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1)
+  const thisMonthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999)
+
+  const [thisMonthData, thisMonthQuantityData, thisMonthTopLocationData] = await Promise.all([
+    prisma.$queryRaw<Array<{revenue: bigint, count: bigint}>>`
+      SELECT COALESCE(SUM("totalAmount"), 0)::bigint as revenue, COUNT(id)::bigint as count
+      FROM orders WHERE date >= ${thisMonthStart} AND date <= ${thisMonthEnd}
+    `,
+    prisma.$queryRaw<Array<{quantity: bigint}>>`
+      SELECT COALESCE(SUM(li.quantity), 0)::bigint as quantity
+      FROM line_items li JOIN orders o ON li."orderId" = o.id
+      WHERE o.date >= ${thisMonthStart} AND o.date <= ${thisMonthEnd}
+    `,
+    prisma.$queryRaw<Array<{location_name: string}>>`
+      SELECT l.name as location_name, COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue
+      FROM locations l LEFT JOIN orders o ON l."squareLocationId" = o."locationId"
+      WHERE o.date >= ${thisMonthStart} AND o.date <= ${thisMonthEnd}
+      GROUP BY l.name ORDER BY revenue DESC LIMIT 1
+    `
+  ])
+
+  // August 2025
+  const aug2025Start = new Date(2025, 7, 1)
+  const aug2025End = new Date(2025, 7, 31, 23, 59, 59, 999)
+
+  const [aug2025Data, aug2025QuantityData, aug2025TopLocationData] = await Promise.all([
+    prisma.$queryRaw<Array<{revenue: bigint, count: bigint}>>`
+      SELECT COALESCE(SUM("totalAmount"), 0)::bigint as revenue, COUNT(id)::bigint as count
+      FROM orders WHERE date >= ${aug2025Start} AND date <= ${aug2025End}
+    `,
+    prisma.$queryRaw<Array<{quantity: bigint}>>`
+      SELECT COALESCE(SUM(li.quantity), 0)::bigint as quantity
+      FROM line_items li JOIN orders o ON li."orderId" = o.id
+      WHERE o.date >= ${aug2025Start} AND o.date <= ${aug2025End}
+    `,
+    prisma.$queryRaw<Array<{location_name: string}>>`
+      SELECT l.name as location_name, COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue
+      FROM locations l LEFT JOIN orders o ON l."squareLocationId" = o."locationId"
+      WHERE o.date >= ${aug2025Start} AND o.date <= ${aug2025End}
+      GROUP BY l.name ORDER BY revenue DESC LIMIT 1
+    `
+  ])
+
+  // July 2025
+  const jul2025Start = new Date(2025, 6, 1)
+  const jul2025End = new Date(2025, 6, 31, 23, 59, 59, 999)
+
+  const [jul2025Data, jul2025QuantityData, jul2025TopLocationData] = await Promise.all([
+    prisma.$queryRaw<Array<{revenue: bigint, count: bigint}>>`
+      SELECT COALESCE(SUM("totalAmount"), 0)::bigint as revenue, COUNT(id)::bigint as count
+      FROM orders WHERE date >= ${jul2025Start} AND date <= ${jul2025End}
+    `,
+    prisma.$queryRaw<Array<{quantity: bigint}>>`
+      SELECT COALESCE(SUM(li.quantity), 0)::bigint as quantity
+      FROM line_items li JOIN orders o ON li."orderId" = o.id
+      WHERE o.date >= ${jul2025Start} AND o.date <= ${jul2025End}
+    `,
+    prisma.$queryRaw<Array<{location_name: string}>>`
+      SELECT l.name as location_name, COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue
+      FROM locations l LEFT JOIN orders o ON l."squareLocationId" = o."locationId"
+      WHERE o.date >= ${jul2025Start} AND o.date <= ${jul2025End}
+      GROUP BY l.name ORDER BY revenue DESC LIMIT 1
+    `
+  ])
+
+  // Add to ground truth object
+  groundTruth.thisMonthRevenue = Number(thisMonthData[0]?.revenue || BigInt(0)) / 100
+  groundTruth.thisMonthTransactionCount = Number(thisMonthData[0]?.count || BigInt(0))
+  groundTruth.thisMonthQuantitySold = Number(thisMonthQuantityData[0]?.quantity || BigInt(0))
+  groundTruth.thisMonthTopLocation = thisMonthTopLocationData[0]?.location_name || null
+
+  groundTruth.august2025Revenue = Number(aug2025Data[0]?.revenue || BigInt(0)) / 100
+  groundTruth.august2025TransactionCount = Number(aug2025Data[0]?.count || BigInt(0))
+  groundTruth.august2025QuantitySold = Number(aug2025QuantityData[0]?.quantity || BigInt(0))
+  groundTruth.august2025TopLocation = aug2025TopLocationData[0]?.location_name || null
+
+  groundTruth.july2025Revenue = Number(jul2025Data[0]?.revenue || BigInt(0)) / 100
+  groundTruth.july2025TransactionCount = Number(jul2025Data[0]?.count || BigInt(0))
+  groundTruth.july2025QuantitySold = Number(jul2025QuantityData[0]?.quantity || BigInt(0))
+  groundTruth.july2025TopLocation = jul2025TopLocationData[0]?.location_name || null
+
+  console.log(`✅ Dynamic time periods calculated (This month: $${groundTruth.thisMonthRevenue.toLocaleString()}, Aug 2025: $${groundTruth.august2025Revenue.toLocaleString()}, Jul 2025: $${groundTruth.july2025Revenue.toLocaleString()})`)
 
   return groundTruth
 }

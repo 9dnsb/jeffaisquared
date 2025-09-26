@@ -158,6 +158,19 @@ export interface QueryResultRow {
   rank?: number
   trend?: 'up' | 'down' | 'stable'
   metric?: string
+
+  // Dynamic time period support
+  time_period?: string
+  metric_type?: string
+
+  // Comparative analysis fields
+  current_value?: number
+  previous_value?: number
+  period?: string
+
+  // Business metrics
+  name?: string
+  day?: string
 }
 
 // ===== CHAT INTEGRATION =====

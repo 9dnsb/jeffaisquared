@@ -7,11 +7,47 @@ import type { ChatCompletionTool } from 'openai/resources/chat/completions'
 
 // ===== TIME-BASED ANALYSIS FUNCTIONS =====
 
+export const getCustomTimeRangeMetrics: ChatCompletionTool = {
+  type: 'function',
+  function: {
+    name: 'get_custom_time_range_metrics',
+    description: 'IMPORTANT: Use this function for ANY custom time period user requests including specific months, quarters, years, "last X days/weeks/months", "this month", "this week", etc. This handles dynamic date parsing for natural language time periods.',
+    parameters: {
+      type: 'object',
+      properties: {
+        time_description: {
+          type: 'string',
+          description: 'Natural language description of the time period (e.g., "August 2025", "last 2 weeks", "this month", "Q1 2024", "last 30 days", "2025")'
+        },
+        metrics: {
+          type: 'array',
+          items: {
+            type: 'string',
+            enum: ['revenue', 'count', 'quantity', 'avg_transaction', 'unique_items']
+          },
+          description: 'Metrics to calculate for the time period'
+        },
+        include_top_location: {
+          type: 'boolean',
+          description: 'REQUIRED: Set to true for questions like "which location had highest revenue in [timeframe]". Use when user asks about top performing locations.'
+        },
+        include_daily_breakdown: {
+          type: 'boolean',
+          description: 'Whether to include day-by-day breakdown of metrics within the time period'
+        }
+      },
+      required: ['time_description', 'metrics', 'include_top_location', 'include_daily_breakdown'],
+      additionalProperties: false
+    },
+    strict: true
+  }
+}
+
 export const getTimeBasedMetrics: ChatCompletionTool = {
   type: 'function',
   function: {
     name: 'get_time_based_metrics',
-    description: 'Get revenue, transaction count, quantity, and averages for specific time periods. Handles today, yesterday, last week, last month analysis.',
+    description: 'DEPRECATED: Use get_custom_time_range_metrics instead for better date parsing. Only use this for legacy predefined timeframes: today, yesterday, last_week, last_month, last_30_days, last_year.',
     parameters: {
       type: 'object',
       properties: {
@@ -148,7 +184,7 @@ export const getLocationMetrics: ChatCompletionTool = {
   type: 'function',
   function: {
     name: 'get_location_metrics',
-    description: 'Get revenue, transaction count, and performance metrics for specific locations or all locations.',
+    description: 'Get revenue, transaction count, and performance metrics for specific locations or all locations. For custom time periods like "August 2025", use get_custom_time_range_metrics instead.',
     parameters: {
       type: 'object',
       properties: {
@@ -434,6 +470,7 @@ export const getAdvancedAnalytics: ChatCompletionTool = {
 
 export const ALL_SALES_FUNCTIONS: ChatCompletionTool[] = [
   // Time-based functions (30 tests)
+  getCustomTimeRangeMetrics,  // NEW: Dynamic date parsing function
   getTimeBasedMetrics,
   comparePeriods,
   getBestPerformingDays,
@@ -456,6 +493,7 @@ export const ALL_SALES_FUNCTIONS: ChatCompletionTool[] = [
 
 // Function name to handler mapping
 export const FUNCTION_HANDLERS = {
+  'get_custom_time_range_metrics': 'handleCustomTimeRangeMetrics',
   'get_time_based_metrics': 'handleTimeBasedMetrics',
   'compare_periods': 'handleComparePeriods',
   'get_best_performing_days': 'handleBestPerformingDays',

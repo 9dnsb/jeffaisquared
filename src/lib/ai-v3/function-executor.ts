@@ -7,6 +7,7 @@ import { Prisma } from '../../generated/prisma'
 import prisma from '../../../lib/prisma'
 import { logger } from '../utils/logger'
 import { getTorontoDate, getTorontoTimeframeDates, debugTorontoTimes } from '../utils/timezone'
+import { parseDynamicTimeframe } from './utils/dynamic-date-parser'
 import { AI_V3_CONFIG, PERFORMANCE_THRESHOLDS } from './config'
 import type { FunctionName } from './functions'
 import type { QueryResultRow } from './types'
@@ -40,6 +41,9 @@ export class FunctionExecutor {
       let result: QueryResultRow[]
 
       switch (functionName) {
+        case 'get_custom_time_range_metrics':
+          result = await this.handleCustomTimeRangeMetrics(args)
+          break
         case 'get_time_based_metrics':
           result = await this.handleTimeBasedMetrics(args)
           break
@@ -104,6 +108,150 @@ export class FunctionExecutor {
   }
 
   // ===== TIME-BASED METRIC HANDLERS =====
+
+  private async handleCustomTimeRangeMetrics(args: {
+    time_description: string
+    metrics: string[]
+    include_top_location?: boolean
+    include_daily_breakdown?: boolean
+  }): Promise<QueryResultRow[]> {
+    // Parse the natural language time description into actual dates
+    const parseResult = parseDynamicTimeframe(args.time_description)
+
+    if (!parseResult.success) {
+      logger.error(`Failed to parse time description: ${args.time_description}`, new Error(parseResult.error))
+      throw new Error(`Unable to parse time period: ${parseResult.error}`)
+    }
+
+    const { startDate, endDate, description } = parseResult.dateRange!
+    const results: QueryResultRow[] = []
+
+    logger.data(`Parsed time range: ${description}`, undefined, {
+      originalInput: args.time_description,
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString()
+    })
+
+    // Build optimized query based on metrics requested
+    const metricsQuery =
+      args.metrics.includes('revenue') ||
+      args.metrics.includes('count') ||
+      args.metrics.includes('quantity') ||
+      args.metrics.includes('avg_transaction')
+
+    if (metricsQuery) {
+      // Separate queries to avoid duplication from LEFT JOIN
+      const revenueResult = await prisma.$queryRaw<Array<{revenue: bigint, count: bigint}>>`
+        SELECT
+          COALESCE(SUM("totalAmount"), 0)::bigint as revenue,
+          COUNT(id)::bigint as count
+        FROM orders
+        WHERE date >= ${startDate} AND date <= ${endDate}
+      `
+
+      const quantityResult = await prisma.$queryRaw<Array<{quantity: bigint}>>`
+        SELECT
+          COALESCE(SUM(li.quantity), 0)::bigint as quantity
+        FROM line_items li
+        JOIN orders o ON li."orderId" = o.id
+        WHERE o.date >= ${startDate} AND o.date <= ${endDate}
+      `
+
+      const data = {
+        revenue: revenueResult[0]?.revenue || BigInt(0),
+        count: revenueResult[0]?.count || BigInt(0),
+        quantity: quantityResult[0]?.quantity || BigInt(0)
+      }
+
+      const revenue = Number(data.revenue) / 100 // Convert cents to dollars
+      const count = Number(data.count)
+      const quantity = Number(data.quantity)
+
+      const row: QueryResultRow = { time_period: description }
+
+      if (args.metrics.includes('revenue')) row.revenue = revenue
+      if (args.metrics.includes('count')) row.count = count
+      if (args.metrics.includes('quantity')) row.quantity = quantity
+      if (args.metrics.includes('avg_transaction')) {
+        row.avg_transaction = count > 0 ? revenue / count : 0
+      }
+
+      results.push(row)
+    }
+
+    // Add top location if requested
+    if (args.include_top_location) {
+      const topLocationResult = await prisma.$queryRaw<Array<{
+        location_name: string
+        revenue: bigint
+      }>>`
+        SELECT l.name as location_name, COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue
+        FROM locations l
+        LEFT JOIN orders o ON l."squareLocationId" = o."locationId"
+        WHERE o.date >= ${startDate} AND o.date <= ${endDate}
+        GROUP BY l.name
+        ORDER BY revenue DESC
+        LIMIT 1
+      `
+
+      if (topLocationResult[0]) {
+        results.push({
+          location: topLocationResult[0].location_name,
+          revenue: Number(topLocationResult[0].revenue) / 100,
+          time_period: description,
+          metric_type: 'top_location'
+        })
+      }
+    }
+
+    // Add unique items count if requested
+    if (args.metrics.includes('unique_items')) {
+      const uniqueItemsResult = await prisma.$queryRaw<Array<{
+        unique_items: bigint
+      }>>`
+        SELECT COUNT(DISTINCT COALESCE(i.name, li.name))::bigint as unique_items
+        FROM line_items li
+        LEFT JOIN items i ON li."itemId" = i.id
+        JOIN orders o ON li."orderId" = o.id
+        WHERE o.date >= ${startDate} AND o.date <= ${endDate}
+      `
+
+      if (uniqueItemsResult[0]) {
+        results[0] = results[0] || { time_period: description }
+        results[0].unique_items = Number(uniqueItemsResult[0].unique_items)
+      }
+    }
+
+    // Add daily breakdown if requested
+    if (args.include_daily_breakdown && args.metrics.includes('revenue')) {
+      const dailyBreakdown = await prisma.$queryRaw<Array<{
+        date: Date
+        revenue: bigint
+        count: bigint
+      }>>`
+        SELECT
+          DATE(o.date) as date,
+          COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue,
+          COUNT(o.id)::bigint as count
+        FROM orders o
+        WHERE o.date >= ${startDate} AND o.date <= ${endDate}
+        GROUP BY DATE(o.date)
+        ORDER BY date
+      `
+
+      for (const day of dailyBreakdown) {
+        results.push({
+          date: day.date.toISOString().split('T')[0],
+          revenue: Number(day.revenue) / 100,
+          count: Number(day.count),
+          time_period: description,
+          metric_type: 'daily_breakdown'
+        })
+      }
+    }
+
+    return results
+  }
 
   private async handleTimeBasedMetrics(args: {
     timeframe: string
@@ -1169,7 +1317,7 @@ export class FunctionExecutor {
 
     // Map location display names to database names
     const locationMap: Record<string, string> = {
-      'HQ': 'HQ',
+      'HQ': 'De Mello Coffee - HQ',
       'Yonge': 'De Mello Coffee - Yonge',
       'Bloor': 'De Mello Coffee - Bloor',
       'Kingston': 'De Mello Coffee - Kingston',
