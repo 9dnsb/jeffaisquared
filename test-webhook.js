@@ -61,7 +61,7 @@ function generateSignature(payload, secret) {
 }
 
 async function testWebhook() {
-  const webhookSecret = 'test-secret-key' // Use this in your .env.development for testing
+  const webhookSecret = process.env.SQUARE_WEBHOOK_SECRET || 'test-secret-key'
   const payloadString = JSON.stringify(testPayload)
   const signature = generateSignature(payloadString, webhookSecret)
 

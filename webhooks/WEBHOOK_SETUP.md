@@ -4,7 +4,7 @@
 This guide walks through setting up Square webhooks to receive real-time sales data into your production database.
 
 ## Implementation Status ✅
-- [x] Webhook API endpoint created at `src/app/api/webhooks/square/route.ts`
+- [x] Webhook API endpoint created at `/api/webhooks/square`
 - [x] HMAC signature verification implemented
 - [x] Order and fulfillment event processing
 - [x] Environment variables configured

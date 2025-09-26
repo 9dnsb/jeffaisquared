@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { headers } from 'next/headers'
 import { z } from 'zod'
 import crypto from 'crypto'
-import prisma from '../../../../lib/prisma'
+import prisma from '../../../../../lib/prisma'
 
 // Square webhook event schema
 const SquareWebhookEventSchema = z.object({
