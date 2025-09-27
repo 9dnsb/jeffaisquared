@@ -7,14 +7,19 @@ const prisma = new PrismaClient()
 // Environment configuration
 const SQUARE_BASE_URL = 'https://connect.squareup.com'
 const ACCESS_TOKEN = process.env.SQUARE_ACCESS_TOKEN
-const SQUARE_VERSION = '2025-08-20'
+const SQUARE_VERSION = '2025-09-24'
 
 // Determine seed mode from environment or arguments
-const SEED_MODE = process.env.SEED_MODE || (process.argv.includes('--incremental') ? 'incremental' : 'full')
-const USE_SQUARE_API = process.env.USE_SQUARE_API === 'true' || process.argv.includes('--from-api')
+const SEED_MODE =
+  process.env.SEED_MODE ||
+  (process.argv.includes('--incremental') ? 'incremental' : 'full')
+const USE_SQUARE_API =
+  process.env.USE_SQUARE_API === 'true' || process.argv.includes('--from-api')
 
 console.log(`🌱 Starting seed in ${SEED_MODE} mode`)
-console.log(`📊 Data source: ${USE_SQUARE_API ? 'Square API' : 'Historical files'}`)
+console.log(
+  `📊 Data source: ${USE_SQUARE_API ? 'Square API' : 'Historical files'}`
+)
 
 // =======================
 // SQUARE API FUNCTIONS
@@ -30,7 +35,7 @@ async function squareApiRequest(
   const options: RequestInit = {
     method,
     headers: {
-      'Authorization': `Bearer ${ACCESS_TOKEN}`,
+      Authorization: `Bearer ${ACCESS_TOKEN}`,
       'Content-Type': 'application/json',
       'Square-Version': SQUARE_VERSION,
     },
@@ -40,7 +45,9 @@ async function squareApiRequest(
     options.body = JSON.stringify(body)
   }
 
-  console.log(`🔗 ${method} ${endpoint}${retryCount > 0 ? ` (retry ${retryCount})` : ''}`)
+  console.log(
+    `🔗 ${method} ${endpoint}${retryCount > 0 ? ` (retry ${retryCount})` : ''}`
+  )
 
   try {
     const response = await fetch(url, options)
@@ -57,14 +64,20 @@ async function squareApiRequest(
       const jitter = Math.random() * 1000 // 0-1 second random jitter
       const totalDelay = baseDelay + jitter
 
-      console.log(`⏳ Rate limited. Waiting ${Math.round(totalDelay)}ms before retry ${retryCount + 1}/${maxRetries}`)
+      console.log(
+        `⏳ Rate limited. Waiting ${Math.round(totalDelay)}ms before retry ${
+          retryCount + 1
+        }/${maxRetries}`
+      )
       await new Promise((resolve) => setTimeout(resolve, totalDelay))
 
       return squareApiRequest(endpoint, method, body, retryCount + 1)
     }
 
     if (!response.ok) {
-      throw new Error(`Square API error: ${response.status} ${response.statusText}`)
+      throw new Error(
+        `Square API error: ${response.status} ${response.statusText}`
+      )
     }
 
     return data
@@ -73,14 +86,20 @@ async function squareApiRequest(
       // Network error - retry with exponential backoff
       const maxRetries = 3
       if (retryCount >= maxRetries) {
-        throw new Error(`Network error after ${maxRetries} retries: ${error.message}`)
+        throw new Error(
+          `Network error after ${maxRetries} retries: ${error.message}`
+        )
       }
 
       const baseDelay = Math.pow(2, retryCount) * 1000
       const jitter = Math.random() * 1000
       const totalDelay = baseDelay + jitter
 
-      console.log(`🔌 Network error. Waiting ${Math.round(totalDelay)}ms before retry ${retryCount + 1}/${maxRetries}`)
+      console.log(
+        `🔌 Network error. Waiting ${Math.round(totalDelay)}ms before retry ${
+          retryCount + 1
+        }/${maxRetries}`
+      )
       await new Promise((resolve) => setTimeout(resolve, totalDelay))
 
       return squareApiRequest(endpoint, method, body, retryCount + 1)
@@ -98,7 +117,9 @@ async function fetchSquareLocations() {
     squareLocationId: loc.id,
     name: loc.name,
     address: loc.address
-      ? `${loc.address.address_line_1 || ''} ${loc.address.locality || ''} ${loc.address.administrative_district_level_1 || ''}`.trim()
+      ? `${loc.address.address_line_1 || ''} ${loc.address.locality || ''} ${
+          loc.address.administrative_district_level_1 || ''
+        }`.trim()
       : null,
     timezone: loc.timezone,
     currency: loc.currency,
@@ -124,7 +145,7 @@ async function fetchSquareCatalogMapping() {
 
     do {
       const queryParams = new URLSearchParams({
-        types: 'ITEM,ITEM_VARIATION,CATEGORY'
+        types: 'ITEM,ITEM_VARIATION,CATEGORY',
       })
 
       if (cursor) {
@@ -155,7 +176,9 @@ async function fetchSquareCatalogMapping() {
       cursor = data.cursor
     } while (cursor)
 
-    console.log(`✅ Mapped ${catalogMapping.items.size} items, ${catalogMapping.variations.size} variations, ${catalogMapping.categories.size} categories`)
+    console.log(
+      `✅ Mapped ${catalogMapping.items.size} items, ${catalogMapping.variations.size} variations, ${catalogMapping.categories.size} categories`
+    )
     return catalogMapping
   } catch (error) {
     console.warn(`⚠️ Failed to fetch catalog data: ${error}`)
@@ -165,7 +188,9 @@ async function fetchSquareCatalogMapping() {
 }
 
 async function fetchSquareOrdersStreaming(locations: any[], days = 730) {
-  console.log(`📊 Fetching ${days} days of orders from Square API (streaming mode)...`)
+  console.log(
+    `📊 Fetching ${days} days of orders from Square API (streaming mode)...`
+  )
 
   const startDate = new Date()
   startDate.setDate(startDate.getDate() - days)
@@ -175,11 +200,19 @@ async function fetchSquareOrdersStreaming(locations: any[], days = 730) {
   const totalLocations = locations.length
 
   // Process each location and stream directly to database
-  for (let locationIndex = 0; locationIndex < locations.length; locationIndex++) {
+  for (
+    let locationIndex = 0;
+    locationIndex < locations.length;
+    locationIndex++
+  ) {
     const location = locations[locationIndex]
     const progressPercent = Math.round((locationIndex / totalLocations) * 100)
 
-    console.log(`\n🏪 Processing location ${locationIndex + 1}/${totalLocations} (${progressPercent}%): ${location.name}`)
+    console.log(
+      `\n🏪 Processing location ${
+        locationIndex + 1
+      }/${totalLocations} (${progressPercent}%): ${location.name}`
+    )
 
     try {
       let cursor = null
@@ -229,29 +262,36 @@ async function fetchSquareOrdersStreaming(locations: any[], days = 730) {
 
         console.log(`   📦 Batch ${batchCount} for ${location.name}...`)
 
-        const result = await squareApiRequest('/v2/orders/search', 'POST', searchBody)
+        const result = await squareApiRequest(
+          '/v2/orders/search',
+          'POST',
+          searchBody
+        )
 
         if (result.orders && result.orders.length > 0) {
           // Process this batch immediately
-          const processedOrders = await processOrderBatch(result.orders, location.squareLocationId)
+          const processedOrders = await processOrderBatch(
+            result.orders,
+            location.squareLocationId
+          )
 
           // Seed this batch directly to database
           await seedOrderBatch(processedOrders)
 
           totalOrdersProcessed += result.orders.length
-          console.log(`   ✅ Processed ${result.orders.length} orders (Total: ${totalOrdersProcessed})`)
+          console.log(
+            `   ✅ Processed ${result.orders.length} orders (Total: ${totalOrdersProcessed})`
+          )
         }
 
         cursor = result.cursor
 
         // Rate limiting: wait 200ms + jitter between requests
         const delay = 200 + Math.random() * 100
-        await new Promise(resolve => setTimeout(resolve, delay))
-
+        await new Promise((resolve) => setTimeout(resolve, delay))
       } while (cursor)
 
       console.log(`✅ Completed ${location.name}: processed all orders`)
-
     } catch (error) {
       console.error(`❌ Error processing location ${location.name}:`, error)
       throw error
@@ -281,7 +321,7 @@ async function seedOrderBatch(orders: any[]) {
   try {
     await prisma.order.createMany({
       data: orders,
-      skipDuplicates: true
+      skipDuplicates: true,
     })
   } catch (error) {
     console.error('Error seeding order batch:', error)
@@ -340,7 +380,9 @@ function loadIncrementalData() {
           allIncrementalOrders.push(...incrementalData.orders)
         }
       } catch (error) {
-        console.warn(`⚠️ Could not load incremental file: ${sync.incrementalFile}`)
+        console.warn(
+          `⚠️ Could not load incremental file: ${sync.incrementalFile}`
+        )
       }
     }
   })
@@ -403,7 +445,11 @@ async function seedItems(items: any[]) {
       })
     }
 
-    console.log(`   ✅ Processed ${Math.min(i + BATCH_SIZE, items.length)}/${items.length} items`)
+    console.log(
+      `   ✅ Processed ${Math.min(i + BATCH_SIZE, items.length)}/${
+        items.length
+      } items`
+    )
   }
 
   console.log('✅ Items seeded successfully')
@@ -442,8 +488,9 @@ async function seedOrdersInBatches(orders: any[]) {
 
       successCount += batch.length
       const progressPercent = Math.round((successCount / orders.length) * 100)
-      console.log(`   ✅ Seeded ${successCount}/${orders.length} orders (${progressPercent}%)`)
-
+      console.log(
+        `   ✅ Seeded ${successCount}/${orders.length} orders (${progressPercent}%)`
+      )
     } catch (error) {
       console.error(`❌ Error seeding batch starting at index ${i}:`, error)
       throw error
@@ -473,30 +520,37 @@ async function main() {
         await seedLocations(locations)
 
         // Seed categories from catalog
-        const categoriesData = Array.from(catalogMapping.categories.entries()).map(
-          ([id, data]: [string, any]) => ({
-            squareCategoryId: id,
-            name: data.name,
-            isActive: true,
-          })
-        )
+        const categoriesData = Array.from(
+          catalogMapping.categories.entries()
+        ).map(([id, data]: [string, any]) => ({
+          squareCategoryId: id,
+          name: data.name,
+          isActive: true,
+        }))
         await seedCategories(categoriesData)
 
         // Stream orders directly to database (no memory accumulation)
-        const totalOrdersProcessed = await fetchSquareOrdersStreaming(locations, 730) // 2 years
+        const totalOrdersProcessed = await fetchSquareOrdersStreaming(
+          locations,
+          730
+        ) // 2 years
 
-        console.log(`\n🎉 Full seed complete! Processed ${totalOrdersProcessed} orders from Square API`)
-
+        console.log(
+          `\n🎉 Full seed complete! Processed ${totalOrdersProcessed} orders from Square API`
+        )
       } else {
         console.log('📁 FULL SEED FROM FILES')
 
         // Check if files exist
         const dataDir = path.join(process.cwd(), 'historical-data')
         if (!fs.existsSync(path.join(dataDir, 'orders.json'))) {
-          throw new Error('Historical data files not found. Run with --from-api flag or fetch data first.')
+          throw new Error(
+            'Historical data files not found. Run with --from-api flag or fetch data first.'
+          )
         }
 
-        const { categoriesData, itemsData, locationsData, ordersData } = loadSquareData()
+        const { categoriesData, itemsData, locationsData, ordersData } =
+          loadSquareData()
 
         await seedLocations(locationsData)
         await seedCategories(categoriesData)
@@ -505,7 +559,6 @@ async function main() {
 
         console.log('\n🎉 Full seed complete from historical files!')
       }
-
     } else if (SEED_MODE === 'incremental') {
       console.log('⚡ INCREMENTAL SEED FROM FILES')
 
@@ -517,12 +570,12 @@ async function main() {
       }
 
       await seedOrdersInBatches(ordersData)
-      console.log(`\n🎉 Incremental seed complete! Added ${ordersData.length} new orders`)
-
+      console.log(
+        `\n🎉 Incremental seed complete! Added ${ordersData.length} new orders`
+      )
     } else {
       throw new Error(`Invalid SEED_MODE: ${SEED_MODE}`)
     }
-
   } catch (error) {
     console.error('❌ Error during seeding:', error)
     throw error
@@ -532,8 +585,7 @@ async function main() {
 }
 
 // Run the main function
-main()
-  .catch((e) => {
-    console.error(e)
-    process.exit(1)
-  })
+main().catch((e) => {
+  console.error(e)
+  process.exit(1)
+})

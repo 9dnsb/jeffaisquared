@@ -18,24 +18,38 @@ const SquareWebhookEventSchema = z.object({
   }),
 })
 
-// Square webhook object schema - matches actual Square payload structure
-const SquareWebhookObjectSchema = z.object({
-  order_created: z.object({
-    created_at: z.string(),
-    location_id: z.string(),
+// Square payment webhook object schema
+const SquarePaymentWebhookObjectSchema = z.object({
+  payment: z.object({
+    id: z.string(),
     order_id: z.string(),
-    state: z.string(),
-    version: z.number(),
-    updated_at: z.string().optional(),
-  }).optional(),
-  order_updated: z.object({
-    created_at: z.string(),
     location_id: z.string(),
-    order_id: z.string(),
-    state: z.string(),
-    version: z.number(),
+    status: z.string(),
+    amount_money: z.object({
+      amount: z.number(),
+      currency: z.string(),
+    }),
+    total_money: z.object({
+      amount: z.number(),
+      currency: z.string(),
+    }),
+    created_at: z.string(),
     updated_at: z.string(),
-  }).optional(),
+    version: z.number(),
+    source_type: z.string(),
+    card_details: z.object({
+      status: z.string(),
+      card: z.object({
+        card_brand: z.string(),
+        last_4: z.string(),
+        card_type: z.string(),
+      }).optional(),
+    }).optional(),
+  }),
+})
+
+// Square order API response schema (for retrieved orders)
+const SquareOrderApiSchema = z.object({
   order: z.object({
     id: z.string(),
     location_id: z.string(),
@@ -71,7 +85,7 @@ const SquareWebhookObjectSchema = z.object({
       catalog_object_id: z.string().optional(),
       variation_name: z.string().optional(),
     })).optional(),
-  }).optional(),
+  }),
 })
 
 function verifySquareSignature(
@@ -95,6 +109,40 @@ function verifySquareSignature(
   } catch (err) {
     console.error('Signature verification error:', err)
     return false
+  }
+}
+
+// Function to fetch order details from Square API
+async function fetchOrderFromSquareApi(orderId: string): Promise<z.infer<typeof SquareOrderApiSchema> | null> {
+  const accessToken = process.env.SQUARE_ACCESS_TOKEN
+  if (!accessToken) {
+    console.error('SQUARE_ACCESS_TOKEN not configured')
+    return null
+  }
+
+  try {
+    const response = await fetch(`https://connect.squareup.com/v2/orders/${orderId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+        'Square-Version': '2025-08-20',
+      },
+    })
+
+    if (!response.ok) {
+      console.error(`Square API error: ${response.status} - ${response.statusText}`)
+      return null
+    }
+
+    const data = await response.json()
+
+    // Validate response structure
+    const orderData = SquareOrderApiSchema.parse(data)
+    return orderData
+  } catch (err) {
+    console.error('Error fetching order from Square API:', err)
+    return null
   }
 }
 
@@ -148,12 +196,8 @@ export async function POST(request: NextRequest) {
 
     // Handle different event types
     switch (event.type) {
-      case 'order.created':
-      case 'order.updated':
-        await handleOrderEvent(event)
-        break
-      case 'order.fulfillment.updated':
-        await handleFulfillmentEvent(event)
+      case 'payment.updated':
+        await handlePaymentUpdatedEvent(event)
         break
       default:
         console.log(`Unhandled event type: ${event.type}`)
@@ -166,54 +210,48 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function handleOrderEvent(event: z.infer<typeof SquareWebhookEventSchema>) {
+async function handlePaymentUpdatedEvent(event: z.infer<typeof SquareWebhookEventSchema>) {
   if (!event.data.object) {
-    console.error('Missing order object in webhook data')
+    console.error('Missing payment object in webhook data')
     return
   }
 
   // Log the actual payload structure for debugging
-  console.log('Raw webhook data structure:', JSON.stringify(event.data.object, null, 2))
+  console.log('Raw payment webhook data:', JSON.stringify(event.data.object, null, 2))
 
-  let orderData
+  let paymentData
   try {
-    orderData = SquareWebhookObjectSchema.parse(event.data.object)
+    paymentData = SquarePaymentWebhookObjectSchema.parse(event.data.object)
   } catch (parseError) {
-    console.error('Schema parse error:', parseError)
-    console.error('Failed to parse object:', JSON.stringify(event.data.object, null, 2))
+    console.error('Payment schema parse error:', parseError)
+    console.error('Failed to parse payment object:', JSON.stringify(event.data.object, null, 2))
     return
   }
 
-  // Handle different Square webhook structures
-  let order
-  if (orderData.order) {
-    order = orderData.order
-  } else if (orderData.order_created) {
-    // Handle order.created event structure
-    order = {
-      id: orderData.order_created.order_id,
-      location_id: orderData.order_created.location_id,
-      state: orderData.order_created.state,
-      created_at: orderData.order_created.created_at,
-      updated_at: orderData.order_created.updated_at || orderData.order_created.created_at,
-      version: orderData.order_created.version,
-      total_money: { amount: 0, currency: 'USD' }, // Default values for order_created events
-    }
-  } else if (orderData.order_updated) {
-    // Handle order.updated event structure
-    order = {
-      id: orderData.order_updated.order_id,
-      location_id: orderData.order_updated.location_id,
-      state: orderData.order_updated.state,
-      created_at: orderData.order_updated.created_at,
-      updated_at: orderData.order_updated.updated_at,
-      version: orderData.order_updated.version,
-      total_money: { amount: 0, currency: 'USD' }, // Default values for order_updated events
-    }
-  } else {
-    console.error('No recognizable order structure found')
+  const payment = paymentData.payment
+  const orderId = payment.order_id
+
+  console.log(`🔄 Processing payment.updated for order ${orderId}`, {
+    paymentId: payment.id,
+    paymentStatus: payment.status,
+    amount: `${payment.total_money.amount / 100} ${payment.total_money.currency}`,
+    location: payment.location_id
+  })
+
+  // Only process completed payments
+  if (payment.status !== 'COMPLETED') {
+    console.log(`⏭️ Skipping payment ${payment.id} - status is ${payment.status} (not COMPLETED)`)
     return
   }
+
+  // Fetch full order details from Square API
+  const orderApiResponse = await fetchOrderFromSquareApi(orderId)
+  if (!orderApiResponse) {
+    console.error(`❌ Failed to fetch order ${orderId} from Square API`)
+    return
+  }
+
+  const order = orderApiResponse.order
 
   // Check if location exists, create if not
   await prisma.location.upsert({
@@ -279,39 +317,10 @@ async function handleOrderEvent(event: z.infer<typeof SquareWebhookEventSchema>)
     }
   }
 
-  console.log(`✅ Successfully processed order ${order.id} for location ${order.location_id}`, {
-    eventType: event.type,
+  console.log(`✅ Successfully processed payment.updated → order ${order.id} for location ${order.location_id}`, {
+    paymentId: payment.id,
     orderState: order.state,
-    version: order.version
+    orderVersion: order.version,
+    lineItemsCount: order.line_items?.length || 0
   })
-}
-
-async function handleFulfillmentEvent(event: z.infer<typeof SquareWebhookEventSchema>) {
-  if (!event.data.object) {
-    console.error('Missing fulfillment object in webhook data')
-    return
-  }
-
-  // Parse fulfillment update and update order state if needed
-  const orderId = event.data.id
-
-  try {
-    const existingOrder = await prisma.order.findFirst({
-      where: { squareOrderId: orderId },
-    })
-
-    if (existingOrder) {
-      // Update order state based on fulfillment
-      await prisma.order.update({
-        where: { id: existingOrder.id },
-        data: {
-          updatedAt: new Date(),
-          // Could update state based on fulfillment status
-        },
-      })
-      console.log(`Updated fulfillment for order ${orderId}`)
-    }
-  } catch (err) {
-    console.error(`Error updating fulfillment for order ${orderId}:`, err)
-  }
 }

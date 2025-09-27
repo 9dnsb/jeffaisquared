@@ -5,7 +5,7 @@ const path = require('path')
 // Square API configuration - use production for real data
 const SQUARE_BASE_URL = 'https://connect.squareup.com'
 const ACCESS_TOKEN = process.env.SQUARE_ACCESS_TOKEN
-const SQUARE_VERSION = '2025-08-20'
+const SQUARE_VERSION = '2025-09-24'
 
 // Helper function to make Square API requests with exponential backoff
 async function squareApiRequest(
@@ -44,7 +44,11 @@ async function squareApiRequest(
     } else {
       // Non-JSON response (likely error page from upstream server)
       const textResponse = await response.text()
-      throw new Error(`Non-JSON response from Square API (${response.status}): ${textResponse.substring(0, 100)}...`)
+      throw new Error(
+        `Non-JSON response from Square API (${
+          response.status
+        }): ${textResponse.substring(0, 100)}...`
+      )
     }
 
     // Handle rate limiting with exponential backoff
@@ -106,7 +110,11 @@ async function squareApiRequest(
 
 // Load or create sync metadata
 async function loadSyncMetadata() {
-  const metadataPath = path.join(__dirname, 'historical-data', 'sync-metadata.json')
+  const metadataPath = path.join(
+    __dirname,
+    'historical-data',
+    'sync-metadata.json'
+  )
 
   try {
     const data = await fs.readFile(metadataPath, 'utf8')
@@ -120,8 +128,8 @@ async function loadSyncMetadata() {
       totalOrdersSynced: 0,
       dataRanges: {
         earliest: null,
-        latest: null
-      }
+        latest: null,
+      },
     }
     return defaultMetadata
   }
@@ -160,24 +168,32 @@ async function determineIncrementalRange() {
   return {
     startDate,
     endDate: now,
-    metadata
+    metadata,
   }
 }
 
 // Fetch incremental orders for all locations
 async function fetchIncrementalOrders(locations, startDate, endDate) {
-  console.log(`📊 Fetching incremental orders from ${startDate.toISOString()} to ${endDate.toISOString()}...`)
+  console.log(
+    `📊 Fetching incremental orders from ${startDate.toISOString()} to ${endDate.toISOString()}...`
+  )
 
   let allOrders = []
   let totalOrdersFound = 0
   const totalLocations = locations.length
 
-  for (let locationIndex = 0; locationIndex < locations.length; locationIndex++) {
+  for (
+    let locationIndex = 0;
+    locationIndex < locations.length;
+    locationIndex++
+  ) {
     const location = locations[locationIndex]
     const progressPercent = Math.round((locationIndex / totalLocations) * 100)
 
     console.log(
-      `\n🏪 Processing location ${locationIndex + 1}/${totalLocations} (${progressPercent}%): ${location.name}`
+      `\n🏪 Processing location ${
+        locationIndex + 1
+      }/${totalLocations} (${progressPercent}%): ${location.name}`
     )
 
     try {
@@ -233,7 +249,9 @@ async function fetchIncrementalOrders(locations, startDate, endDate) {
           const baseDelay = 200 // Base 200ms delay (5 QPS max)
           const jitter = Math.random() * 100 // 0-100ms random jitter
           const totalDelay = baseDelay + jitter
-          console.log(`   ⏳ Rate limiting: waiting ${Math.round(totalDelay)}ms`)
+          console.log(
+            `   ⏳ Rate limiting: waiting ${Math.round(totalDelay)}ms`
+          )
           await new Promise((resolve) => setTimeout(resolve, totalDelay))
         }
       } while (cursor)
@@ -283,11 +301,17 @@ async function fetchIncrementalOrders(locations, startDate, endDate) {
 // Load existing locations from historical data
 async function loadExistingLocations() {
   try {
-    const locationsPath = path.join(__dirname, 'historical-data', 'locations.json')
+    const locationsPath = path.join(
+      __dirname,
+      'historical-data',
+      'locations.json'
+    )
     const data = await fs.readFile(locationsPath, 'utf8')
     return JSON.parse(data)
   } catch (error) {
-    console.warn('⚠️ Could not load existing locations, will fetch fresh from Square API')
+    console.warn(
+      '⚠️ Could not load existing locations, will fetch fresh from Square API'
+    )
     // Fallback: fetch from Square API
     const result = await squareApiRequest('/v2/locations')
     return result.locations.map((loc) => ({
@@ -312,7 +336,10 @@ async function saveIncrementalData(orders, metadata, startDate, endDate) {
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
 
   // Save this batch of incremental orders
-  const incrementalFile = path.join(dataDir, `incremental-orders-${timestamp}.json`)
+  const incrementalFile = path.join(
+    dataDir,
+    `incremental-orders-${timestamp}.json`
+  )
   await fs.writeFile(incrementalFile, JSON.stringify(orders, null, 2))
 
   // Update metadata
@@ -326,24 +353,26 @@ async function saveIncrementalData(orders, metadata, startDate, endDate) {
         startDate: startDate.toISOString(),
         endDate: endDate.toISOString(),
         ordersFound: orders.length,
-        incrementalFile: `incremental-orders-${timestamp}.json`
-      }
+        incrementalFile: `incremental-orders-${timestamp}.json`,
+      },
     ],
     totalOrdersSynced: metadata.totalOrdersSynced + orders.length,
     dataRanges: {
       earliest: metadata.dataRanges.earliest || startDate.toISOString(),
-      latest: endDate.toISOString()
-    }
+      latest: endDate.toISOString(),
+    },
   }
 
   await saveSyncMetadata(updatedMetadata)
 
-  console.log(`💾 Saved ${orders.length} incremental orders to ${incrementalFile}`)
+  console.log(
+    `💾 Saved ${orders.length} incremental orders to ${incrementalFile}`
+  )
   console.log(`📊 Updated sync metadata`)
 
   return {
     incrementalFile,
-    metadata: updatedMetadata
+    metadata: updatedMetadata,
   }
 }
 
@@ -356,8 +385,12 @@ async function fetchIncrementalSquareData() {
     // Determine what range to fetch
     const { startDate, endDate, metadata } = await determineIncrementalRange()
 
-    console.log(`📅 Fetching data from ${startDate.toISOString()} to ${endDate.toISOString()}`)
-    console.log(`📈 Previous total orders synced: ${metadata.totalOrdersSynced}`)
+    console.log(
+      `📅 Fetching data from ${startDate.toISOString()} to ${endDate.toISOString()}`
+    )
+    console.log(
+      `📈 Previous total orders synced: ${metadata.totalOrdersSynced}`
+    )
 
     // Load locations (from cache or API)
     const locations = await loadExistingLocations()
@@ -372,7 +405,12 @@ async function fetchIncrementalSquareData() {
     }
 
     // Save incremental data
-    const result = await saveIncrementalData(orders, metadata, startDate, endDate)
+    const result = await saveIncrementalData(
+      orders,
+      metadata,
+      startDate,
+      endDate
+    )
 
     console.log('\n🎉 INCREMENTAL DATA FETCH COMPLETE!')
     console.log(`📊 Found ${orders.length} new orders`)
@@ -380,7 +418,6 @@ async function fetchIncrementalSquareData() {
     console.log(`💾 Saved to: ${result.incrementalFile}`)
 
     return result
-
   } catch (error) {
     console.error('❌ Error fetching incremental data:', error)
     console.error('Full error:', error.stack)
@@ -394,7 +431,7 @@ module.exports = {
   loadSyncMetadata,
   saveSyncMetadata,
   determineIncrementalRange,
-  loadExistingLocations
+  loadExistingLocations,
 }
 
 // Run if called directly

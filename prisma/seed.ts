@@ -7,7 +7,7 @@ const prisma = new PrismaClient()
 // Environment configuration
 const SQUARE_BASE_URL = 'https://connect.squareup.com'
 const ACCESS_TOKEN = process.env.SQUARE_ACCESS_TOKEN
-const SQUARE_VERSION = '2025-08-20'
+const SQUARE_VERSION = '2025-09-24'
 
 // Determine seed mode from environment or arguments
 const SEED_MODE =

@@ -8,7 +8,7 @@ const prisma = new PrismaClient()
 // Square API configuration - use production for real data
 const SQUARE_BASE_URL = 'https://connect.squareup.com'
 const ACCESS_TOKEN = process.env.SQUARE_ACCESS_TOKEN
-const SQUARE_VERSION = '2025-08-20'
+const SQUARE_VERSION = '2025-09-24'
 
 // Helper function to make Square API requests with exponential backoff
 async function squareApiRequest(
