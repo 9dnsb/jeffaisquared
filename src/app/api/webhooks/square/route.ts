@@ -4,6 +4,91 @@ import { z } from 'zod'
 import crypto from 'crypto'
 import prisma from '../../../../../lib/prisma'
 
+// Intelligent item categorization (same logic as seed)
+function categorizeItem(
+  itemName: string,
+  squareCategory: string | null = null
+): string {
+  // If we have a Square category, try to map it to a simplified category first
+  if (squareCategory) {
+    const categoryLower = squareCategory.toLowerCase()
+
+    // Map Square categories to simplified categories
+    if (categoryLower.includes('coffee')) return 'coffee'
+    if (categoryLower.includes('tea')) return 'tea'
+    if (categoryLower.includes('food')) return 'food'
+    if (categoryLower.includes('beverage')) return 'beverages'
+    if (categoryLower.includes('signature')) return 'signature-drinks'
+    if (categoryLower.includes('retail')) return 'retail'
+    if (categoryLower.includes('wholesale')) return 'wholesale'
+    if (
+      categoryLower.includes('apparel') ||
+      categoryLower.includes('merchandize')
+    )
+      return 'merchandise'
+    if (
+      categoryLower.includes('syrup') ||
+      categoryLower.includes('powder') ||
+      categoryLower.includes('modification')
+    )
+      return 'add-ons'
+    if (categoryLower.includes('education') || categoryLower.includes('event'))
+      return 'services'
+
+    // If we have a Square category but it doesn't match our mapping, use it as-is
+    return squareCategory.toLowerCase().replace(/[^a-z0-9]/g, '-')
+  }
+
+  // Fallback to name-based categorization if no Square category
+  if (!itemName || typeof itemName !== 'string') {
+    return 'other'
+  }
+  const name = itemName.toLowerCase()
+
+  if (
+    name.includes('coffee') ||
+    name.includes('brew') ||
+    name.includes('americano') ||
+    name.includes('espresso')
+  ) {
+    return 'coffee'
+  }
+  if (
+    name.includes('latte') ||
+    name.includes('cappuccino') ||
+    name.includes('macchiato')
+  ) {
+    return 'coffee-drinks'
+  }
+  if (
+    name.includes('tea') ||
+    name.includes('chai') ||
+    name.includes('matcha')
+  ) {
+    return 'tea'
+  }
+  if (
+    name.includes('croissant') ||
+    name.includes('danish') ||
+    name.includes('muffin') ||
+    name.includes('bagel')
+  ) {
+    return 'pastry'
+  }
+  if (
+    name.includes('sandwich') ||
+    name.includes('wrap') ||
+    name.includes('salad')
+  ) {
+    return 'food'
+  }
+  if (name.includes('juice') || name.includes('smoothie')) {
+    return 'beverages'
+  }
+
+  return 'other'
+}
+
 // Square webhook event schema
 const SquareWebhookEventSchema = z.object({
   merchant_id: z.string(),
@@ -289,33 +374,81 @@ async function handlePaymentUpdatedEvent(event: z.infer<typeof SquareWebhookEven
   // Handle line items if present
   if (order.line_items) {
     for (const lineItem of order.line_items) {
-      await prisma.lineItem.upsert({
-        where: { squareLineItemUid: lineItem.uid },
-        update: {
-          name: lineItem.name,
-          quantity: parseInt(lineItem.quantity),
-          unitPriceAmount: lineItem.base_price_money?.amount || 0,
-          totalPriceAmount: lineItem.total_money.amount,
-          currency: lineItem.total_money.currency,
-          taxAmount: lineItem.total_tax_money?.amount || 0,
-          discountAmount: lineItem.total_discount_money?.amount || 0,
-          variations: lineItem.variation_name,
-          category: lineItem.catalog_object_id || null,
-        },
-        create: {
-          squareLineItemUid: lineItem.uid,
-          orderId: upsertedOrder.id,
-          name: lineItem.name,
-          quantity: parseInt(lineItem.quantity),
-          unitPriceAmount: lineItem.base_price_money?.amount || 0,
-          totalPriceAmount: lineItem.total_money.amount,
-          currency: lineItem.total_money.currency,
-          taxAmount: lineItem.total_tax_money?.amount || 0,
-          discountAmount: lineItem.total_discount_money?.amount || 0,
-          variations: lineItem.variation_name,
-          category: lineItem.catalog_object_id || null,
+      // Find or create Item (same logic as seed)
+      const searchSquareItemId =
+        lineItem.catalog_object_id ||
+        `GENERATED_${lineItem.name.replace(/\s+/g, '_').toUpperCase()}`
+
+      let item = await prisma.item.findUnique({
+        where: {
+          squareItemId: searchSquareItemId,
         },
       })
+
+      // If item doesn't exist, create it on the fly
+      if (!item) {
+        const itemData = {
+          squareItemId: searchSquareItemId,
+          squareCatalogId:
+            lineItem.catalog_object_id ||
+            `CATALOG_${lineItem.name.replace(/\s+/g, '_').toUpperCase()}`,
+          squareCategoryId: null,
+          name: lineItem.name,
+          category: categorizeItem(lineItem.name),
+          isActive: true,
+        }
+
+        try {
+          item = await prisma.item.upsert({
+            where: { squareItemId: itemData.squareItemId },
+            update: {
+              name: itemData.name,
+              category: itemData.category,
+              squareCategoryId: itemData.squareCategoryId,
+              isActive: itemData.isActive,
+            },
+            create: itemData,
+          })
+        } catch (err) {
+          console.warn(`⚠️ Could not create item ${lineItem.name}:`, err)
+        }
+      }
+
+      if (item) {
+        await prisma.lineItem.upsert({
+          where: { squareLineItemUid: lineItem.uid },
+          update: {
+            name: lineItem.name,
+            quantity: parseInt(lineItem.quantity),
+            unitPriceAmount: lineItem.base_price_money?.amount || 0,
+            totalPriceAmount: lineItem.total_money.amount,
+            currency: lineItem.total_money.currency,
+            taxAmount: lineItem.total_tax_money?.amount || 0,
+            discountAmount: lineItem.total_discount_money?.amount || 0,
+            variations: lineItem.variation_name,
+            category: lineItem.catalog_object_id || null,
+            itemId: item.id,
+          },
+          create: {
+            squareLineItemUid: lineItem.uid,
+            orderId: upsertedOrder.id,
+            name: lineItem.name,
+            quantity: parseInt(lineItem.quantity),
+            unitPriceAmount: lineItem.base_price_money?.amount || 0,
+            totalPriceAmount: lineItem.total_money.amount,
+            currency: lineItem.total_money.currency,
+            taxAmount: lineItem.total_tax_money?.amount || 0,
+            discountAmount: lineItem.total_discount_money?.amount || 0,
+            variations: lineItem.variation_name,
+            category: lineItem.catalog_object_id || null,
+            itemId: item.id,
+          },
+        })
+      } else {
+        console.warn(
+          `⚠️ Could not create/find item for line item: ${lineItem.name} (searchSquareItemId: ${searchSquareItemId})`
+        )
+      }
     }
   }
 

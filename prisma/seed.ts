@@ -895,7 +895,7 @@ async function seedOrdersInBatches(orders: any[]) {
   console.log('✅ Orders seeded successfully')
 }
 
-async function seedIncrementalLineItems(orders: any[]) {
+async function seedIncrementalLineItems(orders: any[], catalogMapping: any = null) {
   console.log('📦 Processing line items for incremental orders...')
 
   // Get order IDs from database for the line items
@@ -907,25 +907,112 @@ async function seedIncrementalLineItems(orders: any[]) {
 
   const orderIdMap = new Map(dbOrders.map((o) => [o.squareOrderId, o.id]))
 
-  // Extract and flatten all line items
+  // Create line items with Item relationships (same logic as seedOrderBatch)
   const allLineItems: any[] = []
   for (const order of orders) {
     const dbOrderId = orderIdMap.get(order.squareOrderId)
     if (dbOrderId && order.lineItems) {
       for (const lineItem of order.lineItems) {
-        allLineItems.push({
-          squareLineItemUid: lineItem.squareLineItemUid,
-          orderId: dbOrderId,
-          name: lineItem.name,
-          quantity: lineItem.quantity,
-          unitPriceAmount: lineItem.unitPriceAmount,
-          totalPriceAmount: lineItem.totalPriceAmount,
-          currency: lineItem.currency,
-          taxAmount: lineItem.taxAmount || 0,
-          discountAmount: lineItem.discountAmount || 0,
-          variations: lineItem.variations,
-          category: lineItem.category,
+        // Find the item ID we just created
+        // Use the same logic as item creation to find the correct squareItemId
+        let searchSquareItemId = null
+
+        if (catalogMapping) {
+          // Use catalog mapping to find the correct item ID
+          const variation = catalogMapping.variations.get(lineItem.category)
+          const squareItemId = variation?.itemId || null
+          searchSquareItemId =
+            squareItemId ||
+            lineItem.category ||
+            `GENERATED_${lineItem.name.replace(/\s+/g, '_').toUpperCase()}`
+        } else {
+          searchSquareItemId =
+            lineItem.category ||
+            `GENERATED_${lineItem.name.replace(/\s+/g, '_').toUpperCase()}`
+        }
+
+        let item = await prisma.item.findUnique({
+          where: {
+            squareItemId: searchSquareItemId,
+          },
         })
+
+        // If item doesn't exist, create it on the fly
+        if (!item) {
+          let squareCategoryId = null
+          let categoryName = categorizeItem(lineItem.name)
+          let realSquareItemId = null
+
+          if (catalogMapping) {
+            // Get real category from Square catalog (same logic as extractUniqueItems)
+            const variation = catalogMapping.variations.get(lineItem.category)
+            const parentItem = variation
+              ? catalogMapping.items.get(variation.itemId)
+              : null
+
+            // Get the first category from the categories array
+            const categoryIds = parentItem?.categoryIds || []
+            const primaryCategoryId =
+              categoryIds.length > 0 ? categoryIds[0] : null
+            const squareCategory = primaryCategoryId
+              ? catalogMapping.categories.get(primaryCategoryId)
+              : null
+
+            squareCategoryId = primaryCategoryId
+            categoryName = squareCategory?.name || categorizeItem(lineItem.name)
+            realSquareItemId = variation?.itemId || null
+          }
+
+          const itemData = {
+            squareItemId:
+              realSquareItemId ||
+              lineItem.category ||
+              `GENERATED_${lineItem.name.replace(/\s+/g, '_').toUpperCase()}`,
+            squareCatalogId:
+              lineItem.category ||
+              `CATALOG_${lineItem.name.replace(/\s+/g, '_').toUpperCase()}`,
+            squareCategoryId: squareCategoryId,
+            name: lineItem.name,
+            category: categoryName,
+            isActive: true,
+          }
+
+          try {
+            item = await prisma.item.upsert({
+              where: { squareItemId: itemData.squareItemId },
+              update: {
+                name: itemData.name,
+                category: itemData.category,
+                squareCategoryId: itemData.squareCategoryId,
+                isActive: itemData.isActive,
+              },
+              create: itemData,
+            })
+          } catch (error) {
+            console.warn(`⚠️ Could not create item ${lineItem.name}:`, error)
+          }
+        }
+
+        if (item) {
+          allLineItems.push({
+            squareLineItemUid: lineItem.squareLineItemUid,
+            orderId: dbOrderId,
+            itemId: item.id,
+            name: lineItem.name,
+            quantity: lineItem.quantity,
+            unitPriceAmount: lineItem.unitPriceAmount,
+            totalPriceAmount: lineItem.totalPriceAmount,
+            currency: lineItem.currency,
+            taxAmount: lineItem.taxAmount || 0,
+            discountAmount: lineItem.discountAmount || 0,
+            variations: lineItem.variations,
+            category: lineItem.category,
+          })
+        } else {
+          console.warn(
+            `⚠️ Could not create/find item for line item: ${lineItem.name} (searchSquareItemId: ${searchSquareItemId})`
+          )
+        }
       }
     }
   }
@@ -1012,8 +1099,11 @@ async function main() {
         return
       }
 
+      // Fetch catalog mapping for proper Item relationships (same as initial seed)
+      const catalogMapping = await fetchSquareCatalogMapping()
+
       await seedOrdersInBatches(ordersData)
-      await seedIncrementalLineItems(ordersData)
+      await seedIncrementalLineItems(ordersData, catalogMapping)
       console.log(
         `\n🎉 Incremental seed complete! Added ${ordersData.length} new orders`
       )
