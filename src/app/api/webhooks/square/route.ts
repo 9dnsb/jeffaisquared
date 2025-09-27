@@ -63,13 +63,23 @@ function verifySquareSignature(
   signature: string,
   webhookSecret: string
 ): boolean {
-  const hmac = crypto.createHmac('sha256', webhookSecret)
-  hmac.update(payload)
-  const expectedSignature = hmac.digest('base64')
-  return crypto.timingSafeEqual(
-    Buffer.from(signature),
-    Buffer.from(expectedSignature)
-  )
+  try {
+    // Square sends the signature with the webhook URL + payload
+    const notificationUrl = 'https://jeffaisquared.vercel.app/api/webhooks/square'
+    const stringToSign = notificationUrl + payload
+
+    const hmac = crypto.createHmac('sha256', webhookSecret)
+    hmac.update(stringToSign, 'utf8')
+    const expectedSignature = hmac.digest('base64')
+
+    return crypto.timingSafeEqual(
+      Buffer.from(signature, 'base64'),
+      Buffer.from(expectedSignature, 'base64')
+    )
+  } catch (err) {
+    console.error('Signature verification error:', err)
+    return false
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -98,9 +108,18 @@ export async function POST(request: NextRequest) {
 
     const rawBody = await request.text()
 
+    // Log for debugging (remove in production)
+    console.log('Webhook debug info:', {
+      hasSignature: !!signature,
+      hasSecret: !!webhookSecret,
+      environment,
+      bodyLength: rawBody.length,
+      signaturePrefix: signature?.substring(0, 10) + '...'
+    })
+
     // Verify signature
     if (!verifySquareSignature(rawBody, signature, webhookSecret)) {
-      console.error('Invalid Square signature')
+      console.error('Invalid Square signature - verification failed')
       return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
     }
 

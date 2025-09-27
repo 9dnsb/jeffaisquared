@@ -1,5 +1,5 @@
 {
-  "lastSyncTimestamp": "2025-09-26T12:57:21.731Z",
+  "lastSyncTimestamp": "2025-09-26T21:01:19.859Z",
   "lastFullSync": null,
   "syncHistory": [
     {
@@ -78,11 +78,18 @@
       "endDate": "2025-09-26T12:57:21.731Z",
       "ordersFound": 490,
       "incrementalFile": "incremental-orders-2025-09-26T12-58-05-531Z.json"
+    },
+    {
+      "timestamp": "2025-09-26T21:01:26.875Z",
+      "startDate": "2025-09-26T11:57:21.731Z",
+      "endDate": "2025-09-26T21:01:19.859Z",
+      "ordersFound": 1094,
+      "incrementalFile": "incremental-orders-2025-09-26T21-01-26-868Z.json"
     }
   ],
-  "totalOrdersSynced": 6545,
+  "totalOrdersSynced": 7639,
   "dataRanges": {
     "earliest": "2025-09-21T11:48:00.648Z",
-    "latest": "2025-09-26T12:57:21.731Z"
+    "latest": "2025-09-26T21:01:19.859Z"
   }
 }
