@@ -385,13 +385,20 @@ async function handlePaymentUpdatedEvent(event: z.infer<typeof SquareWebhookEven
         },
       })
 
+      // If not found by squareItemId, try finding by squareCatalogId
+      if (!item && lineItem.catalog_object_id) {
+        item = await prisma.item.findUnique({
+          where: {
+            squareCatalogId: lineItem.catalog_object_id,
+          },
+        })
+      }
+
       // If item doesn't exist, create it on the fly
       if (!item) {
         const itemData = {
           squareItemId: searchSquareItemId,
-          squareCatalogId:
-            lineItem.catalog_object_id ||
-            `CATALOG_${lineItem.name.replace(/\s+/g, '_').toUpperCase()}`,
+          squareCatalogId: lineItem.catalog_object_id,
           squareCategoryId: null,
           name: lineItem.name,
           category: categorizeItem(lineItem.name),
