@@ -300,6 +300,7 @@ async function handlePaymentUpdatedEvent(event: z.infer<typeof SquareWebhookEven
           taxAmount: lineItem.total_tax_money?.amount || 0,
           discountAmount: lineItem.total_discount_money?.amount || 0,
           variations: lineItem.variation_name,
+          category: lineItem.catalog_object_id || null,
         },
         create: {
           squareLineItemUid: lineItem.uid,
@@ -312,6 +313,7 @@ async function handlePaymentUpdatedEvent(event: z.infer<typeof SquareWebhookEven
           taxAmount: lineItem.total_tax_money?.amount || 0,
           discountAmount: lineItem.total_discount_money?.amount || 0,
           variations: lineItem.variation_name,
+          category: lineItem.catalog_object_id || null,
         },
       })
     }
