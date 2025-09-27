@@ -28,6 +28,14 @@ const SquareWebhookObjectSchema = z.object({
     version: z.number(),
     updated_at: z.string().optional(),
   }).optional(),
+  order_updated: z.object({
+    created_at: z.string(),
+    location_id: z.string(),
+    order_id: z.string(),
+    state: z.string(),
+    version: z.number(),
+    updated_at: z.string(),
+  }).optional(),
   order: z.object({
     id: z.string(),
     location_id: z.string(),
@@ -190,6 +198,17 @@ async function handleOrderEvent(event: z.infer<typeof SquareWebhookEventSchema>)
       updated_at: orderData.order_created.updated_at || orderData.order_created.created_at,
       version: orderData.order_created.version,
       total_money: { amount: 0, currency: 'USD' }, // Default values for order_created events
+    }
+  } else if (orderData.order_updated) {
+    // Handle order.updated event structure
+    order = {
+      id: orderData.order_updated.order_id,
+      location_id: orderData.order_updated.location_id,
+      state: orderData.order_updated.state,
+      created_at: orderData.order_updated.created_at,
+      updated_at: orderData.order_updated.updated_at,
+      version: orderData.order_updated.version,
+      total_money: { amount: 0, currency: 'USD' }, // Default values for order_updated events
     }
   } else {
     console.error('No recognizable order structure found')
