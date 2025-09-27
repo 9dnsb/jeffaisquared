@@ -18,8 +18,16 @@ const SquareWebhookEventSchema = z.object({
   }),
 })
 
-// Square order schema (simplified for key fields)
-const SquareOrderSchema = z.object({
+// Square webhook object schema - matches actual Square payload structure
+const SquareWebhookObjectSchema = z.object({
+  order_created: z.object({
+    created_at: z.string(),
+    location_id: z.string(),
+    order_id: z.string(),
+    state: z.string(),
+    version: z.number(),
+    updated_at: z.string().optional(),
+  }).optional(),
   order: z.object({
     id: z.string(),
     location_id: z.string(),
@@ -29,7 +37,7 @@ const SquareOrderSchema = z.object({
     total_money: z.object({
       amount: z.number(),
       currency: z.string(),
-    }),
+    }).optional(),
     version: z.number().optional(),
     source: z.object({
       name: z.string().optional(),
@@ -55,7 +63,7 @@ const SquareOrderSchema = z.object({
       catalog_object_id: z.string().optional(),
       variation_name: z.string().optional(),
     })).optional(),
-  }),
+  }).optional(),
 })
 
 function verifySquareSignature(
@@ -156,8 +164,37 @@ async function handleOrderEvent(event: z.infer<typeof SquareWebhookEventSchema>)
     return
   }
 
-  const orderData = SquareOrderSchema.parse(event.data.object)
-  const { order } = orderData
+  // Log the actual payload structure for debugging
+  console.log('Raw webhook data structure:', JSON.stringify(event.data.object, null, 2))
+
+  let orderData
+  try {
+    orderData = SquareWebhookObjectSchema.parse(event.data.object)
+  } catch (parseError) {
+    console.error('Schema parse error:', parseError)
+    console.error('Failed to parse object:', JSON.stringify(event.data.object, null, 2))
+    return
+  }
+
+  // Handle different Square webhook structures
+  let order
+  if (orderData.order) {
+    order = orderData.order
+  } else if (orderData.order_created) {
+    // Handle order.created event structure
+    order = {
+      id: orderData.order_created.order_id,
+      location_id: orderData.order_created.location_id,
+      state: orderData.order_created.state,
+      created_at: orderData.order_created.created_at,
+      updated_at: orderData.order_created.updated_at || orderData.order_created.created_at,
+      version: orderData.order_created.version,
+      total_money: { amount: 0, currency: 'USD' }, // Default values for order_created events
+    }
+  } else {
+    console.error('No recognizable order structure found')
+    return
+  }
 
   // Check if location exists, create if not
   await prisma.location.upsert({
@@ -174,8 +211,8 @@ async function handleOrderEvent(event: z.infer<typeof SquareWebhookEventSchema>)
     where: { squareOrderId: order.id },
     update: {
       state: order.state,
-      totalAmount: order.total_money.amount,
-      currency: order.total_money.currency,
+      totalAmount: order.total_money?.amount || 0,
+      currency: order.total_money?.currency || 'USD',
       version: order.version || 1,
       source: order.source?.name,
       updatedAt: new Date(),
@@ -185,8 +222,8 @@ async function handleOrderEvent(event: z.infer<typeof SquareWebhookEventSchema>)
       locationId: order.location_id,
       date: new Date(order.created_at),
       state: order.state,
-      totalAmount: order.total_money.amount,
-      currency: order.total_money.currency,
+      totalAmount: order.total_money?.amount || 0,
+      currency: order.total_money?.currency || 'USD',
       version: order.version || 1,
       source: order.source?.name,
     },
@@ -223,7 +260,11 @@ async function handleOrderEvent(event: z.infer<typeof SquareWebhookEventSchema>)
     }
   }
 
-  console.log(`Processed order ${order.id} for location ${order.location_id}`)
+  console.log(`✅ Successfully processed order ${order.id} for location ${order.location_id}`, {
+    eventType: event.type,
+    orderState: order.state,
+    version: order.version
+  })
 }
 
 async function handleFulfillmentEvent(event: z.infer<typeof SquareWebhookEventSchema>) {
