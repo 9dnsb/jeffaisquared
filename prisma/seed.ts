@@ -605,6 +605,15 @@ async function seedOrderBatch(orders: any[], catalogMapping: any = null) {
           },
         })
 
+        // If not found by squareItemId, try finding by squareCatalogId
+        if (!item && lineItem.category) {
+          item = await prisma.item.findUnique({
+            where: {
+              squareCatalogId: lineItem.category,
+            },
+          })
+        }
+
         // If item doesn't exist, create it on the fly
         if (!item) {
           let squareCategoryId = null
@@ -636,9 +645,7 @@ async function seedOrderBatch(orders: any[], catalogMapping: any = null) {
               realSquareItemId ||
               lineItem.category ||
               `GENERATED_${lineItem.name.replace(/\s+/g, '_').toUpperCase()}`,
-            squareCatalogId:
-              lineItem.category ||
-              `CATALOG_${lineItem.name.replace(/\s+/g, '_').toUpperCase()}`,
+            squareCatalogId: lineItem.category,
             squareCategoryId: squareCategoryId,
             name: lineItem.name,
             category: categoryName,
@@ -907,50 +914,34 @@ async function seedIncrementalLineItems(orders: any[], catalogMapping: any = nul
 
   const orderIdMap = new Map(dbOrders.map((o) => [o.squareOrderId, o.id]))
 
-  // Create line items with Item relationships (same logic as seedOrderBatch)
-  const allLineItems: any[] = []
+  // Step 1: Collect all unique Items that need to be created/found
+  console.log('🔍 Analyzing unique items...')
+  const uniqueItemsMap = new Map()
+  let totalLineItems = 0
+
   for (const order of orders) {
-    const dbOrderId = orderIdMap.get(order.squareOrderId)
-    if (dbOrderId && order.lineItems) {
+    if (order.lineItems) {
+      totalLineItems += order.lineItems.length
       for (const lineItem of order.lineItems) {
-        // Find the item ID we just created
-        // Use the same logic as item creation to find the correct squareItemId
-        let searchSquareItemId = null
-
-        if (catalogMapping) {
-          // Use catalog mapping to find the correct item ID
-          const variation = catalogMapping.variations.get(lineItem.category)
-          const squareItemId = variation?.itemId || null
-          searchSquareItemId =
-            squareItemId ||
-            lineItem.category ||
-            `GENERATED_${lineItem.name.replace(/\s+/g, '_').toUpperCase()}`
-        } else {
-          searchSquareItemId =
-            lineItem.category ||
-            `GENERATED_${lineItem.name.replace(/\s+/g, '_').toUpperCase()}`
-        }
-
-        let item = await prisma.item.findUnique({
-          where: {
-            squareItemId: searchSquareItemId,
-          },
-        })
-
-        // If item doesn't exist, create it on the fly
-        if (!item) {
+        const itemName = lineItem.name
+        if (!uniqueItemsMap.has(itemName)) {
+          // Calculate the search IDs (same logic as before)
+          let searchSquareItemId = null
+          let realSquareItemId = null
           let squareCategoryId = null
           let categoryName = categorizeItem(lineItem.name)
-          let realSquareItemId = null
 
           if (catalogMapping) {
-            // Get real category from Square catalog (same logic as extractUniqueItems)
             const variation = catalogMapping.variations.get(lineItem.category)
+            const squareItemId = variation?.itemId || null
+            searchSquareItemId =
+              squareItemId ||
+              lineItem.category ||
+              `GENERATED_${lineItem.name.replace(/\s+/g, '_').toUpperCase()}`
+
             const parentItem = variation
               ? catalogMapping.items.get(variation.itemId)
               : null
-
-            // Get the first category from the categories array
             const categoryIds = parentItem?.categoryIds || []
             const primaryCategoryId =
               categoryIds.length > 0 ? categoryIds[0] : null
@@ -961,37 +952,115 @@ async function seedIncrementalLineItems(orders: any[], catalogMapping: any = nul
             squareCategoryId = primaryCategoryId
             categoryName = squareCategory?.name || categorizeItem(lineItem.name)
             realSquareItemId = variation?.itemId || null
+          } else {
+            searchSquareItemId =
+              lineItem.category ||
+              `GENERATED_${lineItem.name.replace(/\s+/g, '_').toUpperCase()}`
           }
 
-          const itemData = {
-            squareItemId:
-              realSquareItemId ||
-              lineItem.category ||
-              `GENERATED_${lineItem.name.replace(/\s+/g, '_').toUpperCase()}`,
-            squareCatalogId:
-              lineItem.category ||
-              `CATALOG_${lineItem.name.replace(/\s+/g, '_').toUpperCase()}`,
-            squareCategoryId: squareCategoryId,
-            name: lineItem.name,
-            category: categoryName,
-            isActive: true,
-          }
-
-          try {
-            item = await prisma.item.upsert({
-              where: { squareItemId: itemData.squareItemId },
-              update: {
-                name: itemData.name,
-                category: itemData.category,
-                squareCategoryId: itemData.squareCategoryId,
-                isActive: itemData.isActive,
-              },
-              create: itemData,
-            })
-          } catch (error) {
-            console.warn(`⚠️ Could not create item ${lineItem.name}:`, error)
-          }
+          uniqueItemsMap.set(itemName, {
+            searchSquareItemId,
+            squareCatalogId: lineItem.category,
+            squareCategoryId,
+            realSquareItemId,
+            categoryName,
+            name: itemName,
+          })
         }
+      }
+    }
+  }
+
+  console.log(`📊 Found ${uniqueItemsMap.size} unique items in ${totalLineItems} line items`)
+
+  // Step 2: Batch fetch existing Items
+  console.log('🔍 Looking up existing items...')
+  const searchIds = Array.from(uniqueItemsMap.values()).map(item => item.searchSquareItemId)
+  const catalogIds = Array.from(uniqueItemsMap.values())
+    .map(item => item.squareCatalogId)
+    .filter(id => id !== null)
+
+  const existingItems = await prisma.item.findMany({
+    where: {
+      OR: [
+        { squareItemId: { in: searchIds } },
+        { squareCatalogId: { in: catalogIds } }
+      ]
+    }
+  })
+
+  // Create lookup maps for existing items
+  const itemsBySquareItemId = new Map(existingItems.map(item => [item.squareItemId, item]))
+  const itemsBySquareCatalogId = new Map(
+    existingItems
+      .filter(item => item.squareCatalogId)
+      .map(item => [item.squareCatalogId, item])
+  )
+
+  console.log(`✅ Found ${existingItems.length} existing items`)
+
+  // Step 3: Create missing Items in batch
+  const itemsToCreate: any[] = []
+  const finalItemMap = new Map()
+
+  for (const [itemName, itemInfo] of uniqueItemsMap.entries()) {
+    // Try to find existing item
+    let existingItem = itemsBySquareItemId.get(itemInfo.searchSquareItemId)
+    if (!existingItem && itemInfo.squareCatalogId) {
+      existingItem = itemsBySquareCatalogId.get(itemInfo.squareCatalogId)
+    }
+
+    if (existingItem) {
+      finalItemMap.set(itemName, existingItem)
+    } else {
+      // Item needs to be created
+      const itemData = {
+        squareItemId:
+          itemInfo.realSquareItemId ||
+          itemInfo.squareCatalogId ||
+          `GENERATED_${itemName.replace(/\s+/g, '_').toUpperCase()}`,
+        squareCatalogId: itemInfo.squareCatalogId,
+        squareCategoryId: itemInfo.squareCategoryId,
+        name: itemName,
+        category: itemInfo.categoryName,
+        isActive: true,
+      }
+      itemsToCreate.push(itemData)
+    }
+  }
+
+  if (itemsToCreate.length > 0) {
+    console.log(`📦 Creating ${itemsToCreate.length} new items...`)
+    for (const itemData of itemsToCreate) {
+      try {
+        const item = await prisma.item.upsert({
+          where: { squareItemId: itemData.squareItemId },
+          update: {
+            name: itemData.name,
+            category: itemData.category,
+            squareCategoryId: itemData.squareCategoryId,
+            isActive: itemData.isActive,
+          },
+          create: itemData,
+        })
+        finalItemMap.set(itemData.name, item)
+      } catch (error) {
+        console.warn(`⚠️ Could not create item ${itemData.name}:`, error)
+      }
+    }
+    console.log(`✅ Created ${itemsToCreate.length} new items`)
+  }
+
+  // Step 4: Create line items using cached Item lookups
+  console.log('📋 Creating line items...')
+  const allLineItems: any[] = []
+  let processedLineItems = 0
+
+  for (const order of orders) {
+    const dbOrderId = orderIdMap.get(order.squareOrderId)
+    if (dbOrderId && order.lineItems) {
+      for (const lineItem of order.lineItems) {
+        const item = finalItemMap.get(lineItem.name)
 
         if (item) {
           allLineItems.push({
@@ -1009,9 +1078,12 @@ async function seedIncrementalLineItems(orders: any[], catalogMapping: any = nul
             category: lineItem.category,
           })
         } else {
-          console.warn(
-            `⚠️ Could not create/find item for line item: ${lineItem.name} (searchSquareItemId: ${searchSquareItemId})`
-          )
+          console.warn(`⚠️ Could not find item for line item: ${lineItem.name}`)
+        }
+
+        processedLineItems++
+        if (processedLineItems % 1000 === 0) {
+          console.log(`   📊 Processed ${processedLineItems}/${totalLineItems} line items`)
         }
       }
     }
