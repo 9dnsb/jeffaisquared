@@ -1,9 +1,6 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import remarkMath from 'remark-math'
-import rehypeKatex from 'rehype-katex'
-import 'katex/dist/katex.min.css'
 
 interface MarkdownMessageProps {
   content: string | null | undefined
@@ -19,8 +16,7 @@ export const MarkdownMessage: React.FC<MarkdownMessageProps> = ({ content, class
   return (
     <div className={className}>
       <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkMath]}
-        rehypePlugins={[rehypeKatex]}
+        remarkPlugins={[remarkGfm]}
         components={{
           // Tailwind-friendly styling for common markdown elements
           ul: (props) => <ul className="list-disc pl-5 my-2" {...props} />,
