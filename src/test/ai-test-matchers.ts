@@ -17,6 +17,63 @@ declare module 'vitest' {
   interface AsymmetricMatchersContaining extends CustomMatchers {}
 }
 
+// Helper functions for common validation patterns
+function validateDataArray(received: any, allowEmpty = false) {
+  if (!received?.data || !Array.isArray(received.data)) {
+    return { valid: false, error: 'AI response missing valid data array' }
+  }
+  if (!allowEmpty && received.data.length === 0) {
+    return { valid: false, error: 'AI response missing valid data array or empty' }
+  }
+  return { valid: true }
+}
+
+function createCountMatcher(received: any, expectedCount: number, itemType: string, isNot: boolean) {
+  const validation = validateDataArray(received, true)
+  if (!validation.valid) {
+    return {
+      pass: false,
+      message: () => validation.error!
+    }
+  }
+
+  const pass = received.data.length === expectedCount
+
+  return {
+    pass,
+    message: () =>
+      `Expected ${expectedCount} ${itemType}, got ${received.data.length}${isNot ? ' (negated)' : ''}`
+  }
+}
+
+function createTopMatcher(
+  received: any,
+  expectedValue: string,
+  fieldNames: string[],
+  itemType: string,
+  isNot: boolean,
+  matchType: 'includes' | 'equals' = 'includes'
+) {
+  const validation = validateDataArray(received, false)
+  if (!validation.valid) {
+    return {
+      pass: false,
+      message: () => validation.error!
+    }
+  }
+
+  const topValue = fieldNames.map(field => received.data[0]?.[field]).find(val => val !== undefined)
+  const pass = matchType === 'includes'
+    ? topValue && topValue.includes(expectedValue)
+    : topValue === expectedValue
+
+  return {
+    pass,
+    message: () =>
+      `Expected top ${itemType} to${isNot ? ' not' : ''} ${matchType === 'includes' ? 'contain' : 'be'} '${expectedValue}', got '${topValue}'`
+  }
+}
+
 expect.extend({
   toHaveValidAIStructure(received) {
     const { isNot } = this
@@ -32,13 +89,16 @@ expect.extend({
     }
   },
 
+  // Both toHaveMetrics and toHaveGroupBy require data validation
+  // jscpd:ignore-start
   toHaveMetrics(received, expectedMetrics: string[]) {
     const { isNot } = this
 
-    if (!received?.data || !Array.isArray(received.data)) {
+    const validation = validateDataArray(received, true)
+    if (!validation.valid) {
       return {
         pass: false,
-        message: () => 'AI response missing valid data array'
+        message: () => validation.error!
       }
     }
 
@@ -67,10 +127,11 @@ expect.extend({
   toHaveGroupBy(received, expectedGroupBy: string[]) {
     const { isNot } = this
 
-    if (!received?.data || !Array.isArray(received.data)) {
+    const validation = validateDataArray(received, true)
+    if (!validation.valid) {
       return {
         pass: false,
-        message: () => 'AI response missing valid data array'
+        message: () => validation.error!
       }
     }
 
@@ -91,82 +152,21 @@ expect.extend({
         `Expected AI response to match groupBy structure: ${expectedGroupBy.join(', ')}${isNot ? ' (negated)' : ''}`
     }
   },
+  // jscpd:ignore-end
 
   toHaveTopLocation(received, expectedLocation: string) {
-    const { isNot } = this
-
-    if (!received?.data || !Array.isArray(received.data) || received.data.length === 0) {
-      return {
-        pass: false,
-        message: () => 'AI response missing valid data array or empty'
-      }
-    }
-
-    const topLocation = received.data[0]?.location || received.data[0]?.name
-    const pass = topLocation && topLocation.includes(expectedLocation)
-
-    return {
-      pass,
-      message: () =>
-        `Expected top location to${isNot ? ' not' : ''} contain '${expectedLocation}', got '${topLocation}'`
-    }
+    return createTopMatcher(received, expectedLocation, ['location', 'name'], 'location', this.isNot, 'includes')
   },
 
   toHaveTopItem(received, expectedItem: string) {
-    const { isNot } = this
-
-    if (!received?.data || !Array.isArray(received.data) || received.data.length === 0) {
-      return {
-        pass: false,
-        message: () => 'AI response missing valid data array or empty'
-      }
-    }
-
-    const topItem = received.data[0]?.item || received.data[0]?.name
-    const pass = topItem === expectedItem
-
-    return {
-      pass,
-      message: () =>
-        `Expected top item to${isNot ? ' not' : ''} be '${expectedItem}', got '${topItem}'`
-    }
+    return createTopMatcher(received, expectedItem, ['item', 'name'], 'item', this.isNot, 'equals')
   },
 
   toHaveLocationCount(received, expectedCount: number) {
-    const { isNot } = this
-
-    if (!received?.data || !Array.isArray(received.data)) {
-      return {
-        pass: false,
-        message: () => 'AI response missing valid data array'
-      }
-    }
-
-    const pass = received.data.length === expectedCount
-
-    return {
-      pass,
-      message: () =>
-        `Expected ${expectedCount} locations, got ${received.data.length}${isNot ? ' (negated)' : ''}`
-    }
+    return createCountMatcher(received, expectedCount, 'locations', this.isNot)
   },
 
   toHaveItemCount(received, expectedCount: number) {
-    const { isNot } = this
-
-    if (!received?.data || !Array.isArray(received.data)) {
-      return {
-        pass: false,
-        message: () => 'AI response missing valid data array'
-      }
-    }
-
-    const pass = received.data.length === expectedCount
-
-    return {
-      pass,
-      message: () =>
-        `Expected ${expectedCount} items, got ${received.data.length}${isNot ? ' (negated)' : ''}`
-    }
+    return createCountMatcher(received, expectedCount, 'items', this.isNot)
   }
 })

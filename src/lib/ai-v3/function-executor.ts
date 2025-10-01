@@ -468,63 +468,65 @@ export class FunctionExecutor {
     const { startDate, endDate } = this.getTimeframeDates(args.timeframe)
     const limit = args.limit || 1
 
-    // Handle only 'day' grouping with Prisma ORM for now (most common use case)
+    // Handle 'day' grouping with database aggregations (most common use case)
     if (args.group_by === 'day') {
-      // Use Prisma ORM to fetch orders and group by date manually
-      const whereClause = startDate && endDate ? {
-        date: {
-          gte: startDate,
-          lt: endDate
+      const metricClause =
+        args.metric === 'revenue'
+          ? 'COALESCE(SUM(o."totalAmount"), 0)::bigint as value'
+          : args.metric === 'count'
+          ? 'COUNT(o.id)::bigint as value'
+          : 'COALESCE(SUM(li.quantity), 0)::bigint as value'
+
+      let dailyResults: Array<{
+        day: Date
+        value: bigint
+      }>
+
+      if (startDate && endDate) {
+        if (args.metric === 'quantity') {
+          dailyResults = await prisma.$queryRaw`
+            SELECT DATE(o.date) as day, ${Prisma.raw(metricClause)}
+            FROM orders o
+            LEFT JOIN line_items li ON o.id = li."orderId"
+            WHERE o.date >= ${startDate} AND o.date < ${endDate}
+            GROUP BY DATE(o.date)
+            ORDER BY value DESC
+            LIMIT ${limit}
+          `
+        } else {
+          dailyResults = await prisma.$queryRaw`
+            SELECT DATE(o.date) as day, ${Prisma.raw(metricClause)}
+            FROM orders o
+            WHERE o.date >= ${startDate} AND o.date < ${endDate}
+            GROUP BY DATE(o.date)
+            ORDER BY value DESC
+            LIMIT ${limit}
+          `
         }
-      } : {}
-
-      const orders = await prisma.order.findMany({
-        where: whereClause,
-        select: {
-          date: true,
-          totalAmount: true,
-          lineItems: args.metric === 'quantity' ? {
-            select: {
-              quantity: true
-            }
-          } : undefined
+      } else {
+        if (args.metric === 'quantity') {
+          dailyResults = await prisma.$queryRaw`
+            SELECT DATE(o.date) as day, ${Prisma.raw(metricClause)}
+            FROM orders o
+            LEFT JOIN line_items li ON o.id = li."orderId"
+            GROUP BY DATE(o.date)
+            ORDER BY value DESC
+            LIMIT ${limit}
+          `
+        } else {
+          dailyResults = await prisma.$queryRaw`
+            SELECT DATE(o.date) as day, ${Prisma.raw(metricClause)}
+            FROM orders o
+            GROUP BY DATE(o.date)
+            ORDER BY value DESC
+            LIMIT ${limit}
+          `
         }
-      })
+      }
 
-      // Group by calendar date (not timestamp)
-      const dailyTotals: Record<string, { revenue: number, count: number, quantity: number }> = {}
-
-      orders.forEach(order => {
-        const dateString = order.date.toISOString().split('T')[0] // YYYY-MM-DD format
-
-        if (!dailyTotals[dateString]) {
-          dailyTotals[dateString] = { revenue: 0, count: 0, quantity: 0 }
-        }
-
-        dailyTotals[dateString].revenue += order.totalAmount || 0
-        dailyTotals[dateString].count += 1
-
-        if (order.lineItems) {
-          dailyTotals[dateString].quantity += order.lineItems.reduce((sum, li) => sum + (li.quantity || 0), 0)
-        }
-      })
-
-      // Sort by the requested metric and take top results
-      const sortedDays = Object.entries(dailyTotals)
-        .sort(([, a], [, b]) => {
-          const aValue = args.metric === 'revenue' ? a.revenue :
-                        args.metric === 'count' ? a.count : a.quantity
-          const bValue = args.metric === 'revenue' ? b.revenue :
-                        args.metric === 'count' ? b.count : b.quantity
-          return bValue - aValue
-        })
-        .slice(0, limit)
-
-      return sortedDays.map(([date, totals], index) => ({
-        day: date,
-        [args.metric]: args.metric === 'revenue' ? totals.revenue / 100 : // Convert cents to dollars
-                     args.metric === 'count' ? totals.count :
-                     totals.quantity,
+      return dailyResults.map((row, index) => ({
+        day: row.day.toISOString().split('T')[0],
+        [args.metric]: args.metric === 'revenue' ? Number(row.value) / 100 : Number(row.value),
         rank: index + 1,
       })) as QueryResultRow[]
     }
@@ -621,66 +623,66 @@ export class FunctionExecutor {
       ? this.getTimeframeDates(args.timeframe)
       : { startDate: null, endDate: null }
 
-    // Build location filter for partial name matching using Prisma ORM
-    const locationNameFilters = args.locations?.map(locationName => ({
-      name: {
-        contains: locationName,
-        mode: 'insensitive' as const
-      }
-    })) || []
+    // Build location filter for SQL query
+    const locationFilter = args.locations && args.locations.length > 0
+      ? Prisma.sql`AND l.name ILIKE ANY(ARRAY[${Prisma.join(args.locations.map(loc => `%${loc}%`))}])`
+      : Prisma.empty
 
-    // Get all locations with their orders using Prisma ORM
-    const locations = await prisma.location.findMany({
-      where: locationNameFilters.length > 0 ? {
-        OR: locationNameFilters
-      } : undefined,
-      include: {
-        orders: {
-          where: startDate && endDate ? {
-            date: {
-              gte: startDate,
-              lt: endDate
-            }
-          } : undefined
-        }
-      }
-    })
+    // Use database aggregations for all metrics
+    let locationMetrics: Array<{
+      location_name: string
+      revenue: bigint
+      count: bigint
+    }>
 
-    // Calculate metrics for each location
-    const results = locations.map(location => {
-      const orders = location.orders
-      const revenue = orders.reduce((sum, order) => sum + order.totalAmount, 0)
-      const count = orders.length
-      const avgTransaction = count > 0 ? revenue / count / 100 : 0
+    if (startDate && endDate) {
+      locationMetrics = await prisma.$queryRaw`
+        SELECT
+          l.name as location_name,
+          COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue,
+          COUNT(o.id)::bigint as count
+        FROM locations l
+        LEFT JOIN orders o ON l."squareLocationId" = o."locationId"
+          AND o.date >= ${startDate} AND o.date < ${endDate}
+        WHERE 1=1 ${locationFilter}
+        GROUP BY l.name
+        ORDER BY revenue DESC
+      `
+    } else {
+      locationMetrics = await prisma.$queryRaw`
+        SELECT
+          l.name as location_name,
+          COALESCE(SUM(o."totalAmount"), 0)::bigint as revenue,
+          COUNT(o.id)::bigint as count
+        FROM locations l
+        LEFT JOIN orders o ON l."squareLocationId" = o."locationId"
+        WHERE 1=1 ${locationFilter}
+        GROUP BY l.name
+        ORDER BY revenue DESC
+      `
+    }
 
-      return {
-        location: location.name,
-        revenue: revenue / 100, // Convert cents to dollars
-        count: count,
-        avg_transaction: avgTransaction
-      }
-    })
+    // Calculate total revenue for market share (done in JS, but only on aggregated data)
+    const totalRevenue = locationMetrics.reduce((sum, loc) => sum + Number(loc.revenue), 0) / 100
 
-    // Sort by revenue descending
-    results.sort((a, b) => b.revenue - a.revenue)
+    return locationMetrics.map((row) => {
+      const revenue = Number(row.revenue) / 100 // Convert cents to dollars
+      const count = Number(row.count)
+      const avgTransaction = count > 0 ? revenue / count : 0
 
-    // Calculate market share if requested
-    const totalRevenue = results.reduce((sum, r) => sum + r.revenue, 0)
-
-    return results.map((row) => {
       const result: QueryResultRow = {
-        location: row.location,
+        location: row.location_name,
       }
 
-      if (args.metrics.includes('revenue')) result.revenue = row.revenue
-      if (args.metrics.includes('count')) result.count = row.count
+      if (args.metrics.includes('revenue')) result.revenue = revenue
+      if (args.metrics.includes('count')) result.count = count
       if (args.metrics.includes('avg_transaction'))
-        result.avg_transaction = row.avg_transaction
+        result.avg_transaction = avgTransaction
       if (args.metrics.includes('market_share') && totalRevenue > 0) {
-        result.market_share = (row.revenue / totalRevenue) * 100
+        result.market_share = Number(((revenue / totalRevenue) * 100).toFixed(2))
       }
       if (args.metrics.includes('efficiency')) {
-        result.efficiency = row.count > 0 ? row.revenue / row.count : 0
+        result.efficiency = count > 0 ? revenue / count : 0
       }
 
       return result

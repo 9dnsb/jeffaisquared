@@ -349,25 +349,25 @@ async function handlePaymentUpdatedEvent(event: z.infer<typeof SquareWebhookEven
   })
 
   // Upsert order
+  const orderData = {
+    state: order.state,
+    totalAmount: order.total_money?.amount || 0,
+    currency: order.total_money?.currency || 'USD',
+    version: order.version || 1,
+    source: order.source?.name,
+  }
+
   const upsertedOrder = await prisma.order.upsert({
     where: { squareOrderId: order.id },
     update: {
-      state: order.state,
-      totalAmount: order.total_money?.amount || 0,
-      currency: order.total_money?.currency || 'USD',
-      version: order.version || 1,
-      source: order.source?.name,
+      ...orderData,
       updatedAt: new Date(),
     },
     create: {
       squareOrderId: order.id,
       locationId: order.location_id,
       date: new Date(order.created_at),
-      state: order.state,
-      totalAmount: order.total_money?.amount || 0,
-      currency: order.total_money?.currency || 'USD',
-      version: order.version || 1,
-      source: order.source?.name,
+      ...orderData,
     },
   })
 
@@ -422,33 +422,26 @@ async function handlePaymentUpdatedEvent(event: z.infer<typeof SquareWebhookEven
       }
 
       if (item) {
+        const lineItemData = {
+          name: lineItem.name,
+          quantity: parseInt(lineItem.quantity),
+          unitPriceAmount: lineItem.base_price_money?.amount || 0,
+          totalPriceAmount: lineItem.total_money.amount,
+          currency: lineItem.total_money.currency,
+          taxAmount: lineItem.total_tax_money?.amount || 0,
+          discountAmount: lineItem.total_discount_money?.amount || 0,
+          variations: lineItem.variation_name,
+          category: lineItem.catalog_object_id || null,
+          itemId: item.id,
+        }
+
         await prisma.lineItem.upsert({
           where: { squareLineItemUid: lineItem.uid },
-          update: {
-            name: lineItem.name,
-            quantity: parseInt(lineItem.quantity),
-            unitPriceAmount: lineItem.base_price_money?.amount || 0,
-            totalPriceAmount: lineItem.total_money.amount,
-            currency: lineItem.total_money.currency,
-            taxAmount: lineItem.total_tax_money?.amount || 0,
-            discountAmount: lineItem.total_discount_money?.amount || 0,
-            variations: lineItem.variation_name,
-            category: lineItem.catalog_object_id || null,
-            itemId: item.id,
-          },
+          update: lineItemData,
           create: {
             squareLineItemUid: lineItem.uid,
             orderId: upsertedOrder.id,
-            name: lineItem.name,
-            quantity: parseInt(lineItem.quantity),
-            unitPriceAmount: lineItem.base_price_money?.amount || 0,
-            totalPriceAmount: lineItem.total_money.amount,
-            currency: lineItem.total_money.currency,
-            taxAmount: lineItem.total_tax_money?.amount || 0,
-            discountAmount: lineItem.total_discount_money?.amount || 0,
-            variations: lineItem.variation_name,
-            category: lineItem.catalog_object_id || null,
-            itemId: item.id,
+            ...lineItemData,
           },
         })
       } else {

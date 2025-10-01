@@ -81,6 +81,69 @@ class PrismaSafeQueryBuilder {
   }
 
   /**
+   * Build common date range filter for Order queries
+   */
+  private buildOrderDateFilter(dateRange?: DateRangeFilter): Prisma.OrderWhereInput {
+    if (!dateRange) return {}
+    return {
+      date: {
+        gte: dateRange.start,
+        lte: dateRange.end
+      }
+    }
+  }
+
+  /**
+   * Build common location filter for Order queries
+   */
+  private buildOrderLocationFilter(locationIds?: string[]): Prisma.OrderWhereInput {
+    if (!locationIds || locationIds.length === 0) return {}
+    return {
+      locationId: {
+        in: locationIds
+      }
+    }
+  }
+
+  /**
+   * Build common item name filter for Order queries
+   */
+  private buildOrderItemFilter(itemNames?: string[]): Prisma.OrderWhereInput {
+    if (!itemNames || itemNames.length === 0) return {}
+    return {
+      lineItems: {
+        some: {
+          OR: [
+            {
+              name: {
+                in: itemNames
+              }
+            },
+            {
+              item: {
+                name: {
+                  in: itemNames
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+
+  /**
+   * Build combined where clause for common filters
+   */
+  private buildOrderWhereClause(filters?: LocationFilters): Prisma.OrderWhereInput {
+    return {
+      ...this.buildOrderDateFilter(filters?.dateRange),
+      ...this.buildOrderLocationFilter(filters?.locationIds),
+      ...this.buildOrderItemFilter(filters?.itemNames)
+    }
+  }
+
+  /**
    * Execute safe query with comprehensive logging
    */
   private async executeWithLogging<T>(
@@ -163,21 +226,7 @@ class PrismaSafeQueryBuilder {
   }>[]>> {
     logger.data('Building orders query with filters', undefined, this.serializeFilters(filters))
 
-    const where: Prisma.OrderWhereInput = {}
-
-    // Build where clause with Prisma's type-safe operators
-    if (filters?.dateRange) {
-      where.date = {
-        gte: filters.dateRange.start,
-        lte: filters.dateRange.end
-      }
-    }
-
-    if (filters?.locationIds && filters.locationIds.length > 0) {
-      where.locationId = {
-        in: filters.locationIds
-      }
-    }
+    const where: Prisma.OrderWhereInput = this.buildOrderWhereClause(filters)
 
     if (filters?.minAmount !== undefined || filters?.maxAmount !== undefined) {
       where.totalAmount = {}
@@ -186,28 +235,6 @@ class PrismaSafeQueryBuilder {
       }
       if (filters.maxAmount !== undefined) {
         where.totalAmount.lte = Math.round(filters.maxAmount * 100) // Convert dollars to cents
-      }
-    }
-
-    // Add item filtering for orders data
-    if (filters?.itemNames && filters.itemNames.length > 0) {
-      where.lineItems = {
-        some: {
-          OR: [
-            {
-              name: {
-                in: filters.itemNames
-              }
-            },
-            {
-              item: {
-                name: {
-                  in: filters.itemNames
-                }
-              }
-            }
-          ]
-        }
       }
     }
 
@@ -243,42 +270,7 @@ class PrismaSafeQueryBuilder {
   }>>> {
     logger.data('Building orders summary query', undefined, this.serializeFilters(filters))
 
-    const where: Prisma.OrderWhereInput = {}
-
-    if (filters?.dateRange) {
-      where.date = {
-        gte: filters.dateRange.start,
-        lte: filters.dateRange.end
-      }
-    }
-
-    if (filters?.locationIds && filters.locationIds.length > 0) {
-      where.locationId = {
-        in: filters.locationIds
-      }
-    }
-
-    // Add item filtering - if specific items are requested, filter by those items
-    if (filters?.itemNames && filters.itemNames.length > 0) {
-      where.lineItems = {
-        some: {
-          OR: [
-            {
-              name: {
-                in: filters.itemNames
-              }
-            },
-            {
-              item: {
-                name: {
-                  in: filters.itemNames
-                }
-              }
-            }
-          ]
-        }
-      }
-    }
+    const where: Prisma.OrderWhereInput = this.buildOrderWhereClause(filters)
 
     return this.executeWithLogging(
       'GET_ORDERS_SUMMARY',
@@ -380,19 +372,9 @@ class PrismaSafeQueryBuilder {
   async getSalesCount(filters?: LocationFilters): Promise<SafeQueryResult<number>> {
     logger.data('Building sales count query', undefined, this.serializeFilters(filters))
 
-    const where: Prisma.OrderWhereInput = {}
-
-    if (filters?.dateRange) {
-      where.date = {
-        gte: filters.dateRange.start,
-        lte: filters.dateRange.end
-      }
-    }
-
-    if (filters?.locationIds && filters.locationIds.length > 0) {
-      where.locationId = {
-        in: filters.locationIds
-      }
+    const where: Prisma.OrderWhereInput = {
+      ...this.buildOrderDateFilter(filters?.dateRange),
+      ...this.buildOrderLocationFilter(filters?.locationIds)
     }
 
     return this.executeWithLogging(

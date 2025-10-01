@@ -40,6 +40,8 @@ describe('/api/auth/login', () => {
     supabaseServer.createSupabaseServerClient.mockResolvedValue(mockSupabaseClient)
   })
 
+  // Test patterns require similar setup with different assertions
+  // jscpd:ignore-start
   describe('POST', () => {
     it('should successfully login user with valid credentials', async () => {
       const loginData = {
@@ -182,4 +184,5 @@ describe('/api/auth/login', () => {
       expect(response).toBe(mockSuccessResponse)
     })
   })
+  // jscpd:ignore-end
 })

@@ -2,10 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '../../../lib/utils/logger'
 import { validateChatRequest } from '../../../lib/validation/schemas'
 import { createSupabaseServerClient } from '../../../../lib/supabase-server'
-import { intentClassifier } from '../../../lib/ai/intentClassifier'
-import { dataQueryHandlerV3 } from '../../../lib/ai-v3/data-query-handler'
+import { functionCaller } from '../../../lib/ai-v3/function-caller'
 import { generalChatHandler } from '../../../lib/ai/generalChatHandler'
-import { clarificationHandler } from '../../../lib/ai/clarificationHandler'
 import {
   createConversation,
   getConversation,
@@ -18,9 +16,9 @@ import type {
   ChatResponse,
   ChatIntent,
   ChatMessageMetadata,
-  PerformanceMetrics,
   ChatMessage
 } from '../../../types/chat'
+import type { QueryRequest } from '../../../lib/ai-v3/types'
 
 // Constants for chat processing
 const PERFORMANCE_METRICS_LIMIT = 100
@@ -121,8 +119,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       })
     }
 
-    // Step 6: Process message through three-tier system
-    const processResult = await processMessageThroughTiers(
+    // Step 6: Process message through function calling system
+    const processResult = await processMessageWithFunctionCalling(
       chatRequest.message,
       conversationHistory,
       userId
@@ -298,9 +296,9 @@ async function getOrCreateConversation(
 }
 
 /**
- * Process message through three-tier AI system
+ * Process message using function calling with general chat fallback
  */
-async function processMessageThroughTiers(
+async function processMessageWithFunctionCalling(
   userMessage: string,
   conversationHistory: ChatMessage[],
   userId: string
@@ -309,194 +307,144 @@ async function processMessageThroughTiers(
   intent: ChatIntent
   metadata: ChatMessageMetadata
 }> {
-  const overallTimer = logger.startTimer('Three-Tier Processing')
-  const performanceMetrics: Partial<PerformanceMetrics> = {
-    totalProcessingTime: 0,
-    intentClassificationTime: 0,
-    queryExecutionTime: 0,
-    aiResponseTime: 0,
-    persistenceTime: 0,
-    tokenUsage: { total: 0, classification: 0, response: 0 },
-    costs: { total: 0, classification: 0, response: 0 }
-  }
+  const overallTimer = logger.startTimer('Function Calling Processing')
 
   try {
-    logger.chat('Starting three-tier message processing', userMessage.slice(0, PERFORMANCE_METRICS_LIMIT), {
+    logger.chat('Starting function calling message processing', userMessage.slice(0, PERFORMANCE_METRICS_LIMIT), {
       userId,
       historyLength: conversationHistory.length
     })
 
-    // Tier 1: Intent Classification
-    const classificationTimer = logger.startTimer('Intent Classification Tier')
-    const intentResult = await intentClassifier.classifyIntent(
+    // Convert conversation history to AI v3 format
+    const aiV3ConversationHistory = conversationHistory.map(msg => ({
+      id: msg.id,
+      role: msg.role,
+      content: msg.content,
+      timestamp: msg.createdAt,
+      metadata: msg.metadata ? {
+        queryType: typeof msg.metadata === 'object' && msg.metadata !== null && 'queryType' in msg.metadata
+          ? String(msg.metadata.queryType)
+          : undefined,
+        processingTime: typeof msg.metadata === 'object' && msg.metadata !== null && 'processingTime' in msg.metadata
+          ? Number(msg.metadata.processingTime)
+          : undefined
+      } : undefined
+    }))
+
+    // Try function calling first (for data queries and business analysis)
+    const queryRequest: QueryRequest = {
       userMessage,
-      conversationHistory,
+      conversationHistory: aiV3ConversationHistory,
+      intent: 'data_query',
       userId
-    )
-    const classificationTime = classificationTimer()
+    }
 
-    performanceMetrics.intentClassificationTime = classificationTime
-    performanceMetrics.tokenUsage!.classification = intentResult.metadata.tokens
-    performanceMetrics.costs!.classification = intentResult.metadata.cost
+    const functionResult = await functionCaller.processQuery(queryRequest)
 
-    logger.intent('Intent classification completed', undefined, {
-      intent: intentResult.intent,
-      confidence: intentResult.confidence,
-      processingTime: classificationTime,
-      reasoning: intentResult.reasoning
-    })
+    const totalTime = overallTimer()
 
-    // Tier 2 & 3: Execute based on intent
-    let response: string
-    let responseMetadata: Record<string, string | number | boolean | Date | null> = {}
+    // If function calling succeeded (with data OR text-only response), use that response
+    if (functionResult.success && (functionResult.data.length > 0 || functionResult.summary)) {
+      const metadata: ChatMessageMetadata = {
+        intent: 'data_query',
+        intentConfidence: 0.9, // High confidence since function was successfully called
+        model: 'gpt-4o',
+        tokens: 0, // TODO: Extract from function caller
+        cost: 0, // TODO: Extract from function caller
+        processingTime: totalTime,
+        timestampStart: new Date(Date.now() - totalTime).toISOString(),
+        timestampEnd: new Date().toISOString(),
 
-    const executionTimer = logger.startTimer('Intent Execution Tier')
+        // Performance breakdown
+        performanceBreakdown: {
+          intentClassificationTime: 0, // No explicit classification
+          executionTime: functionResult.metadata.processingTime,
+          totalTime
+        },
 
-    switch (intentResult.intent) {
-      case 'data_query':
-        const dataResult = await dataQueryHandlerV3.processDataQuery({
-          userMessage,
-          conversationHistory,
-          intent: 'data_query',
-          userId
-        })
+        // Data query specific metadata
+        queryPlan: functionResult.metadata.queryPlan,
+        queryType: functionResult.data.length > 0 ? 'function_call' : 'text_only_context',
+        prismaQuery: functionResult.metadata.queryPlan,
 
-        response = dataResult.success ? dataResult.summary : (dataResult.error || 'Failed to process data query')
-        responseMetadata = {
-          processingTime: dataResult.metadata.processingTime,
-          queryPlan: dataResult.queryPlan,
-          queryType: dataResult.queryType,
-          prismaQuery: dataResult.metadata.prismaQuery
-        }
-        performanceMetrics.queryExecutionTime = dataResult.metadata.processingTime
+        // Business context
+        businessContext: functionResult.data.length > 0
+          ? `Function calling: ${functionResult.metadata.queryComplexity} complexity, ${functionResult.metadata.recordCount} records`
+          : `Text-only response using conversation context`,
 
-        logger.queryExecution(
-          'data_query',
-          dataResult.queryPlan,
-          undefined,
-          {
-            success: dataResult.success,
-            recordCount: dataResult.recordCount,
-            processingTime: dataResult.metadata.processingTime
-          }
-        )
-        break
-
-      case 'general_advice':
-        const adviceResult = await generalChatHandler.processGeneralAdvice({
-          userMessage,
-          conversationHistory,
-          intent: 'general_advice'
-        })
-
-        response = adviceResult.success ? adviceResult.advice : (adviceResult.error || 'Failed to generate advice')
-        responseMetadata = adviceResult.metadata
-        performanceMetrics.aiResponseTime = adviceResult.metadata.processingTime
-
-        logger.ai('General advice generated', undefined, {
-          success: adviceResult.success,
-          adviceLength: response.length,
-          actionItemCount: adviceResult.actionItems?.length || 0,
-          processingTime: adviceResult.metadata.processingTime
-        })
-        break
-
-      case 'clarification':
-        const clarificationResult = await clarificationHandler.processClarificationRequest({
-          userMessage,
-          conversationHistory,
-          intent: 'clarification',
-          ambiguousAspects: ['user_intent', 'scope', 'context']
-        })
-
-        const questions = clarificationResult.success ? clarificationResult.questions : [
-          'Could you please provide more details about what you are looking for?'
-        ]
-        response = `I need a bit more information to help you effectively:\n\n${questions.map(q => `• ${q}`).join('\n')}`
-        responseMetadata = clarificationResult.metadata
-        performanceMetrics.aiResponseTime = clarificationResult.metadata.processingTime
-
-        logger.intent('Clarification questions generated', undefined, {
-          success: clarificationResult.success,
-          questionCount: questions.length,
-          processingTime: clarificationResult.metadata.processingTime
-        })
-        break
-
-      default:
-        response = 'I apologize, but I encountered an issue determining how to help you. Could you please rephrase your request?'
-        responseMetadata = {
-          model: 'fallback',
+        // Function calling metadata
+        intentReasoning: functionResult.data.length > 0
+          ? 'Function calling determined this is a data query'
+          : 'Model used conversation context to answer',
+        classificationMetadata: {
+          model: 'gpt-4o',
           tokens: 0,
           cost: 0,
           processingTime: 0
         }
-    }
+      }
 
-    const executionTime = executionTimer()
+      logger.success('Function calling completed successfully', undefined, {
+        processingTime: totalTime,
+        intent: 'data_query',
+        responseLength: functionResult.summary.length,
+        recordCount: functionResult.metadata.recordCount,
+        userId
+      })
 
-    // Update performance metrics
-    performanceMetrics.tokenUsage!.response = (typeof responseMetadata['tokens'] === 'number' ? responseMetadata['tokens'] : 0)
-    performanceMetrics.costs!.response = (typeof responseMetadata['cost'] === 'number' ? responseMetadata['cost'] : 0)
-    performanceMetrics.tokenUsage!.total =
-      performanceMetrics.tokenUsage!.classification + performanceMetrics.tokenUsage!.response
-    performanceMetrics.costs!.total =
-      performanceMetrics.costs!.classification + performanceMetrics.costs!.response
-
-    const totalTime = overallTimer()
-    performanceMetrics.totalProcessingTime = totalTime
-
-    // Build comprehensive metadata
-    const metadata: ChatMessageMetadata = {
-      intent: intentResult.intent,
-      intentConfidence: intentResult.confidence,
-      model: (typeof responseMetadata['model'] === 'string' ? responseMetadata['model'] : 'unknown'),
-      tokens: performanceMetrics.tokenUsage!.total,
-      cost: performanceMetrics.costs!.total,
-      processingTime: totalTime,
-      timestampStart: new Date(Date.now() - totalTime).toISOString(),
-      timestampEnd: new Date().toISOString(),
-
-      // Performance breakdown
-      performanceBreakdown: {
-        intentClassificationTime: performanceMetrics.intentClassificationTime,
-        executionTime,
-        totalTime
-      },
-
-      // Intent-specific metadata
-      ...(intentResult.intent === 'data_query' && {
-        queryPlan: (typeof responseMetadata['queryPlan'] === 'string' ? responseMetadata['queryPlan'] : undefined),
-        queryType: (typeof responseMetadata['queryType'] === 'string' ? responseMetadata['queryType'] : 'unknown'),
-        prismaQuery: (typeof responseMetadata['prismaQuery'] === 'string' ? responseMetadata['prismaQuery'] : undefined)
-      }),
-
-      // Business context
-      businessContext: `Intent: ${intentResult.intent}, Confidence: ${intentResult.confidence}`,
-
-      // Reasoning and classification details
-      intentReasoning: intentResult.reasoning,
-      classificationMetadata: {
-        model: intentResult.metadata.model,
-        tokens: intentResult.metadata.tokens,
-        cost: intentResult.metadata.cost,
-        processingTime: intentResult.metadata.processingTime
+      return {
+        response: functionResult.summary,
+        intent: 'data_query',
+        metadata
       }
     }
 
-    logger.success('Three-tier processing completed', undefined, {
-      processingTime: totalTime,
-      intent: intentResult.intent,
-      confidence: intentResult.confidence,
+    // Fallback to general chat handler if function calling failed
+    // This handles general questions, advice requests, and clarifications
+    logger.chat('Function calling failed or returned no response, falling back to general chat handler')
+
+    const adviceResult = await generalChatHandler.processGeneralAdvice({
+      userMessage,
+      conversationHistory,
+      intent: 'general_advice'
+    })
+
+    const fallbackTime = overallTimer()
+
+    const response = adviceResult.success
+      ? adviceResult.advice
+      : 'I apologize, but I encountered an error processing your message. Please try again.'
+
+    const metadata: ChatMessageMetadata = {
+      intent: 'general_advice',
+      intentConfidence: 0.7,
+      model: adviceResult.metadata.model,
+      tokens: adviceResult.metadata.tokens,
+      cost: adviceResult.metadata.cost,
+      processingTime: fallbackTime,
+      timestampStart: new Date(Date.now() - fallbackTime).toISOString(),
+      timestampEnd: new Date().toISOString(),
+
+      performanceBreakdown: {
+        intentClassificationTime: 0,
+        executionTime: adviceResult.metadata.processingTime,
+        totalTime: fallbackTime
+      },
+
+      businessContext: 'General chat fallback - no data query detected',
+      intentReasoning: 'Function calling did not return results, using general chat handler'
+    }
+
+    logger.success('General chat fallback completed', undefined, {
+      processingTime: fallbackTime,
+      intent: 'general_advice',
       responseLength: response.length,
-      totalTokens: metadata.tokens,
-      totalCost: metadata.cost,
       userId
     })
 
     return {
       response,
-      intent: intentResult.intent,
+      intent: 'general_advice',
       metadata
     }
 
@@ -504,7 +452,7 @@ async function processMessageThroughTiers(
     const duration = overallTimer()
     const error = err instanceof Error ? err : new Error(UNKNOWN_ERROR_MESSAGE)
 
-    logger.error('Three-tier processing failed', error, {
+    logger.error('Function calling processing failed', error, {
       processingTime: duration,
       userId,
       userMessage: userMessage.slice(0, TITLE_GENERATION_MESSAGE_LIMIT)

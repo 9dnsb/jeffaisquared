@@ -9,6 +9,24 @@ const toPrismaJson = (value: ChatMessageMetadata | undefined) => {
   // Return the value directly - let TypeScript infer the correct Prisma type
   return value
 }
+
+// Helper function for error handling in database operations
+function handleDatabaseError(
+  err: unknown,
+  timer: () => number,
+  operation: string,
+  context: Record<string, unknown>
+): { success: false; error: string } {
+  const duration = timer()
+  const error = err instanceof Error ? err : new Error(CONVERSATION_MESSAGES.UNKNOWN_ERROR)
+
+  logger.error(`Failed to ${operation}`, error, {
+    processingTime: duration,
+    ...context
+  })
+
+  return { success: false, error: error.message }
+}
 import type {
   Conversation,
   ChatMessage,
@@ -261,15 +279,7 @@ export async function deleteConversation(
 
     return { success: true }
   } catch (err) {
-    const duration = timer()
-    const error = err instanceof Error ? err : new Error(CONVERSATION_MESSAGES.UNKNOWN_ERROR)
-
-    logger.error('Failed to delete conversation', error, {
-      processingTime: duration,
-      conversationId
-    })
-
-    return { success: false, error: error.message }
+    return handleDatabaseError(err, timer, 'delete conversation', { conversationId })
   }
 }
 
@@ -600,15 +610,7 @@ export async function archiveConversation(
 
     return { success: true }
   } catch (err) {
-    const duration = timer()
-    const error = err instanceof Error ? err : new Error(CONVERSATION_MESSAGES.UNKNOWN_ERROR)
-
-    logger.error('Failed to archive conversation', error, {
-      processingTime: duration,
-      conversationId
-    })
-
-    return { success: false, error: error.message }
+    return handleDatabaseError(err, timer, 'archive conversation', { conversationId })
   }
 }
 

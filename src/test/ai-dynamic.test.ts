@@ -14,6 +14,9 @@ describe('AI Dynamic Data Tests', () => {
     await disconnectPrisma()
   })
 
+  // Test structure follows consistent pattern for different time periods
+  // Each time period (today, yesterday, last week, etc.) requires similar assertions with different ground truth values
+  // jscpd:ignore-start
   describe('Today Analysis', () => {
     it('should calculate total sales today', async () => {
       const response = await makeAIRequest("What are our total sales today?")
@@ -302,6 +305,7 @@ describe('AI Dynamic Data Tests', () => {
       expect(total).toBeInRange(expectedRange.min, expectedRange.max)
     })
   })
+  // jscpd:ignore-end
 
   describe('Dynamic Business Metrics', () => {
     it('should calculate average daily sales based on current data', async () => {

@@ -1,43 +1,19 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
-import type { User } from '@supabase/supabase-js'
 import { NavLink } from '../../types/nav'
 import LogoLink from './LogoLink'
 import DesktopNav from './DesktopNav'
 import HamburgerToggle from './HamburgerToggle'
 import MobileNav from './MobileNav'
+import { useSession } from '../../hooks/useSession'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
   const pathname = usePathname()
   const router = useRouter()
-
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const response = await fetch('/api/auth/session', {
-          credentials: 'include'
-        })
-        const data = await response.json() as { authenticated: boolean; user?: User; error?: string }
-
-        if (response.ok && data.authenticated && data.user) {
-          setUser(data.user)
-        } else {
-          setUser(null)
-        }
-      } catch {
-        setUser(null)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    getUser()
-  }, [])
+  const { user, loading, setUser } = useSession()
 
   const handleLogout = async () => {
     try {

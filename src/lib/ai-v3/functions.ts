@@ -1,9 +1,52 @@
 /**
  * AI v3 Function Definitions - Modern OpenAI Function Calling Architecture
  * Maps 100+ test cases to 14 specific, optimized functions
+ *
+ * STRUCTURED OUTPUTS IMPLEMENTATION:
+ * ===================================
+ * All functions use OpenAI's Structured Outputs feature with strict: true
+ *
+ * Benefits:
+ * - 100% schema compliance guaranteed (vs best-effort JSON mode)
+ * - No JSON parsing errors - arguments are always valid
+ * - Programmatic refusal detection for unsafe requests
+ * - Required fields are always present as specified
+ * - additionalProperties: false prevents unexpected fields
+ *
+ * Requirements for strict mode:
+ * 1. All parameters must have explicit type definitions
+ * 2. All optional fields must be in required array with explicit defaults
+ * 3. additionalProperties must be false
+ * 4. No recursive schemas (all schemas must be finite)
+ * 5. All enum values must be explicitly defined
+ *
+ * Reference: https://platform.openai.com/docs/guides/structured-outputs
  */
 
 import type { ChatCompletionTool } from 'openai/resources/chat/completions'
+
+// ===== SHARED SCHEMA DEFINITIONS =====
+
+const TIMEFRAME_PROPERTY = {
+  type: 'string' as const,
+  enum: ['today', 'yesterday', 'last_week', 'last_month', 'all_time'],
+  description: 'Time period for analysis'
+}
+
+const LOCATION_PROPERTY = {
+  type: ['string', 'null'] as const,
+  enum: ['HQ', 'Yonge', 'Bloor', 'Kingston', 'The Well', 'Broadway', null],
+  description: 'Specific location to analyze or null for all locations'
+}
+
+const METRICS_PROPERTY = {
+  type: 'array' as const,
+  items: {
+    type: 'string' as const,
+    enum: ['revenue', 'count', 'quantity', 'avg_transaction', 'unique_items']
+  },
+  description: 'Metrics to calculate for the time period'
+}
 
 // ===== TIME-BASED ANALYSIS FUNCTIONS =====
 
@@ -19,14 +62,7 @@ export const getCustomTimeRangeMetrics: ChatCompletionTool = {
           type: 'string',
           description: 'Natural language description of the time period (e.g., "August 2025", "last 2 weeks", "this month", "Q1 2024", "last 30 days", "2025")'
         },
-        metrics: {
-          type: 'array',
-          items: {
-            type: 'string',
-            enum: ['revenue', 'count', 'quantity', 'avg_transaction', 'unique_items']
-          },
-          description: 'Metrics to calculate for the time period'
-        },
+        metrics: METRICS_PROPERTY,
         include_top_location: {
           type: 'boolean',
           description: 'REQUIRED: Set to true for questions like "which location had highest revenue in [timeframe]". Use when user asks about top performing locations.'
@@ -56,14 +92,7 @@ export const getTimeBasedMetrics: ChatCompletionTool = {
           enum: ['today', 'yesterday', 'last_week', 'last_month', 'last_30_days', 'last_year'],
           description: 'Time period to analyze'
         },
-        metrics: {
-          type: 'array',
-          items: {
-            type: 'string',
-            enum: ['revenue', 'count', 'quantity', 'avg_transaction', 'unique_items']
-          },
-          description: 'Metrics to calculate for the time period'
-        },
+        metrics: METRICS_PROPERTY,
         include_top_location: {
           type: 'boolean',
           description: 'Whether to include the top performing location for this period'
@@ -347,16 +376,8 @@ export const getTopProducts: ChatCompletionTool = {
           maximum: 50,
           description: 'Number of top products to return'
         },
-        timeframe: {
-          type: 'string',
-          enum: ['today', 'yesterday', 'last_week', 'last_month', 'all_time'],
-          description: 'Time period for analysis'
-        },
-        location: {
-          type: ['string', 'null'],
-          enum: ['HQ', 'Yonge', 'Bloor', 'Kingston', 'The Well', 'Broadway', null],
-          description: 'Specific location to analyze or null for all locations'
-        }
+        timeframe: TIMEFRAME_PROPERTY,
+        location: LOCATION_PROPERTY
       },
       required: ['ranking_metric', 'limit', 'timeframe', 'location'],
       additionalProperties: false
@@ -413,16 +434,8 @@ export const getProductCategories: ChatCompletionTool = {
           enum: ['top_categories', 'unique_item_count', 'product_mix', 'price_analysis'],
           description: 'Type of product category analysis'
         },
-        timeframe: {
-          type: 'string',
-          enum: ['today', 'yesterday', 'last_week', 'last_month', 'all_time'],
-          description: 'Time period for analysis'
-        },
-        location: {
-          type: ['string', 'null'],
-          enum: ['HQ', 'Yonge', 'Bloor', 'Kingston', 'The Well', 'Broadway', null],
-          description: 'Specific location to analyze or null for all locations'
-        }
+        timeframe: TIMEFRAME_PROPERTY,
+        location: LOCATION_PROPERTY
       },
       required: ['analysis_type', 'timeframe', 'location'],
       additionalProperties: false

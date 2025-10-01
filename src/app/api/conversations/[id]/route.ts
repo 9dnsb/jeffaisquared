@@ -16,6 +16,46 @@ const CONVERSATION_NOT_FOUND_ERROR = 'Conversation not found'
 const INTERNAL_SERVER_ERROR = 'Internal server error'
 const UNKNOWN_ERROR_MESSAGE = 'Unknown error'
 
+// Helper function to validate session and ownership
+async function validateConversationAccess(
+  conversationId: string,
+  timer: () => number
+): Promise<{ userId: string } | NextResponse> {
+  // Validate session
+  const sessionResult = await validateSession(true)
+  if (sessionResult.error || !sessionResult.session) {
+    const duration = timer()
+    logger.error('Conversation access - invalid session', undefined, {
+      processingTime: duration,
+      conversationId
+    })
+    return sessionResult.error || NextResponse.json(
+      { error: AUTHENTICATION_REQUIRED_ERROR },
+      { status: 401 }
+    )
+  }
+
+  const userId = sessionResult.session.user.id
+
+  // Validate conversation ownership
+  const ownershipResult = await validateConversationOwnership(conversationId, userId)
+  if (!ownershipResult.success || !ownershipResult.isOwner) {
+    const duration = timer()
+    logger.warn('Conversation access denied', undefined, {
+      processingTime: duration,
+      conversationId,
+      userId,
+      ...(ownershipResult.error && { error: new Error(ownershipResult.error) })
+    })
+    return NextResponse.json(
+      { error: CONVERSATION_NOT_FOUND_ERROR },
+      { status: 404 }
+    )
+  }
+
+  return { userId }
+}
+
 /**
  * GET - Retrieve a specific conversation with messages
  */
@@ -30,37 +70,12 @@ export async function GET(
 
     logger.conversationFlow('GET conversation request received', conversationId)
 
-    // Validate session
-    const sessionResult = await validateSession(true)
-    if (sessionResult.error || !sessionResult.session) {
-      const duration = timer()
-      logger.error('Get conversation - invalid session', undefined, {
-        processingTime: duration,
-        conversationId
-      })
-      return sessionResult.error || NextResponse.json(
-        { error: AUTHENTICATION_REQUIRED_ERROR },
-        { status: 401 }
-      )
+    // Validate session and ownership
+    const accessResult = await validateConversationAccess(conversationId, timer)
+    if (accessResult instanceof NextResponse) {
+      return accessResult
     }
-
-    const userId = sessionResult.session.user.id
-
-    // Validate conversation ownership
-    const ownershipResult = await validateConversationOwnership(conversationId, userId)
-    if (!ownershipResult.success || !ownershipResult.isOwner) {
-      const duration = timer()
-      logger.warn('Conversation access denied', undefined, {
-        processingTime: duration,
-        conversationId,
-        userId,
-        ...(ownershipResult.error && { error: new Error(ownershipResult.error) })
-      })
-      return NextResponse.json(
-        { error: CONVERSATION_NOT_FOUND_ERROR },
-        { status: 404 }
-      )
-    }
+    const { userId } = accessResult
 
     // Get query parameters
     const { searchParams } = new URL(request.url)
@@ -152,37 +167,12 @@ export async function PATCH(
 
     logger.conversationFlow('PATCH conversation request received', conversationId)
 
-    // Validate session
-    const sessionResult = await validateSession(true)
-    if (sessionResult.error || !sessionResult.session) {
-      const duration = timer()
-      logger.error('Update conversation - invalid session', undefined, {
-        processingTime: duration,
-        conversationId
-      })
-      return sessionResult.error || NextResponse.json(
-        { error: AUTHENTICATION_REQUIRED_ERROR },
-        { status: 401 }
-      )
+    // Validate session and ownership
+    const accessResult = await validateConversationAccess(conversationId, timer)
+    if (accessResult instanceof NextResponse) {
+      return accessResult
     }
-
-    const userId = sessionResult.session.user.id
-
-    // Validate conversation ownership
-    const ownershipResult = await validateConversationOwnership(conversationId, userId)
-    if (!ownershipResult.success || !ownershipResult.isOwner) {
-      const duration = timer()
-      logger.warn('Conversation update access denied', undefined, {
-        processingTime: duration,
-        conversationId,
-        userId,
-        ...(ownershipResult.error && { error: new Error(ownershipResult.error) })
-      })
-      return NextResponse.json(
-        { error: CONVERSATION_NOT_FOUND_ERROR },
-        { status: 404 }
-      )
-    }
+    const { userId } = accessResult
 
     // Parse and validate request body
     const requestBody = await request.json() as Record<string, string | number | boolean | null>
@@ -275,37 +265,12 @@ export async function DELETE(
 
     logger.conversationFlow('DELETE conversation request received', conversationId)
 
-    // Validate session
-    const sessionResult = await validateSession(true)
-    if (sessionResult.error || !sessionResult.session) {
-      const duration = timer()
-      logger.error('Delete conversation - invalid session', undefined, {
-        processingTime: duration,
-        conversationId
-      })
-      return sessionResult.error || NextResponse.json(
-        { error: AUTHENTICATION_REQUIRED_ERROR },
-        { status: 401 }
-      )
+    // Validate session and ownership
+    const accessResult = await validateConversationAccess(conversationId, timer)
+    if (accessResult instanceof NextResponse) {
+      return accessResult
     }
-
-    const userId = sessionResult.session.user.id
-
-    // Validate conversation ownership
-    const ownershipResult = await validateConversationOwnership(conversationId, userId)
-    if (!ownershipResult.success || !ownershipResult.isOwner) {
-      const duration = timer()
-      logger.warn('Conversation delete access denied', undefined, {
-        processingTime: duration,
-        conversationId,
-        userId,
-        ...(ownershipResult.error && { error: new Error(ownershipResult.error) })
-      })
-      return NextResponse.json(
-        { error: CONVERSATION_NOT_FOUND_ERROR },
-        { status: 404 }
-      )
-    }
+    const { userId } = accessResult
 
     logger.conversationFlow('Deleting conversation', conversationId, userId)
 

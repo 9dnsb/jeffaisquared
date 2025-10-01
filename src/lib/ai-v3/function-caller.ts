@@ -34,6 +34,26 @@ export class FunctionCaller {
   }
 
   /**
+   * Helper to create OpenAI function call error response
+   */
+  private createOpenAIErrorResponse(
+    inputMessages: Array<{ role: string; content: string }>,
+    duration: number,
+    tokens: number,
+    error: string
+  ) {
+    return {
+      success: false,
+      toolCalls: [],
+      openaiMessages: inputMessages,
+      tokens,
+      cost: tokens * 0.00003,
+      processingTime: duration,
+      error,
+    }
+  }
+
+  /**
    * Process user query using OpenAI function calling
    */
   async processQuery(request: QueryRequest): Promise<QueryResponse> {
@@ -64,6 +84,36 @@ export class FunctionCaller {
         return this.createErrorResponse(
           functionCallResult.error || 'Function call failed'
         )
+      }
+
+      // Handle text-only response (model used conversation context)
+      if (
+        functionCallResult.textResponse &&
+        functionCallResult.toolCalls.length === 0
+      ) {
+        const totalTime = overallTimer()
+
+        logger.success('AI v3 text-only response completed', undefined, {
+          processingTime: totalTime,
+          requestId: this.requestCount,
+          totalTokens: functionCallResult.tokens,
+          totalCost: functionCallResult.cost,
+        })
+
+        return {
+          success: true,
+          data: [],
+          summary: functionCallResult.textResponse,
+          metadata: {
+            processingTime: totalTime,
+            queryComplexity: 'simple',
+            cacheHit: false,
+            queryPlan: 'text_only_response',
+            recordCount: 0,
+            optimizationStrategy: 'conversation_context',
+            extractedParameters: {} as any,
+          },
+        }
       }
 
       // Step 2: Execute all function calls
@@ -134,7 +184,16 @@ export class FunctionCaller {
   }
 
   /**
-   * Make initial OpenAI request with function definitions with rate limit handling
+   * Make initial OpenAI request with function definitions using Structured Outputs
+   *
+   * STRUCTURED OUTPUTS (strict mode):
+   * - All functions have strict: true and additionalProperties: false
+   * - OpenAI guarantees 100% schema compliance (vs best-effort matching)
+   * - Eliminates JSON parsing errors and validation failures
+   * - Provides programmatic refusal detection via choice.message.refusal
+   * - Required fields are always present as specified in schema
+   *
+   * Rate limit handling with exponential backoff retry logic
    */
   private async callOpenAIWithFunctions(request: QueryRequest): Promise<{
     success: boolean
@@ -146,6 +205,7 @@ export class FunctionCaller {
     tokens: number
     cost: number
     processingTime: number
+    textResponse?: string
     error?: string
   }> {
     const timer = logger.startTimer('OpenAI Function Call Request')
@@ -163,38 +223,49 @@ export class FunctionCaller {
           role: 'system' as const,
           content: `You are a business analytics assistant that helps analyze sales data.
 
-CRITICAL: Call EXACTLY ONE function per user question. Do not call multiple functions unless the user explicitly asks for multiple different types of analysis.
+CRITICAL DECISION TREE - Follow this order:
 
-Function Selection Rules:
+1. FIRST: Check conversation history for relevant data
+   - If the user asks about data that was JUST provided in recent messages, answer directly using that context
+   - Examples where you should NOT call functions:
+     * "compare them" → use data from previous messages
+     * "which was better?" → use data from previous messages
+     * "what's the difference?" → calculate using data already provided
+     * "what about [metric] for that period?" → use timeframe from previous context
+
+2. ONLY call functions when you need NEW data not in conversation history
+   - User asks about a NEW time period not yet queried
+   - User asks about DIFFERENT locations not in recent context
+   - User requests a NEW type of analysis requiring fresh data
+
+Function Selection Rules (when calling functions):
 1. For "best/top/highest performing location" questions: use get_location_rankings with ranking_type="by_revenue"
-   - ALWAYS include timeframe parameter if time period is mentioned
    - Example: "highest sales today" → get_location_rankings(ranking_type="by_revenue", timeframe="today")
 2. For "worst/bottom/lowest performing location" questions: use get_location_rankings with ranking_type="by_revenue" and order="lowest_to_highest"
-   - ALWAYS include timeframe parameter if time period is mentioned
 3. For specific location performance: use get_location_metrics with specific location names
-   - ALWAYS include timeframe parameter if time period is mentioned
+   - Example: "Bloor revenue" → get_location_metrics(locations=["Bloor"], metrics=["revenue"], timeframe="all_time")
+   - Example: "Bloor transactions" → get_location_metrics(locations=["Bloor"], metrics=["count"], timeframe="all_time")
 4. For comparing specific locations: use compare_locations with comparison_type="specific_pair"
-   - Example: "Compare Bloor vs Kingston revenue" → compare_locations(comparison_type="specific_pair", location_a="Bloor", location_b="Kingston", metric="revenue", timeframe="all_time")
-   - ALWAYS include timeframe parameter if time period is mentioned
-5. For time-based totals (today's sales, yesterday's revenue): use get_time_based_metrics
+   - Example: "Compare Bloor vs Kingston" → compare_locations(comparison_type="specific_pair", location_a="Bloor", location_b="Kingston", metric="revenue", timeframe="all_time")
+5. For time-based totals: use get_time_based_metrics
 6. For comparing time periods: use compare_periods
 7. For product analysis: use get_top_products or get_product_location_analysis
 8. For business overviews: use get_business_overview
 
-CRITICAL TIMEFRAME HANDLING (Use exact timeframe values, Toronto timezone):
-- "today" → timeframe="today" (${todayDates.startDate.toISOString()} to ${todayDates.endDate.toISOString()})
-- "yesterday" → timeframe="yesterday" (${yesterdayDates.startDate.toISOString()} to ${yesterdayDates.endDate.toISOString()})
-- "last week" → timeframe="last_week" (${lastWeekDates.startDate.toISOString()} to ${lastWeekDates.endDate.toISOString()})
-- "last month" → timeframe="last_month" (${lastMonthDates.startDate.toISOString()} to ${lastMonthDates.endDate.toISOString()})
-- If no time mentioned, use all-time data (no timeframe parameter)
+CRITICAL TIMEFRAME DEFAULTS:
+- If NO time period is mentioned → ALWAYS use timeframe="all_time"
+- "today" → timeframe="today"
+- "yesterday" → timeframe="yesterday"
+- "last week" → timeframe="last_week"
+- "last month" → timeframe="last_month"
+- Questions like "How many transactions has Bloor had?" mean ALL TIME, use timeframe="all_time"
 
-NEVER call both time-based AND location functions for a single question about "best performing location revenue" - this is asking for location ranking, not time-based totals.
+NEVER ask clarifying questions. Either use conversation context or call a function with reasonable defaults.
 
 Available data:
 - Sales transactions with revenue, quantities, dates
 - 6 store locations: HQ, Yonge, Bloor, Kingston, The Well, Broadway
-- Product/item data with categories and pricing
-- Time-based data for trend analysis`,
+- Product/item data with categories and pricing`,
         },
         ...request.conversationHistory.map((msg) => ({
           role: msg.role,
@@ -206,16 +277,30 @@ Available data:
         },
       ]
 
+      // Convert Chat Completions tools format to Responses API format
+      const responsesApiTools = ALL_SALES_FUNCTIONS.map((tool) => {
+        if (tool.type === 'function') {
+          return {
+            type: 'function' as const,
+            name: tool.function.name,
+            description: tool.function.description,
+            parameters: tool.function.parameters,
+            strict: tool.function.strict,
+          }
+        }
+        throw new Error(`Unsupported tool type: ${tool.type}`)
+      })
+
       const response = await RateLimiter.withRetry(
         async () => {
-          return await this.openai.chat.completions.create({
+          return await this.openai.responses.create({
             model: AI_V3_CONFIG.openai.model,
-            messages: inputMessages,
-            tools: ALL_SALES_FUNCTIONS,
+            input: inputMessages,
+            tools: responsesApiTools,
             tool_choice: 'auto', // Let model decide which functions to call
             parallel_tool_calls: false, // Prevent multiple functions for single-metric queries
             temperature: AI_V3_CONFIG.openai.temperature,
-            max_tokens: AI_V3_CONFIG.openai.maxTokens,
+            max_output_tokens: AI_V3_CONFIG.openai.maxTokens,
           })
         },
         3,
@@ -224,30 +309,127 @@ Available data:
       ) // 3 retries, 1s initial delay, 15s max delay for Tier 2
 
       const duration = timer()
-      const choice = response.choices[0]
-      const rawToolCalls = choice?.message?.tool_calls || []
+
+      // Check response status (Responses API status checking)
+      if (response.status === 'failed') {
+        const errorMessage =
+          response.error?.message || 'Response generation failed'
+        logger.error('Response generation failed', new Error(errorMessage), {
+          errorCode: response.error?.code,
+          processingTime: duration,
+        })
+        return this.createOpenAIErrorResponse(
+          inputMessages,
+          duration,
+          response.usage?.total_tokens || 0,
+          errorMessage
+        )
+      }
+
+      if (response.status === 'incomplete') {
+        const incompleteReason =
+          response.incomplete_details?.reason || 'unknown'
+        logger.warn('Response incomplete', undefined, {
+          incompleteReason: incompleteReason,
+          processingTime: duration,
+        })
+        return this.createOpenAIErrorResponse(
+          inputMessages,
+          duration,
+          response.usage?.total_tokens || 0,
+          `Response incomplete: ${incompleteReason}`
+        )
+      }
+
+      const output = response.output
+
+      // Check for refusal in output items (Responses API refusal handling)
+      const refusalItem = output.find(
+        (item: any) =>
+          item.type === 'message' &&
+          item.content?.some((c: any) => c.type === 'refusal')
+      )
+
+      if (refusalItem) {
+        const refusalContent = (refusalItem as any).content.find(
+          (c: any) => c.type === 'refusal'
+        )
+        logger.warn('OpenAI refused to generate function calls', undefined, {
+          refusalReason: refusalContent?.refusal,
+          status: response.status,
+        })
+        return this.createOpenAIErrorResponse(
+          inputMessages,
+          duration,
+          response.usage?.total_tokens || 0,
+          `Request refused: ${refusalContent?.refusal}`
+        )
+      }
+
+      // Extract function calls from output array (Responses API format)
+      const toolCalls: Array<{
+        id: string
+        function: { name: string; arguments: string }
+      }> = []
+
+      for (const item of output) {
+        if ((item as any).type === 'function_call') {
+          const functionCallItem = item as any
+          toolCalls.push({
+            id: functionCallItem.call_id,
+            function: {
+              name: functionCallItem.name,
+              arguments: functionCallItem.arguments,
+            },
+          })
+        }
+      }
+
       const tokens = response.usage?.total_tokens || 0
       const cost = tokens * 0.00003 // GPT-4o pricing
 
-      // Convert OpenAI tool calls to our expected format
-      const toolCalls = rawToolCalls
-        .filter((tc) => tc.type === 'function')
-        .map((tc) => {
-          const functionCall = tc as any // OpenAI types may be outdated
-          return {
-            id: tc.id,
-            function: {
-              name: functionCall.function?.name || '',
-              arguments: functionCall.function?.arguments || '{}',
-            },
-          }
-        })
-
+      // Handle text-only responses (when model uses conversation context instead of calling functions)
       if (toolCalls.length === 0) {
-        logger.warn('No function calls generated by OpenAI', undefined, {
-          messageContent: choice?.message?.content?.slice(0, 200),
-          finishReason: choice?.finish_reason,
-        })
+        // Check if there's a text message instead
+        const textMessage = output.find((item: any) => item.type === 'message')
+        const messageContent = textMessage
+          ? (textMessage as any).content?.find(
+              (c: any) => c.type === 'output_text'
+            )?.text
+          : null
+
+        if (messageContent && messageContent.trim()) {
+          // Valid text-only response - model used conversation context
+          logger.ai(
+            'Text-only response (using conversation context)',
+            undefined,
+            {
+              messageLength: messageContent.length,
+              tokens,
+              cost: Number(cost.toFixed(6)),
+              processingTime: duration,
+            }
+          )
+
+          return {
+            success: true,
+            toolCalls: [],
+            openaiMessages: inputMessages,
+            tokens,
+            cost,
+            processingTime: duration,
+            textResponse: messageContent,
+          }
+        }
+
+        // No function calls AND no text = error
+        logger.warn(
+          'No function calls or text generated by OpenAI',
+          undefined,
+          {
+            status: response.status,
+          }
+        )
         return {
           success: false,
           toolCalls: [],
@@ -255,7 +437,7 @@ Available data:
           tokens,
           cost,
           processingTime: duration,
-          error: 'No function calls generated',
+          error: 'Model returned neither function calls nor text response',
         }
       }
 
@@ -336,8 +518,36 @@ Available data:
       const timer = logger.startTimer(`Execute ${toolCall.function.name}`)
 
       try {
-        // Parse function arguments
-        const functionArgs = JSON.parse(toolCall.function.arguments)
+        // Parse function arguments (guaranteed valid JSON due to strict mode)
+        let functionArgs: any
+        try {
+          functionArgs = JSON.parse(toolCall.function.arguments)
+        } catch (parseError) {
+          // This should never happen with strict mode enabled, but handle gracefully
+          logger.error(
+            `Unexpected JSON parse error with strict mode`,
+            parseError instanceof Error
+              ? parseError
+              : new Error('Parse failed'),
+            {
+              functionName: toolCall.function.name,
+              arguments: toolCall.function.arguments.slice(0, 200),
+            }
+          )
+          throw new Error(
+            `Failed to parse function arguments: ${
+              parseError instanceof Error ? parseError.message : 'Unknown error'
+            }`
+          )
+        }
+
+        // Validate that all required fields are present (strict mode guarantees this)
+        // This is redundant with strict mode but provides extra safety
+        if (!this.validateFunctionArgs(toolCall.function.name, functionArgs)) {
+          throw new Error(
+            `Function arguments validation failed for ${toolCall.function.name}`
+          )
+        }
 
         // Execute the function
         const result = await executor.executeFunction(
@@ -406,7 +616,7 @@ Available data:
   }
 
   /**
-   * Get final natural language response from OpenAI using new API format
+   * Get final natural language response from OpenAI using Responses API
    */
   private async getFinalResponse(
     request: QueryRequest,
@@ -425,34 +635,38 @@ Available data:
     const timer = logger.startTimer('OpenAI Final Response')
 
     try {
-      // Build messages with tool call results using traditional API format
-      const messages = [
-        ...originalMessages,
-        {
-          role: 'assistant' as const,
-          content: null,
-          tool_calls: toolCalls.map((tc) => ({
-            id: tc.id,
-            type: 'function' as const,
-            function: tc.function,
-          })),
-        },
-        ...executionResults.map((result) => ({
-          role: 'tool' as const,
-          tool_call_id: result.toolCallId,
-          content: result.success
+      // Build input with function call outputs using Responses API format
+      const input: any[] = [...originalMessages]
+
+      // CRITICAL: First, append the function call items from the first response
+      // This tells the model which functions were called
+      toolCalls.forEach((tc) => {
+        input.push({
+          type: 'function_call',
+          call_id: tc.id,
+          name: tc.function.name,
+          arguments: tc.function.arguments,
+        })
+      })
+
+      // Then, add the function call outputs (Responses API format)
+      executionResults.forEach((result) => {
+        input.push({
+          type: 'function_call_output',
+          call_id: result.toolCallId,
+          output: result.success
             ? JSON.stringify(result.result)
             : `Error: ${result.error}`,
-        })),
-      ]
+        })
+      })
 
       const response = await RateLimiter.withRetry(
         async () => {
-          return await this.openai.chat.completions.create({
+          return await this.openai.responses.create({
             model: AI_V3_CONFIG.openai.model,
-            messages,
+            input: input,
             temperature: 0.1, // Lower temperature for consistent summaries
-            max_tokens: 800,
+            max_output_tokens: 800,
           })
         },
         3,
@@ -461,8 +675,28 @@ Available data:
       ) // 3 retries, 1s initial delay, 15s max delay for Tier 2
 
       const duration = timer()
-      const content =
-        response.choices[0]?.message?.content || 'No summary available'
+
+      // Extract text from output using Responses API format
+      let content = 'No summary available'
+
+      // Use SDK helper output_text if available, otherwise manually extract
+      if ((response as any).output_text) {
+        content = (response as any).output_text
+      } else {
+        // Manually extract from output array
+        const messageItem = response.output.find(
+          (item: any) => item.type === 'message'
+        )
+        if (messageItem) {
+          const textContent = (messageItem as any).content?.find(
+            (c: any) => c.type === 'output_text'
+          )
+          if (textContent) {
+            content = textContent.text
+          }
+        }
+      }
+
       const tokens = response.usage?.total_tokens || 0
       const cost = tokens * 0.00003
 
@@ -598,6 +832,39 @@ Available data:
     } catch {
       return {}
     }
+  }
+
+  /**
+   * Validate function arguments against expected schema
+   * This is redundant with strict mode but provides extra safety and logging
+   */
+  private validateFunctionArgs(functionName: string, args: any): boolean {
+    // With strict mode enabled, OpenAI guarantees schema compliance
+    // This validation is a defensive check that should never fail
+    if (!args || typeof args !== 'object') {
+      logger.warn('Function arguments are not an object', undefined, {
+        functionName,
+        argsType: typeof args,
+      })
+      return false
+    }
+
+    // Basic validation - strict mode guarantees required fields are present
+    // Log if we detect any anomalies (should never happen with strict: true)
+    const hasRequiredFields = Object.keys(args).length > 0
+
+    if (!hasRequiredFields) {
+      logger.warn(
+        'Function arguments object is empty (unexpected with strict mode)',
+        undefined,
+        {
+          functionName,
+        }
+      )
+      return false
+    }
+
+    return true
   }
 }
 

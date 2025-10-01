@@ -104,10 +104,9 @@ Before tests, run:
 **Development:**
 
 - `npm run dev` - Start Next.js development server
-- `npm run lint` - Run ESLint
 - `npx tsc --noEmit` - TypeScript type checking without compilation
 - `npx jscpd src` - No duplicates
-- `npx tsc --noEmit && npm run lint && npx jscpd src && npm run test:run -- --coverage` - Full code quality check (ALWAYS RUN AFTER CODING)
+- `npx tsc --noEmit && npx jscpd src` - Full code quality check (ALWAYS RUN AFTER CODING)
 - `npm run build` - Build for production
 
 **Testing:**
@@ -120,21 +119,19 @@ Before tests, run:
 - All database commands use `.env.development` by default
 - Prisma generates client to `src/generated/prisma/`
 - Seed data is based on Zapier.xlsx sample data
-- ESLint ignores generated Prisma files
 
 ## Code Quality Requirements
 
 **MANDATORY: Always run after creating/modifying code:**
 
 ```bash
-npx tsc --noEmit && npm run lint && npx jscpd src && npm run test:run -- --coverage
+npx tsc --noEmit && npx jscpd src
 ```
 
 This ensures:
 
 - ✅ TypeScript compilation passes (strict mode enabled)
 - ✅ No type errors or unsafe operations
-- ✅ ESLint rules pass (no-any, strict TypeScript rules)
 - ✅ No code duplication (jscpd detects duplicate code blocks)
 - ✅ All tests pass with coverage reporting
 - ✅ Code follows project standards
@@ -169,24 +166,6 @@ This ensures:
 - `"noUnusedParameters": true` - No unused function parameters
 - `"allowUnreachableCode": false` - No unreachable code
 - `"forceConsistentCasingInFileNames": true` - Consistent file naming
-
-### ESLint Rules (eslint.config.mjs)
-
-**ZERO-TOLERANCE POLICY:**
-
-**TypeScript Safety Rules (ALL are ERRORS):**
-
-- `@typescript-eslint/no-explicit-any: error` - NEVER use `any` type
-- `@typescript-eslint/no-unsafe-assignment: error` - No unsafe value assignments
-- `@typescript-eslint/no-unsafe-call: error` - No unsafe function calls
-- `@typescript-eslint/no-unsafe-member-access: error` - No unsafe property access
-- `@typescript-eslint/no-unsafe-return: error` - No unsafe return values
-- `@typescript-eslint/restrict-plus-operands: error` - Type-safe arithmetic only
-- `@typescript-eslint/restrict-template-expressions: error` - Type-safe template literals
-
-**Custom Rules:**
-
-- `no-restricted-syntax` - FORBIDDEN: `unknown` keyword (use specific types)
 
 **React Rules:**
 

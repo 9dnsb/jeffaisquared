@@ -2,6 +2,20 @@ import { PrismaClient } from '../generated/prisma'
 
 const prisma = new PrismaClient()
 
+// Helper function to get order aggregates for a date range
+async function getOrderAggregateForRange(startDate: Date, endDate: Date) {
+  return prisma.order.aggregate({
+    where: {
+      date: {
+        gte: startDate,
+        lt: endDate
+      }
+    },
+    _count: true,
+    _sum: { totalAmount: true }
+  })
+}
+
 export interface GroundTruthData {
   // Static data (doesn't change based on current date)
   total2024Sales: number
@@ -125,60 +139,11 @@ export async function calculateGroundTruth(): Promise<GroundTruthData> {
     }),
 
     // Dynamic data
-    prisma.order.aggregate({
-      where: {
-        date: {
-          gte: today,
-          lt: new Date(today.getTime() + 24 * 60 * 60 * 1000)
-        }
-      },
-      _count: true,
-      _sum: { totalAmount: true }
-    }),
-
-    prisma.order.aggregate({
-      where: {
-        date: {
-          gte: yesterday,
-          lt: today
-        }
-      },
-      _count: true,
-      _sum: { totalAmount: true }
-    }),
-
-    prisma.order.aggregate({
-      where: {
-        date: {
-          gte: lastWeekStart,
-          lt: today
-        }
-      },
-      _count: true,
-      _sum: { totalAmount: true }
-    }),
-
-    prisma.order.aggregate({
-      where: {
-        date: {
-          gte: thisMonthStart,
-          lt: new Date(today.getTime() + 24 * 60 * 60 * 1000)
-        }
-      },
-      _count: true,
-      _sum: { totalAmount: true }
-    }),
-
-    prisma.order.aggregate({
-      where: {
-        date: {
-          gte: last30DaysStart,
-          lt: new Date(today.getTime() + 24 * 60 * 60 * 1000)
-        }
-      },
-      _count: true,
-      _sum: { totalAmount: true }
-    })
+    getOrderAggregateForRange(today, new Date(today.getTime() + 24 * 60 * 60 * 1000)),
+    getOrderAggregateForRange(yesterday, today),
+    getOrderAggregateForRange(lastWeekStart, today),
+    getOrderAggregateForRange(thisMonthStart, new Date(today.getTime() + 24 * 60 * 60 * 1000)),
+    getOrderAggregateForRange(last30DaysStart, new Date(today.getTime() + 24 * 60 * 60 * 1000))
   ])
 
   // Get location mappings

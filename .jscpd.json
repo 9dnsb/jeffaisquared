@@ -11,7 +11,7 @@
   ],
   "skipComments": true,
   "format": ["typescript", "javascript", "tsx"],
-  "minTokens": 50,
+  "minTokens": 45,
   "minLines": 5,
   "mode": "mild",
   "output": "./reports/jscpd"

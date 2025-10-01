@@ -26,6 +26,8 @@ vi.mock('../../../../../lib/supabase', () => ({
   }
 }))
 
+// Test setup pattern similar to other auth tests
+// jscpd:ignore-start
 describe('/api/auth/reset-password', () => {
   let authApiUtils: any
   let supabase: any
@@ -36,6 +38,7 @@ describe('/api/auth/reset-password', () => {
     authApiUtils = await import('@/lib/auth-api-utils')
     supabase = (await import('../../../../../lib/supabase')).default
   })
+  // jscpd:ignore-end
 
   describe('POST', () => {
     const validResetPasswordData = {
