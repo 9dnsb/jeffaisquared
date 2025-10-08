@@ -19,7 +19,7 @@ import { createClient } from '@supabase/supabase-js'
 // ============================================================================
 
 const EMBEDDING_MODEL = 'text-embedding-3-small'
-const CHAT_MODEL = 'gpt-5-nano' // Using Responses API with gpt-5-nano (optimized for structured tasks)
+const CHAT_MODEL = 'gpt-4.1-nano' // Using Responses API with gpt-4.1-nano (low latency, no reasoning step)
 const SCHEMA_MATCH_THRESHOLD = 0.0 // Minimum similarity score (0.0 = return all matches)
 const SCHEMA_MATCH_COUNT = 10 // Number of schema objects to retrieve
 const MAX_QUERY_TIMEOUT = 10000 // 10 seconds max for SQL execution
@@ -220,7 +220,7 @@ Generate a PostgreSQL query that accurately answers this question.`
       },
     ],
     tool_choice: { type: 'function', name: 'generate_sql' },
-    // Note: gpt-5 models don't support temperature parameter (reasoning models use reasoning.effort instead)
+    temperature: 0, // Deterministic for SQL generation
   })
 
   // Find the function call in the output
