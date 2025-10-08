@@ -22,7 +22,7 @@ const EMBEDDING_MODEL = 'text-embedding-3-small'
 const CHAT_MODEL = 'gpt-4.1-nano' // Using Responses API with gpt-4.1-nano (low latency, no reasoning step)
 const SCHEMA_MATCH_THRESHOLD = 0.0 // Minimum similarity score (0.0 = return all matches)
 const SCHEMA_MATCH_COUNT = 10 // Number of schema objects to retrieve
-const MAX_QUERY_TIMEOUT = 10000 // 10 seconds max for SQL execution
+const MAX_QUERY_TIMEOUT = 20000 // 15 seconds max for SQL execution
 
 // ============================================================================
 // Types
@@ -77,7 +77,10 @@ const getSupabaseClient = () => {
 /**
  * Send SSE event to client
  */
-function sendSSE(controller: ReadableStreamDefaultController, event: SSEEvent): void {
+function sendSSE(
+  controller: ReadableStreamDefaultController,
+  event: SSEEvent
+): void {
   const data = `data: ${JSON.stringify(event)}\n\n`
   controller.enqueue(new TextEncoder().encode(data))
 }
@@ -105,8 +108,14 @@ async function retrieveSchemaContext(
   const vectorString = `[${questionEmbedding.join(',')}]`
 
   console.log('[retrieveSchemaContext] Starting schema retrieval...')
-  console.log('[retrieveSchemaContext] Embedding length:', questionEmbedding.length)
-  console.log('[retrieveSchemaContext] Vector string preview:', vectorString.substring(0, 100) + '...')
+  console.log(
+    '[retrieveSchemaContext] Embedding length:',
+    questionEmbedding.length
+  )
+  console.log(
+    '[retrieveSchemaContext] Vector string preview:',
+    vectorString.substring(0, 100) + '...'
+  )
 
   const supabase = getSupabaseClient()
 
@@ -124,11 +133,14 @@ async function retrieveSchemaContext(
     errorMessage: error?.message,
     errorDetails: error?.details,
     errorHint: error?.hint,
-    errorCode: error?.code
+    errorCode: error?.code,
   })
 
   if (error) {
-    console.error('[retrieveSchemaContext] Full error object:', JSON.stringify(error, null, 2))
+    console.error(
+      '[retrieveSchemaContext] Full error object:',
+      JSON.stringify(error, null, 2)
+    )
     throw new Error(`Schema retrieval failed: ${error.message}`)
   }
 
@@ -146,7 +158,11 @@ async function generateSQL(
   const schemaDescription = schemaContext
     .map(
       (match) =>
-        `[${match.object_type.toUpperCase()}] ${match.object_name} (similarity: ${(match.similarity * 100).toFixed(1)}%)\n${match.description}`
+        `[${match.object_type.toUpperCase()}] ${
+          match.object_name
+        } (similarity: ${(match.similarity * 100).toFixed(1)}%)\n${
+          match.description
+        }`
     )
     .join('\n\n')
 
@@ -262,17 +278,23 @@ async function executeSQL(sql: string): Promise<unknown[]> {
     errorMessage: error?.message,
     errorDetails: error?.details,
     errorHint: error?.hint,
-    errorCode: error?.code
+    errorCode: error?.code,
   })
 
   if (error) {
-    console.error('[executeSQL] Full error object:', JSON.stringify(error, null, 2))
+    console.error(
+      '[executeSQL] Full error object:',
+      JSON.stringify(error, null, 2)
+    )
     throw new Error(`Query execution failed: ${error.message}`)
   }
 
   // Parse JSON result
   const results = typeof data === 'string' ? JSON.parse(data) : data
-  console.log('[executeSQL] Parsed results count:', Array.isArray(results) ? results.length : 'not an array')
+  console.log(
+    '[executeSQL] Parsed results count:',
+    Array.isArray(results) ? results.length : 'not an array'
+  )
   return Array.isArray(results) ? results : []
 }
 
@@ -323,7 +345,10 @@ export async function POST(request: NextRequest): Promise<Response> {
           type: 'schema',
           message: `Found ${schemaMatches.length} relevant schema objects`,
           context: schemaMatches.map(
-            (m) => `${m.object_type}: ${m.object_name} (${(m.similarity * 100).toFixed(1)}%)`
+            (m) =>
+              `${m.object_type}: ${m.object_name} (${(
+                m.similarity * 100
+              ).toFixed(1)}%)`
           ),
         })
 
