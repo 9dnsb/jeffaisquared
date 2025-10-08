@@ -1,400 +1,423 @@
 'use client'
 
-import React, { useState, useEffect, useRef, useCallback } from 'react'
-import type {
-  ChatInterfaceProps,
-  ChatMessage,
-  ConversationWithMessages,
-  ChatResponse
-} from '../types/chat'
-import MarkdownMessage from './MarkdownMessage'
+import React, { useState, useRef, useEffect } from 'react'
 
-// Component constants
-const AUTO_SCROLL_DELAY = 120
-const CONVERSATION_ID_DISPLAY_LENGTH = -8
-const PERCENTAGE_MULTIPLIER = 100
-const COST_DECIMAL_PLACES = 4
+// ============================================================================
+// Types
+// ============================================================================
 
-/**
- * Main chat interface component with full conversation persistence
- * and real-time message handling
- */
-export default function ChatInterface({ userId, initialConversationId }: ChatInterfaceProps) {
-  // State management
-  const [currentConversation, setCurrentConversation] = useState<ConversationWithMessages | null>(null)
-  const [messages, setMessages] = useState<ChatMessage[]>([])
-  const [inputMessage, setInputMessage] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [isLoadingConversation, setIsLoadingConversation] = useState(false)
+interface Message {
+  id: string
+  role: 'user' | 'assistant'
+  content: string
+}
 
-  // Refs
+interface StreamState {
+  status: string
+  schemaContext: string[]
+  sql: string
+  explanation: string
+  results: Record<string, unknown>[]
+  error: string | null
+  isStreaming: boolean
+}
+
+interface SSEEvent {
+  type: 'status' | 'schema' | 'sql' | 'results' | 'error' | 'complete'
+  message?: string
+  context?: string[]
+  query?: string
+  explanation?: string
+  data?: Record<string, unknown>[]
+  error?: string
+}
+
+// ============================================================================
+// Main Component
+// ============================================================================
+
+export default function ChatInterface({ userId }: { userId: string }) {
+  const [messages, setMessages] = useState<Message[]>([])
+  const [input, setInput] = useState('')
+  const [streamState, setStreamState] = useState<StreamState>({
+    status: '',
+    schemaContext: [],
+    sql: '',
+    explanation: '',
+    results: [],
+    error: null,
+    isStreaming: false,
+  })
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  /**
-   * Scroll to bottom of messages
-   */
-  const scrollToBottom = useCallback(() => {
+  // Auto-scroll to bottom
+  useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [])
+  }, [messages, streamState])
 
-  /**
-   * Load conversation by ID
-   */
-  const loadConversation = useCallback(async (conversationId: string) => {
-    console.log('🔄 Loading conversation:', conversationId)
-    setIsLoadingConversation(true)
-    setError(null)
+  // ============================================================================
+  // SSE Streaming Handler
+  // ============================================================================
 
-    try {
-      const response = await fetch(`/api/conversations/${conversationId}?includeMessages=true`, {
-        credentials: 'include'
-      })
-      const data = await response.json() as {
-        success: boolean
-        conversation?: ConversationWithMessages
-        error?: string
-      }
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to load conversation')
-      }
-
-      if (data.success && data.conversation) {
-        console.log('✅ Conversation loaded:', data.conversation.id, 'Messages:', data.conversation.messages?.length || 0)
-        setCurrentConversation(data.conversation)
-        setMessages(data.conversation.messages || [])
-        setError(null)
-      } else {
-        throw new Error('Invalid conversation response')
-      }
-    } catch (err) {
-      console.error('❌ Failed to load conversation:', err)
-      setError(err instanceof Error ? err.message : 'Failed to load conversation')
-    } finally {
-      setIsLoadingConversation(false)
-    }
-  }, [])
-
-  /**
-   * Create new conversation
-   */
-  const createNewConversation = useCallback(async () => {
-    console.log('🆕 Creating new conversation')
-    setCurrentConversation(null)
-    setMessages([])
-    setError(null)
-  }, [])
-
-  /**
-   * Send message to chat API
-   */
-  const sendMessage = useCallback(async () => {
-    if (!inputMessage.trim() || isLoading) return
-
-    const messageToSend = inputMessage.trim()
-    setInputMessage('')
-    setError(null)
-    setIsLoading(true)
-
-    // Add user message to UI immediately
-    const tempUserMessage: ChatMessage = {
-      id: `temp-${Date.now()}`,
-      conversationId: currentConversation?.id || 'temp',
-      role: 'user',
-      content: messageToSend,
-      metadata: null,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }
-
-    setMessages(prev => [...prev, tempUserMessage])
-
-    console.log('📤 Sending message:', {
-      message: messageToSend,
-      conversationId: currentConversation?.id,
-      userId
+  const streamQuery = async (question: string) => {
+    // Reset stream state
+    setStreamState({
+      status: '',
+      schemaContext: [],
+      sql: '',
+      explanation: '',
+      results: [],
+      error: null,
+      isStreaming: true,
     })
 
     try {
-      const response = await fetch('/api/chat', {
+      const response = await fetch('/api/text-to-sql', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          message: messageToSend,
-          conversationId: currentConversation?.id,
-          userId
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question }),
       })
 
-      const data = await response.json() as ChatResponse
-
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to send message')
+        throw new Error(`HTTP ${response.status}`)
       }
 
-      if (data.success) {
-        console.log('✅ Message sent successfully:', {
-          conversationId: data.conversationId,
-          intent: data.intent,
-          messageLength: data.message.length,
-          tokens: data.metadata.tokens,
-          cost: data.metadata.cost,
-          processingTime: data.metadata.processingTime
-        })
+      const reader = response.body?.getReader()
+      if (!reader) throw new Error('No response stream')
 
-        // Update conversation if this is a new one
-        if (!currentConversation || currentConversation.id !== data.conversationId) {
-          setCurrentConversation(prev => prev ? { ...prev, id: data.conversationId } : {
-            id: data.conversationId,
-            userId,
-            title: null,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            messages: []
-          })
-        }
+      const decoder = new TextDecoder()
+      let buffer = ''
 
-        // Create proper AI response message
-        const aiMessage: ChatMessage = {
-          id: data.messageId,
-          conversationId: data.conversationId,
-          role: 'assistant',
-          content: data.message,
-          metadata: data.metadata,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
 
-        // Replace temp message and add AI response
-        setMessages(prev => {
-          const withoutTemp = prev.filter(msg => msg.id !== tempUserMessage.id)
-          const properUserMessage: ChatMessage = {
-            ...tempUserMessage,
-            id: `user-${data.messageId}`,
-            conversationId: data.conversationId
+        buffer += decoder.decode(value, { stream: true })
+        const lines = buffer.split('\n')
+        buffer = lines.pop() || ''
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = line.slice(6)
+            if (data === '[DONE]') continue
+
+            try {
+              const event = JSON.parse(data) as SSEEvent
+
+              setStreamState((prev) => {
+                const next = { ...prev }
+
+                switch (event.type) {
+                  case 'status':
+                    next.status = event.message || ''
+                    break
+                  case 'schema':
+                    next.schemaContext = event.context || []
+                    break
+                  case 'sql':
+                    next.sql = event.query || ''
+                    next.explanation = event.explanation || ''
+                    break
+                  case 'results':
+                    next.results = event.data || []
+                    next.isStreaming = false
+                    break
+                  case 'error':
+                    next.error = event.error || 'Unknown error'
+                    next.isStreaming = false
+                    break
+                  case 'complete':
+                    next.isStreaming = false
+                    break
+                }
+
+                return next
+              })
+            } catch (parseErr) {
+              console.error('Failed to parse SSE:', parseErr)
+            }
           }
-          return [...withoutTemp, properUserMessage, aiMessage]
-        })
-
-        setError(null)
-      } else {
-        throw new Error(data.error || 'Unknown error occurred')
+        }
       }
     } catch (err) {
-      console.error('❌ Failed to send message:', err)
-      setError(err instanceof Error ? err.message : 'Failed to send message')
-
-      // Remove temp message on error
-      setMessages(prev => prev.filter(msg => msg.id !== tempUserMessage.id))
-    } finally {
-      setIsLoading(false)
+      setStreamState((prev) => ({
+        ...prev,
+        error: err instanceof Error ? err.message : 'Stream failed',
+        isStreaming: false,
+      }))
     }
-  }, [inputMessage, isLoading, currentConversation, userId])
+  }
 
-  /**
-   * Handle Enter key press
-   */
-  const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
+  // ============================================================================
+  // Message Handlers
+  // ============================================================================
+
+  const handleSend = async () => {
+    if (!input.trim()) return
+
+    const userMessage: Message = {
+      id: `user-${Date.now()}`,
+      role: 'user',
+      content: input.trim(),
+    }
+
+    setMessages((prev) => [...prev, userMessage])
+    setInput('')
+
+    // Add placeholder for assistant response
+    const assistantMessage: Message = {
+      id: `assistant-${Date.now()}`,
+      role: 'assistant',
+      content: '',
+    }
+    setMessages((prev) => [...prev, assistantMessage])
+
+    // Start streaming
+    await streamQuery(userMessage.content)
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
-      sendMessage()
+      handleSend()
     }
-  }, [sendMessage])
+  }
 
-  /**
-   * Auto-resize textarea
-   */
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputMessage(e.target.value)
-
-    // Auto-resize textarea
-    const textarea = e.target
-    textarea.style.height = 'auto'
-    textarea.style.height = `${Math.min(textarea.scrollHeight, AUTO_SCROLL_DELAY)}px`
-  }, [])
-
-  /**
-   * Format timestamp
-   */
-  const formatTimestamp = useCallback((date: Date) => {
-    return new Intl.DateTimeFormat('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
-    }).format(new Date(date))
-  }, [])
-
-  /**
-   * Render message metadata for debugging
-   */
-  const renderMessageMetadata = useCallback((message: ChatMessage) => {
-    if (!message.metadata) return null
-
-    const metadata = message.metadata
-    return (
-      <div className="text-xs text-gray-400 mt-1 space-y-1">
-        {metadata.intent && (
-          <div>Intent: {metadata.intent} {metadata.intentConfidence && `(${(metadata.intentConfidence * PERCENTAGE_MULTIPLIER).toFixed(0)}%)`}</div>
-        )}
-        {metadata.model && (
-          <div>Model: {metadata.model}</div>
-        )}
-        {metadata.tokens && (
-          <div>Tokens: {metadata.tokens} {metadata.cost && `($${metadata.cost.toFixed(COST_DECIMAL_PLACES)})`}</div>
-        )}
-        {metadata.processingTime && (
-          <div>Time: {metadata.processingTime}ms</div>
-        )}
-        {metadata.queryType && (
-          <div>Query: {metadata.queryType}</div>
-        )}
-      </div>
-    )
-  }, [])
-
-  // Load initial conversation
-  useEffect(() => {
-    if (initialConversationId) {
-      loadConversation(initialConversationId)
-    }
-  }, [initialConversationId, loadConversation])
-
-  // Auto-scroll to bottom when messages change
-  useEffect(() => {
-    scrollToBottom()
-  }, [messages, scrollToBottom])
+  // ============================================================================
+  // Render
+  // ============================================================================
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex h-screen flex-col bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <div className="border-b border-gray-200 p-3 sm:p-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-heading font-semibold text-primary">
-              {currentConversation?.title || 'New Conversation'}
-            </h2>
-            {currentConversation && (
-              <p className="text-sm text-text-gray">
-                ID: {currentConversation.id.slice(CONVERSATION_ID_DISPLAY_LENGTH)}
-              </p>
-            )}
-          </div>
-          <button
-            onClick={createNewConversation}
-            className="bg-accent text-white px-4 py-2 rounded-md hover:bg-accent/90 transition-colors font-heading font-medium"
-          >
-            New Chat
-          </button>
-        </div>
+      <div className="border-b border-gray-200 bg-white px-6 py-4 dark:border-gray-700 dark:bg-gray-800">
+        <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+          Sales Analytics Chat
+        </h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          Ask questions about your sales data
+        </p>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-4">
-        {isLoadingConversation && (
-          <div className="flex justify-center items-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent"></div>
-            <span className="ml-2 text-text-gray">Loading conversation...</span>
-          </div>
-        )}
-
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-md p-4">
-            <div className="flex">
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-red-800">Error</h3>
-                <div className="mt-2 text-sm text-red-700">{error}</div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {messages.length === 0 && !isLoadingConversation && !error && (
-          <div className="text-center py-8 text-gray-500">
-            <p className="text-lg mb-2">Start a conversation</p>
-            <p className="text-sm">Ask me about your sales data, get business advice, or ask any questions!</p>
-          </div>
-        )}
-
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
-            <div
-              className={`max-w-xs lg:max-w-md xl:max-w-lg px-4 py-2 rounded-lg ${
-                message.role === 'user'
-                  ? 'bg-primary text-white'
-                  : 'bg-gray-100 text-gray-900 border'
-              }`}
-            >
-              {message.role === 'assistant' ? (
-                <MarkdownMessage content={message.content} />
+      <div className="flex-1 overflow-y-auto px-6 py-4">
+        <div className="mx-auto max-w-3xl space-y-4">
+          {messages.map((message, index) => (
+            <div key={message.id}>
+              {message.role === 'user' ? (
+                <div className="flex justify-end">
+                  <div className="max-w-[80%] rounded-lg bg-blue-600 px-4 py-2 text-white">
+                    {message.content}
+                  </div>
+                </div>
               ) : (
-                <div className="whitespace-pre-wrap">{message.content}</div>
+                <div className="flex justify-start">
+                  <div className="max-w-[80%] rounded-lg bg-white px-4 py-2 shadow dark:bg-gray-800">
+                    {/* Show streaming state for the last assistant message */}
+                    {index === messages.length - 1 && streamState.isStreaming && (
+                      <StreamingProgress state={streamState} />
+                    )}
+
+                    {/* Show results for the last assistant message */}
+                    {index === messages.length - 1 &&
+                      !streamState.isStreaming &&
+                      (streamState.results.length > 0 || streamState.error) && (
+                        <QueryResults state={streamState} />
+                      )}
+                  </div>
+                </div>
               )}
-              <div className="flex items-center justify-between mt-2">
-                <span className={`text-xs ${
-                  message.role === 'user' ? 'text-white/70' : 'text-gray-500'
-                }`}>
-                  {formatTimestamp(message.createdAt)}
-                </span>
-                {message.role === 'assistant' && message.metadata?.intent && (
-                  <span className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded">
-                    {message.metadata.intent}
-                  </span>
-                )}
-              </div>
-              {/* Debug metadata (remove in production) */}
-              {message.role === 'assistant' && renderMessageMetadata(message)}
             </div>
-          </div>
-        ))}
-
-        {isLoading && (
-          <div className="flex justify-start">
-            <div className="bg-gray-100 text-gray-900 border max-w-xs lg:max-w-md xl:max-w-lg px-4 py-2 rounded-lg">
-              <div className="flex items-center space-x-2">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-accent"></div>
-                <span>Thinking...</span>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <div ref={messagesEndRef} />
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
       </div>
 
       {/* Input */}
-      <div className="border-t border-gray-200 p-3 sm:p-4">
-        <div className="flex space-x-2">
-          <textarea
-            ref={textareaRef}
-            value={inputMessage}
-            onChange={handleInputChange}
-            onKeyPress={handleKeyPress}
-            placeholder="Type your message..."
-            className="flex-1 resize-none border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-secondary/50 focus:border-secondary/70 bg-white text-gray-900 placeholder-text-gray"
-            rows={1}
-            disabled={isLoading}
-          />
-          <button
-            onClick={sendMessage}
-            disabled={!inputMessage.trim() || isLoading}
-            className={`px-4 py-2 rounded-md font-heading font-medium transition-colors ${
-              !inputMessage.trim() || isLoading
-                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-accent text-white hover:bg-accent/90'
-            }`}
-          >
-            {isLoading ? 'Sending...' : 'Send'}
-          </button>
+      <div className="border-t border-gray-200 bg-white px-6 py-4 dark:border-gray-700 dark:bg-gray-800">
+        <div className="mx-auto max-w-3xl">
+          <div className="flex space-x-2">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Ask a question about your sales data..."
+              className="flex-1 rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+              disabled={streamState.isStreaming}
+            />
+            <button
+              onClick={handleSend}
+              disabled={!input.trim() || streamState.isStreaming}
+              className="rounded-lg bg-blue-600 px-6 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Send
+            </button>
+          </div>
         </div>
       </div>
     </div>
   )
+}
+
+// ============================================================================
+// Streaming Progress Component
+// ============================================================================
+
+function StreamingProgress({ state }: { state: StreamState }) {
+  return (
+    <div className="space-y-3">
+      {/* Current Status with Spinner */}
+      {state.status && (
+        <div className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+          <span className="text-sm font-medium">
+            {state.status.includes('Analyzing') && '🧠 '}
+            {state.status.includes('Retrieving') && '🔍 '}
+            {state.status.includes('Generating') && '🧩 '}
+            {state.status.includes('Executing') && '🚀 '}
+            {state.status}
+          </span>
+        </div>
+      )}
+
+      {/* Schema Context */}
+      {state.schemaContext.length > 0 && (
+        <div className="rounded-md bg-blue-50 p-3 dark:bg-blue-900/20">
+          <div className="mb-1 flex items-center space-x-2 text-sm font-medium text-blue-900 dark:text-blue-300">
+            <span>🔍</span>
+            <span>Schema Context</span>
+          </div>
+          <div className="space-y-1 text-xs text-blue-700 dark:text-blue-400">
+            {state.schemaContext.map((ctx, i) => (
+              <div key={i}>{ctx}</div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Generated SQL */}
+      {state.sql && (
+        <div className="rounded-md bg-gray-50 p-3 dark:bg-gray-800">
+          <div className="mb-2 flex items-center space-x-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+            <span>🧩</span>
+            <span>Generated SQL</span>
+          </div>
+          {state.explanation && (
+            <p className="mb-2 text-xs text-gray-600 dark:text-gray-400">
+              {state.explanation}
+            </p>
+          )}
+          <pre className="overflow-x-auto rounded bg-gray-900 p-2 text-xs text-green-400">
+            <code>{state.sql}</code>
+          </pre>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ============================================================================
+// Query Results Component
+// ============================================================================
+
+function QueryResults({ state }: { state: StreamState }) {
+  if (state.error) {
+    return (
+      <div className="rounded-md bg-red-50 p-4 dark:bg-red-900/20">
+        <div className="flex items-center space-x-2">
+          <span className="text-lg">❌</span>
+          <div>
+            <div className="font-medium text-red-900 dark:text-red-300">
+              Query Error
+            </div>
+            <div className="text-sm text-red-700 dark:text-red-400">
+              {state.error}
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (state.results.length === 0) {
+    return (
+      <div className="rounded-md bg-yellow-50 p-4 dark:bg-yellow-900/20">
+        <div className="flex items-center space-x-2 text-yellow-900 dark:text-yellow-300">
+          <span className="text-lg">ℹ️</span>
+          <span className="font-medium">No results found</span>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-3">
+      {/* Success Header */}
+      <div className="flex items-center space-x-2 text-green-700 dark:text-green-400">
+        <span className="text-lg">📊</span>
+        <span className="font-medium">Results ({state.results.length} rows)</span>
+      </div>
+
+      {/* SQL Query (Collapsible) */}
+      {state.sql && (
+        <details className="rounded-md bg-gray-50 p-2 dark:bg-gray-800">
+          <summary className="cursor-pointer text-xs font-medium text-gray-600 dark:text-gray-400">
+            View SQL Query
+          </summary>
+          <pre className="mt-2 overflow-x-auto rounded bg-gray-900 p-2 text-xs text-green-400">
+            <code>{state.sql}</code>
+          </pre>
+        </details>
+      )}
+
+      {/* Results Table */}
+      <div className="overflow-x-auto rounded-md border border-gray-200 dark:border-gray-700">
+        <table className="min-w-full divide-y divide-gray-200 text-sm dark:divide-gray-700">
+          <thead className="bg-gray-50 dark:bg-gray-800">
+            <tr>
+              {Object.keys(state.results[0] || {}).map((key) => (
+                <th
+                  key={key}
+                  className="px-4 py-2 text-left font-medium text-gray-700 dark:text-gray-300"
+                >
+                  {key}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
+            {state.results.map((row, i) => (
+              <tr key={i}>
+                {Object.values(row).map((value, j) => (
+                  <td
+                    key={j}
+                    className="px-4 py-2 text-gray-900 dark:text-gray-100"
+                  >
+                    {formatCellValue(value)}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}
+
+// ============================================================================
+// Utilities
+// ============================================================================
+
+function formatCellValue(value: unknown): string {
+  if (value === null || value === undefined) return '-'
+  if (typeof value === 'boolean') return value ? '✓' : '✗'
+  if (typeof value === 'number') {
+    return value.toLocaleString(undefined, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    })
+  }
+  return String(value)
 }

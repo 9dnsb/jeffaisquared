@@ -40,6 +40,7 @@ export async function middleware(request: NextRequest) {
     !request.nextUrl.pathname.startsWith('/auth') &&
     !request.nextUrl.pathname.startsWith('/api/auth') &&
     !request.nextUrl.pathname.startsWith('/api/test-query') &&
+    !request.nextUrl.pathname.startsWith('/api/text-to-sql') &&
     !request.nextUrl.pathname.startsWith('/api/webhooks') &&
     request.nextUrl.pathname !== '/'
   ) {

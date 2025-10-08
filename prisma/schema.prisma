@@ -14,8 +14,8 @@ model Profile {
   email     String   @unique
   firstName String?  @map("first_name")
   lastName  String?  @map("last_name")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
   @@map("profiles")
 }
@@ -25,8 +25,8 @@ model Category {
   squareCategoryId String   @unique
   name             String
   isActive         Boolean  @default(true)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  createdAt        DateTime @default(now()) @db.Timestamptz
+  updatedAt        DateTime @updatedAt @db.Timestamptz
   items            Item[]
 
   @@map("categories")
@@ -41,8 +41,8 @@ model Location {
   currency          String?
   status            String?
   businessHours     Json?
-  createdAt         DateTime   @default(now())
-  updatedAt         DateTime   @updatedAt
+  createdAt         DateTime   @default(now()) @db.Timestamptz
+  updatedAt         DateTime   @updatedAt @db.Timestamptz
   orders            Order[]
 
   @@map("locations")
@@ -56,8 +56,8 @@ model Item {
   name             String
   category         String?
   isActive         Boolean     @default(true)
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @updatedAt
+  createdAt        DateTime    @default(now()) @db.Timestamptz
+  updatedAt        DateTime    @updatedAt @db.Timestamptz
   categoryRel      Category?   @relation(fields: [squareCategoryId], references: [squareCategoryId])
   lineItems        LineItem[]
 
@@ -71,14 +71,14 @@ model Order {
   id              String     @id @default(cuid())
   squareOrderId   String     @unique
   locationId      String
-  date            DateTime
+  date            DateTime   @db.Timestamptz
   state           String
   totalAmount     Int        // Amount in cents
   currency        String
   version         Int?
   source          String?
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
+  createdAt       DateTime   @default(now()) @db.Timestamptz
+  updatedAt       DateTime   @updatedAt @db.Timestamptz
   location        Location   @relation(fields: [locationId], references: [squareLocationId])
   lineItems       LineItem[]
 
@@ -105,8 +105,8 @@ model LineItem {
   discountAmount       Int      @default(0)
   variations           String?
   category             String?
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  createdAt            DateTime @default(now()) @db.Timestamptz
+  updatedAt            DateTime @updatedAt @db.Timestamptz
   order                Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   item                 Item?    @relation(fields: [itemId], references: [id])
 
@@ -121,8 +121,8 @@ model Conversation {
   id        String        @id @default(cuid())
   userId    String        @map("user_id")
   title     String?
-  createdAt DateTime      @default(now()) @map("created_at")
-  updatedAt DateTime      @updatedAt @map("updated_at")
+  createdAt DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime      @updatedAt @map("updated_at") @db.Timestamptz
   messages  ChatMessage[]
 
   @@map("conversations")
@@ -134,9 +134,25 @@ model ChatMessage {
   role           String
   content        String
   metadata       Json?
-  createdAt      DateTime     @default(now()) @map("created_at")
-  updatedAt      DateTime     @updatedAt @map("updated_at")
+  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime     @updatedAt @map("updated_at") @db.Timestamptz
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 
   @@map("chat_messages")
+}
+
+model SchemaEmbedding {
+  id          BigInt   @id @default(autoincrement())
+  objectName  String   @map("object_name")
+  objectType  String   @map("object_type")
+  description String
+  // Note: vector type not directly supported by Prisma
+  // The embedding column exists in DB as VECTOR(1536)
+  // Will use raw SQL via Supabase client for vector operations
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@index([objectName], name: "idx_schema_embeddings_object_name")
+  @@index([objectType], name: "idx_schema_embeddings_object_type")
+  @@map("schema_embeddings")
 }

@@ -119,7 +119,10 @@ export default function ConversationList({
         // Add to conversations list
         const newConversationItem: ConversationListItem = {
           id: data.conversation.id,
+          userId,
           title: data.conversation.title,
+          createdAt: new Date(data.conversation.createdAt || Date.now()),
+          updatedAt: new Date(data.conversation.createdAt || Date.now()),
           lastMessageAt: new Date(data.conversation.createdAt || Date.now()),
           messageCount: 0
         }
