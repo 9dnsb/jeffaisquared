@@ -57,6 +57,8 @@ interface SSEEvent {
 
 // Mark route as dynamic to prevent static optimization during build
 export const dynamic = 'force-dynamic'
+// Set maximum execution time to 60 seconds
+export const maxDuration = 60
 
 const openai = new OpenAI({
   apiKey: process.env['OPENAI_API_KEY']!,
@@ -177,18 +179,39 @@ GUIDELINES:
 - Use proper table aliases for readability
 - **CRITICAL: ALWAYS quote column names with double quotes (e.g., "totalAmount", "locationId", "itemId")**
 - Column names are case-sensitive camelCase and MUST be quoted
-- Leverage indexed columns for filtering (date, "locationId", "itemId", category)
+- **CRITICAL: Use ILIKE for case-insensitive text matching (e.g., WHERE i."name" ILIKE 'latte' instead of = 'latte')**
+- **PERFORMANCE: Leverage indexed columns for WHERE clauses (date, "locationId", "itemId", category)**
+- **PERFORMANCE: Use date range filters efficiently (indexed BRIN on date column)**
 - Convert cents to dollars for currency display (amount / 100.0)
 - Use proper date handling (date_trunc, intervals, CURRENT_DATE)
 - Return results in JSON-compatible format
 - Use proper GROUP BY for aggregations
 - Order results meaningfully (usually DESC for rankings, ASC for chronological)
-- Handle NULL values appropriately
+- Handle NULL values appropriately (use COALESCE when needed)
+- **PERFORMANCE: Limit result sets with reasonable LIMIT clauses when possible**
 - **CRITICAL JOIN RELATIONSHIPS:**
   - orders → locations: JOIN locations l ON o."locationId" = l."squareLocationId"
   - orders → line_items: JOIN line_items li ON o."id" = li."orderId"
   - line_items → items: JOIN items i ON li."itemId" = i."id"
   - items → categories: JOIN categories c ON i."squareCategoryId" = c."squareCategoryId"
+
+**QUERY OPTIMIZATION RULES:**
+- **CRITICAL: ALWAYS join to orders table and filter on orders."date" for date-based queries**
+- **CRITICAL: line_items."createdAt" is database record creation time, NOT the order date**
+- **CRITICAL: For date filtering, use: JOIN orders o ON li."orderId" = o."id" WHERE DATE(o."date") >= '2025-08-01'**
+- **CRITICAL: line_items table HAS both "name" and "category" columns (denormalized from items)**
+- **CRITICAL: To query by item name, filter on line_items."name" (e.g., WHERE li."name" ILIKE 'latte')**
+- **CRITICAL: To query by category, filter on line_items."category" (e.g., WHERE li."category" ILIKE 'coffee')**
+- **CRITICAL: Do NOT join to items table unless you need item.id or items-specific data**
+- **CRITICAL AGGREGATION RULES:**
+  - "How many [items] sold" → Use SUM(li."quantity") for total units sold
+  - "How many orders" → Use COUNT(*) for number of transactions
+  - "How many customers" → Use COUNT(DISTINCT o."customerId") if available
+  - Example: "257 lattes sold" means SUM(quantity)=257, not COUNT(*)=257
+- Example: For "Latte revenue in August", use:
+  SELECT SUM(li."totalPriceAmount")/100.0 FROM line_items li
+  JOIN orders o ON li."orderId" = o."id"
+  WHERE li."name" ILIKE 'latte' AND DATE(o."date") >= '2025-08-01' AND DATE(o."date") < '2025-09-01'
 
 IMPORTANT NOTES:
 - **JOIN KEY WARNING:** orders."locationId" joins to locations."squareLocationId" (NOT locations."id"!)
@@ -198,11 +221,14 @@ IMPORTANT NOTES:
 - Use proper SQL syntax for PostgreSQL
 - Example: SELECT o."totalAmount" FROM orders o WHERE o."locationId" = 'xyz'
 - **CRITICAL: Always use DATE() to cast timestamp columns for day-based filtering**
+- **CRITICAL DATE ASSUMPTION: If user specifies a date without a year, ALWAYS assume the CURRENT YEAR (${new Date().getFullYear()})**
 - For "yesterday", use: WHERE DATE("date") = (CURRENT_DATE - INTERVAL '1 day')::date
 - For "today", use: WHERE DATE("date") = CURRENT_DATE
 - For "last 7 days", use: WHERE DATE("date") >= (CURRENT_DATE - INTERVAL '7 days')::date
 - For "last week", use: WHERE DATE("date") >= date_trunc('week', CURRENT_DATE - INTERVAL '1 week')::date AND DATE("date") < date_trunc('week', CURRENT_DATE)::date
 - For "last month", use: WHERE DATE("date") >= date_trunc('month', CURRENT_DATE - INTERVAL '1 month')::date
+- For specific date without year (e.g., "Oct 5", "January 15"), use: WHERE DATE("date") = '${new Date().getFullYear()}-MM-DD'
+- For specific date with year (e.g., "Oct 5, 2023"), use the specified year
 - Example: WHERE DATE(o."date") = (CURRENT_DATE - INTERVAL '1 day')::date
 
 Generate a PostgreSQL query that accurately answers this question.`
