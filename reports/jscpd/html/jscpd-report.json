@@ -1,6 +1,6 @@
 {
   "statistics": {
-    "detectionDate": "2025-10-01T00:41:15.757Z",
+    "detectionDate": "2025-10-08T12:24:41.068Z",
     "formats": {
       "typescript": {
         "sources": {
@@ -172,45 +172,21 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
-          "src/lib/ai-v3/utils/dynamic-date-parser.ts": {
-            "lines": 402,
-            "tokens": 3487,
+          "src/app/api/text-to-sql/route.ts": {
+            "lines": 394,
+            "tokens": 2662,
             "sources": 1,
-            "clones": 0,
-            "duplicatedLines": 0,
-            "duplicatedTokens": 0,
-            "percentage": 0,
-            "percentageTokens": 0,
-            "newDuplicatedLines": 0,
-            "newClones": 0
-          },
-          "src/app/api/test-query/route.ts": {
-            "lines": 68,
-            "tokens": 577,
-            "sources": 1,
-            "clones": 0,
-            "duplicatedLines": 0,
-            "duplicatedTokens": 0,
-            "percentage": 0,
-            "percentageTokens": 0,
+            "clones": 2,
+            "duplicatedLines": 18,
+            "duplicatedTokens": 156,
+            "percentage": 4.57,
+            "percentageTokens": 5.86,
             "newDuplicatedLines": 0,
             "newClones": 0
           },
           "src/app/api/conversations/route.ts": {
             "lines": 201,
             "tokens": 1545,
-            "sources": 1,
-            "clones": 0,
-            "duplicatedLines": 0,
-            "duplicatedTokens": 0,
-            "percentage": 0,
-            "percentageTokens": 0,
-            "newDuplicatedLines": 0,
-            "newClones": 0
-          },
-          "src/app/api/chat/route.ts": {
-            "lines": 473,
-            "tokens": 3918,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -305,8 +281,8 @@
             "newClones": 0
           },
           "src/lib/utils/conversations.ts": {
-            "lines": 683,
-            "tokens": 5325,
+            "lines": 844,
+            "tokens": 5655,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -376,102 +352,6 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
-          "src/lib/ai-v3/types.ts": {
-            "lines": 326,
-            "tokens": 2223,
-            "sources": 1,
-            "clones": 0,
-            "duplicatedLines": 0,
-            "duplicatedTokens": 0,
-            "percentage": 0,
-            "percentageTokens": 0,
-            "newDuplicatedLines": 0,
-            "newClones": 0
-          },
-          "src/lib/ai-v3/rate-limiter.ts": {
-            "lines": 99,
-            "tokens": 747,
-            "sources": 1,
-            "clones": 0,
-            "duplicatedLines": 0,
-            "duplicatedTokens": 0,
-            "percentage": 0,
-            "percentageTokens": 0,
-            "newDuplicatedLines": 0,
-            "newClones": 0
-          },
-          "src/lib/ai-v3/functions.ts": {
-            "lines": 558,
-            "tokens": 4142,
-            "sources": 1,
-            "clones": 0,
-            "duplicatedLines": 0,
-            "duplicatedTokens": 0,
-            "percentage": 0,
-            "percentageTokens": 0,
-            "newDuplicatedLines": 0,
-            "newClones": 0
-          },
-          "src/lib/ai-v3/function-caller.ts": {
-            "lines": 843,
-            "tokens": 6643,
-            "sources": 1,
-            "clones": 0,
-            "duplicatedLines": 0,
-            "duplicatedTokens": 0,
-            "percentage": 0,
-            "percentageTokens": 0,
-            "newDuplicatedLines": 0,
-            "newClones": 0
-          },
-          "src/lib/ai-v3/data-query-handler.ts": {
-            "lines": 183,
-            "tokens": 1318,
-            "sources": 1,
-            "clones": 0,
-            "duplicatedLines": 0,
-            "duplicatedTokens": 0,
-            "percentage": 0,
-            "percentageTokens": 0,
-            "newDuplicatedLines": 0,
-            "newClones": 0
-          },
-          "src/lib/ai-v3/config.ts": {
-            "lines": 198,
-            "tokens": 1145,
-            "sources": 1,
-            "clones": 0,
-            "duplicatedLines": 0,
-            "duplicatedTokens": 0,
-            "percentage": 0,
-            "percentageTokens": 0,
-            "newDuplicatedLines": 0,
-            "newClones": 0
-          },
-          "src/lib/ai/intentClassifier.ts": {
-            "lines": 573,
-            "tokens": 3731,
-            "sources": 1,
-            "clones": 0,
-            "duplicatedLines": 0,
-            "duplicatedTokens": 0,
-            "percentage": 0,
-            "percentageTokens": 0,
-            "newDuplicatedLines": 0,
-            "newClones": 0
-          },
-          "src/lib/ai/generalChatHandler.ts": {
-            "lines": 662,
-            "tokens": 5460,
-            "sources": 1,
-            "clones": 0,
-            "duplicatedLines": 0,
-            "duplicatedTokens": 0,
-            "percentage": 0,
-            "percentageTokens": 0,
-            "newDuplicatedLines": 0,
-            "newClones": 0
-          },
           "src/types/prisma-extensions.ts": {
             "lines": 123,
             "tokens": 935,
@@ -484,21 +364,9 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
-          "src/types/openai.ts": {
-            "lines": 97,
-            "tokens": 593,
-            "sources": 1,
-            "clones": 0,
-            "duplicatedLines": 0,
-            "duplicatedTokens": 0,
-            "percentage": 0,
-            "percentageTokens": 0,
-            "newDuplicatedLines": 0,
-            "newClones": 0
-          },
           "src/types/chat.ts": {
-            "lines": 346,
-            "tokens": 2585,
+            "lines": 112,
+            "tokens": 710,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -653,8 +521,8 @@
             "newClones": 0
           },
           "src/hooks/useSession.ts": {
-            "lines": 44,
-            "tokens": 416,
+            "lines": 56,
+            "tokens": 484,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -689,8 +557,8 @@
             "newClones": 0
           },
           "src/middleware.ts": {
-            "lines": 73,
-            "tokens": 536,
+            "lines": 74,
+            "tokens": 552,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -714,14 +582,14 @@
           }
         },
         "total": {
-          "lines": 12921,
-          "tokens": 101480,
-          "sources": 59,
-          "clones": 0,
-          "duplicatedLines": 0,
-          "duplicatedTokens": 0,
-          "percentage": 0,
-          "percentageTokens": 0,
+          "lines": 8773,
+          "tokens": 68697,
+          "sources": 48,
+          "clones": 1,
+          "duplicatedLines": 9,
+          "duplicatedTokens": 78,
+          "percentage": 0.1,
+          "percentageTokens": 0.11,
           "newDuplicatedLines": 0,
           "newClones": 0
         }
@@ -980,21 +848,9 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
-          "src/app/chat/page.tsx": {
-            "lines": 0,
-            "tokens": 3,
-            "sources": 1,
-            "clones": 0,
-            "duplicatedLines": 0,
-            "duplicatedTokens": 0,
-            "percentage": 0,
-            "percentageTokens": 0,
-            "newDuplicatedLines": 0,
-            "newClones": 0
-          },
           "src/components/MarkdownMessage.tsx": {
-            "lines": 20,
-            "tokens": 297,
+            "lines": 19,
+            "tokens": 285,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -1017,20 +873,8 @@
             "newClones": 0
           },
           "src/components/ChatInterface.tsx": {
-            "lines": 104,
-            "tokens": 908,
-            "sources": 1,
-            "clones": 0,
-            "duplicatedLines": 0,
-            "duplicatedTokens": 0,
-            "percentage": 0,
-            "percentageTokens": 0,
-            "newDuplicatedLines": 0,
-            "newClones": 0
-          },
-          "src/components/ChatGPTInterface.tsx": {
-            "lines": 205,
-            "tokens": 1787,
+            "lines": 200,
+            "tokens": 1768,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -1054,9 +898,9 @@
           }
         },
         "total": {
-          "lines": 993,
-          "tokens": 8214,
-          "sources": 27,
+          "lines": 883,
+          "tokens": 7272,
+          "sources": 25,
           "clones": 0,
           "duplicatedLines": 0,
           "duplicatedTokens": 0,
@@ -1368,18 +1212,6 @@
             "newDuplicatedLines": 0,
             "newClones": 0
           },
-          "src/app/chat/page.tsx": {
-            "lines": 13,
-            "tokens": 92,
-            "sources": 1,
-            "clones": 0,
-            "duplicatedLines": 0,
-            "duplicatedTokens": 0,
-            "percentage": 0,
-            "percentageTokens": 0,
-            "newDuplicatedLines": 0,
-            "newClones": 0
-          },
           "src/hooks/useAuthRedirect.test.tsx": {
             "lines": 118,
             "tokens": 562,
@@ -1405,8 +1237,8 @@
             "newClones": 0
           },
           "src/components/MarkdownMessage.tsx": {
-            "lines": 67,
-            "tokens": 647,
+            "lines": 63,
+            "tokens": 615,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -1417,8 +1249,8 @@
             "newClones": 0
           },
           "src/components/ConversationList.tsx": {
-            "lines": 378,
-            "tokens": 2946,
+            "lines": 381,
+            "tokens": 2998,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -1429,20 +1261,8 @@
             "newClones": 0
           },
           "src/components/ChatInterface.tsx": {
-            "lines": 399,
-            "tokens": 3543,
-            "sources": 1,
-            "clones": 0,
-            "duplicatedLines": 0,
-            "duplicatedTokens": 0,
-            "percentage": 0,
-            "percentageTokens": 0,
-            "newDuplicatedLines": 0,
-            "newClones": 0
-          },
-          "src/components/ChatGPTInterface.tsx": {
-            "lines": 297,
-            "tokens": 2560,
+            "lines": 484,
+            "tokens": 4178,
             "sources": 1,
             "clones": 0,
             "duplicatedLines": 0,
@@ -1478,9 +1298,9 @@
           }
         },
         "total": {
-          "lines": 3179,
-          "tokens": 25491,
-          "sources": 34,
+          "lines": 2953,
+          "tokens": 23494,
+          "sources": 32,
           "clones": 0,
           "duplicatedLines": 0,
           "duplicatedTokens": 0,
@@ -1492,18 +1312,55 @@
       }
     },
     "total": {
-      "lines": 17093,
-      "tokens": 135185,
-      "sources": 120,
-      "clones": 0,
-      "duplicatedLines": 0,
-      "duplicatedTokens": 0,
-      "percentage": 0,
-      "percentageTokens": 0,
+      "lines": 12609,
+      "tokens": 99463,
+      "sources": 105,
+      "clones": 1,
+      "duplicatedLines": 9,
+      "duplicatedTokens": 78,
+      "percentage": 0.07,
+      "percentageTokens": 0.08,
       "newDuplicatedLines": 0,
       "newClones": 0
     }
   },
-  "duplicates": [],
-  "filename": "C:\\Users\\david\\Documents\\jeffaisquared\\node_modules\\@jscpd\\html-reporter\\dist\\templates\\main.pug"
+  "duplicates": [
+    {
+      "format": "typescript",
+      "lines": 10,
+      "fragment": ",\r\n    hasError: !!error,\r\n    errorMessage: error?.message,\r\n    errorDetails: error?.details,\r\n    errorHint: error?.hint,\r\n    errorCode: error?.code\r\n  })\r\n\r\n  if (error) {\r\n    console.error('[executeSQL] Full error object:'",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src\\app\\api\\text-to-sql\\route.ts",
+        "start": 260,
+        "end": 269,
+        "startLoc": {
+          "line": 260,
+          "column": 5,
+          "position": 1619
+        },
+        "endLoc": {
+          "line": 269,
+          "column": 34,
+          "position": 1697
+        }
+      },
+      "secondFile": {
+        "name": "src\\app\\api\\text-to-sql\\route.ts",
+        "start": 122,
+        "end": 131,
+        "startLoc": {
+          "line": 122,
+          "column": 7,
+          "position": 785
+        },
+        "endLoc": {
+          "line": 131,
+          "column": 45,
+          "position": 863
+        }
+      }
+    }
+  ],
+  "filename": "c:\\Users\\david\\Documents\\jeffaisquared\\node_modules\\@jscpd\\html-reporter\\dist\\templates\\main.pug"
 }

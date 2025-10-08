@@ -10,6 +10,13 @@ interface Message {
   id: string
   role: 'user' | 'assistant'
   content: string
+  // Store query results with each assistant message
+  queryState?: {
+    sql: string
+    explanation: string
+    results: Record<string, unknown>[]
+    error: string | null
+  }
 }
 
 interface StreamState {
@@ -59,7 +66,7 @@ export default function ChatInterface({ userId }: { userId: string }) {
   // SSE Streaming Handler
   // ============================================================================
 
-  const streamQuery = async (question: string) => {
+  const streamQuery = async (question: string, messageId: string) => {
     // Reset stream state
     setStreamState({
       status: '',
@@ -70,6 +77,14 @@ export default function ChatInterface({ userId }: { userId: string }) {
       error: null,
       isStreaming: true,
     })
+
+    // Track final state locally
+    let finalState = {
+      sql: '',
+      explanation: '',
+      results: [] as Record<string, unknown>[],
+      error: null as string | null,
+    }
 
     try {
       const response = await fetch('/api/text-to-sql', {
@@ -117,14 +132,18 @@ export default function ChatInterface({ userId }: { userId: string }) {
                   case 'sql':
                     next.sql = event.query || ''
                     next.explanation = event.explanation || ''
+                    finalState.sql = event.query || ''
+                    finalState.explanation = event.explanation || ''
                     break
                   case 'results':
                     next.results = event.data || []
                     next.isStreaming = false
+                    finalState.results = event.data || []
                     break
                   case 'error':
                     next.error = event.error || 'Unknown error'
                     next.isStreaming = false
+                    finalState.error = event.error || 'Unknown error'
                     break
                   case 'complete':
                     next.isStreaming = false
@@ -139,12 +158,42 @@ export default function ChatInterface({ userId }: { userId: string }) {
           }
         }
       }
+
+      // When streaming completes, save final results to the message
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === messageId
+            ? {
+                ...msg,
+                queryState: finalState,
+              }
+            : msg
+        )
+      )
     } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Stream failed'
       setStreamState((prev) => ({
         ...prev,
-        error: err instanceof Error ? err.message : 'Stream failed',
+        error: errorMessage,
         isStreaming: false,
       }))
+
+      // Save error to message
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === messageId
+            ? {
+                ...msg,
+                queryState: {
+                  sql: '',
+                  explanation: '',
+                  results: [],
+                  error: errorMessage,
+                },
+              }
+            : msg
+        )
+      )
     }
   }
 
@@ -165,15 +214,16 @@ export default function ChatInterface({ userId }: { userId: string }) {
     setInput('')
 
     // Add placeholder for assistant response
+    const assistantMessageId = `assistant-${Date.now()}`
     const assistantMessage: Message = {
-      id: `assistant-${Date.now()}`,
+      id: assistantMessageId,
       role: 'assistant',
       content: '',
     }
     setMessages((prev) => [...prev, assistantMessage])
 
     // Start streaming
-    await streamQuery(userMessage.content)
+    await streamQuery(userMessage.content, assistantMessageId)
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -218,9 +268,15 @@ export default function ChatInterface({ userId }: { userId: string }) {
                       <StreamingProgress state={streamState} />
                     )}
 
-                    {/* Show results for the last assistant message */}
+                    {/* Show saved results from previous messages */}
+                    {message.queryState && !streamState.isStreaming && (
+                      <QueryResults state={message.queryState} />
+                    )}
+
+                    {/* Show results for the last assistant message during streaming */}
                     {index === messages.length - 1 &&
                       !streamState.isStreaming &&
+                      !message.queryState &&
                       (streamState.results.length > 0 || streamState.error) && (
                         <QueryResults state={streamState} />
                       )}
@@ -321,7 +377,13 @@ function StreamingProgress({ state }: { state: StreamState }) {
 // Query Results Component
 // ============================================================================
 
-function QueryResults({ state }: { state: StreamState }) {
+function QueryResults({
+  state,
+}: {
+  state:
+    | StreamState
+    | { sql: string; explanation: string; results: Record<string, unknown>[]; error: string | null }
+}) {
   if (state.error) {
     return (
       <div className="rounded-md bg-red-50 p-4 dark:bg-red-900/20">

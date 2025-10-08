@@ -9,7 +9,11 @@
 interface SSEEvent {
   type: 'status' | 'schema' | 'sql' | 'results' | 'error' | 'complete'
   message?: string
-  data?: unknown
+  context?: string[]
+  query?: string
+  explanation?: string
+  data?: unknown[]
+  error?: string
 }
 
 async function testTextToSQL(question: string): Promise<void> {
@@ -59,14 +63,12 @@ async function testTextToSQL(question: string): Promise<void> {
 
             case 'schema':
               console.log(`🔍 ${event.message}`)
-              if (event.data && Array.isArray(event.data)) {
-                event.data.slice(0, 3).forEach((item) => {
-                  console.log(
-                    `   - [${item.type}] ${item.name} (${(item.similarity * 100).toFixed(1)}%)`
-                  )
+              if (event.context && Array.isArray(event.context)) {
+                event.context.slice(0, 3).forEach((item) => {
+                  console.log(`   - ${item}`)
                 })
-                if (event.data.length > 3) {
-                  console.log(`   ... and ${event.data.length - 3} more`)
+                if (event.context.length > 3) {
+                  console.log(`   ... and ${event.context.length - 3} more`)
                 }
               }
               break
@@ -74,8 +76,8 @@ async function testTextToSQL(question: string): Promise<void> {
             case 'sql':
               console.log(`\n🧩 SQL Query Generated:`)
               console.log(`   Explanation: ${event.message}`)
-              if (event.data && typeof event.data === 'object' && 'sql' in event.data) {
-                console.log(`\n   ${event.data.sql}\n`)
+              if (event.query) {
+                console.log(`\n   ${event.query}\n`)
               }
               break
 
@@ -93,7 +95,7 @@ async function testTextToSQL(question: string): Promise<void> {
               break
 
             case 'error':
-              console.error(`❌ Error: ${event.message}`)
+              console.error(`❌ Error: ${event.error || event.message}`)
               break
 
             case 'complete':
