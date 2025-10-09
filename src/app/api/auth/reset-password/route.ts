@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
-import supabase from '../../../../../lib/supabase'
+import { createSupabaseServerClient } from '../../../../../lib/supabase-server'
 import { parseRequestBody, handleSupabaseError, createSuccessResponse, validateSession } from '@/lib/auth-api-utils'
 
 const MIN_PASSWORD_LENGTH = 6
@@ -17,6 +17,7 @@ export async function POST(request: NextRequest) {
     return parseError
   }
 
+  const supabase = await createSupabaseServerClient()
   const { error } = await supabase.auth.updateUser({
     password: validatedData.password
   })

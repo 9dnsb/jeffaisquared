@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
-import supabase from '../../lib/supabase'
+import { createSupabaseServerClient } from '../../lib/supabase-server'
 import { parseRequestBody, handleSupabaseError, createSuccessResponse, createErrorResponse } from './auth-api-utils'
 import { ensureUserProfile } from './profile-utils'
 import { PrismaClient } from '../generated/prisma'
@@ -27,6 +27,7 @@ export async function handleRegistration(request: NextRequest, prismaClient: Pri
       return parseError
     }
     // Step 1: Create user in Supabase Auth
+    const supabase = await createSupabaseServerClient()
     const { data, error } = await supabase.auth.signUp({
       email: validatedData.email,
       password: validatedData.password,
