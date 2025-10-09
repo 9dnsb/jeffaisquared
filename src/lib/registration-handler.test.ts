@@ -20,13 +20,15 @@ vi.mock('./profile-utils', () => ({
   ensureUserProfile: vi.fn()
 }))
 
-// Mock supabase client
-vi.mock('../../lib/supabase', () => ({
-  default: {
-    auth: {
-      signUp: vi.fn()
-    }
+// Mock supabase server client
+const mockSupabaseClient = {
+  auth: {
+    signUp: vi.fn()
   }
+}
+
+vi.mock('../../lib/supabase-server', () => ({
+  createSupabaseServerClient: vi.fn(() => Promise.resolve(mockSupabaseClient)),
 }))
 
 describe('registration-handler', () => {
@@ -42,7 +44,7 @@ describe('registration-handler', () => {
     console.error = vi.fn()
 
     authApiUtils = await import('./auth-api-utils')
-    supabase = (await import('../../lib/supabase')).default
+    supabase = mockSupabaseClient
     profileUtils = await import('./profile-utils')
 
     // Create mock Prisma client

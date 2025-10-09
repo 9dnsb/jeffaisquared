@@ -11,13 +11,15 @@ vi.mock('@/lib/auth-api-utils', () => ({
 }))
 // jscpd:ignore-end
 
-// Mock supabase client
-vi.mock('../../../../../lib/supabase', () => ({
-  default: {
-    auth: {
-      resetPasswordForEmail: vi.fn(),
-    },
+// Mock supabase server client
+const mockSupabaseClient = {
+  auth: {
+    resetPasswordForEmail: vi.fn(),
   },
+}
+
+vi.mock('../../../../../lib/supabase-server', () => ({
+  createSupabaseServerClient: vi.fn(() => Promise.resolve(mockSupabaseClient)),
 }))
 
 // Test setup pattern similar to other auth tests
@@ -30,7 +32,7 @@ describe('/api/auth/forgot-password', () => {
     vi.clearAllMocks()
 
     authApiUtils = await import('@/lib/auth-api-utils')
-    supabase = (await import('../../../../../lib/supabase')).default
+    supabase = mockSupabaseClient
   })
   // jscpd:ignore-end
 

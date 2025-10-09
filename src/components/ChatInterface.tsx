@@ -97,12 +97,15 @@ export default function ChatInterface({ userId }: { userId: string }) {
     }
 
     // Build conversation history for context (all messages in current chat)
+    // Include SQL queries and result summaries for assistant messages
     const conversationHistory = messages.map((msg) => ({
       role: msg.role,
       content:
         msg.role === 'user'
           ? msg.content
-          : msg.queryState?.explanation || 'Query executed',
+          : msg.queryState
+            ? `${msg.queryState.explanation}\n\nSQL Query:\n${msg.queryState.sql}\n\nResults: ${msg.queryState.results.length} row(s) with columns: ${Object.keys(msg.queryState.results[0] || {}).join(', ')}`
+            : 'Query executed',
     }))
 
     try {

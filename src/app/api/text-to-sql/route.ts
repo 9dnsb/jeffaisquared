@@ -242,12 +242,15 @@ GUIDELINES:
   - "How many customers" → Use COUNT(DISTINCT o."customerId") if available
   - Example: "257 lattes sold" means SUM(quantity)=257, not COUNT(*)=257
 - **CRITICAL COMPARISON QUERY RULES:**
+  - **ALWAYS generate a SINGLE query for ALL comparisons** - NEVER generate separate queries for each period
+  - Use CASE statements or conditional aggregation to show side-by-side comparisons in columns
+  - When user says "compare this/that to [date/period]", look at the previous query structure and maintain it while adding comparison columns
+  - Example: If previous query was "best sellers today" grouped by item name, "compare this to oct 1" should GROUP BY item name with columns for both periods
   - When user asks to compare "by location", "at each location", "across locations", "for all locations", or "at all locations", ALWAYS GROUP BY location name to show per-location breakdown
-  - Use CASE statements or conditional aggregation to show side-by-side comparisons in a SINGLE query
   - Example: "compare sales today vs last week by location" should GROUP BY l."name" with separate columns for each period
   - Example: "compare them across all locations" should GROUP BY l."name" with separate columns for each metric
-  - Return one row per location showing both periods for easy comparison (NOT a single total row)
-  - For simple comparisons (e.g., "compare X to Y"), use CASE statements with SUM, not subqueries
+  - Return one row per dimension (item/location/category) showing all periods for easy comparison (NOT separate queries)
+  - For simple total comparisons (e.g., "compare total sales X to Y"), use CASE statements with SUM in a single row
   - **CRITICAL: When using "last [day of week]" formulas, ALWAYS calculate from Toronto time, not UTC**
   - Example: "compare sales yesterday to last Tuesday" should be:
     SELECT
@@ -258,6 +261,18 @@ GUIDELINES:
   SELECT SUM(li."totalPriceAmount")/100.0 FROM line_items li
   JOIN orders o ON li."orderId" = o."id"
   WHERE li."name" ILIKE 'latte' AND DATE(o."date" AT TIME ZONE 'America/Toronto') >= '2025-08-01' AND DATE(o."date" AT TIME ZONE 'America/Toronto') < '2025-09-01'
+- Example: For "compare this to oct 1" after "best sellers today" query:
+  SELECT
+    i."name",
+    SUM(CASE WHEN DATE(o."date" AT TIME ZONE 'America/Toronto') = DATE(CURRENT_TIMESTAMP AT TIME ZONE 'America/Toronto') THEN li."quantity" ELSE 0 END) AS "Today",
+    SUM(CASE WHEN DATE(o."date" AT TIME ZONE 'America/Toronto') = '2025-10-01' THEN li."quantity" ELSE 0 END) AS "Oct 1"
+  FROM line_items li
+  JOIN orders o ON li."orderId" = o."id"
+  JOIN items i ON li."itemId" = i."id"
+  WHERE DATE(o."date" AT TIME ZONE 'America/Toronto') IN (DATE(CURRENT_TIMESTAMP AT TIME ZONE 'America/Toronto'), '2025-10-01')
+  GROUP BY i."name"
+  ORDER BY "Today" DESC
+  LIMIT 10
 
 IMPORTANT NOTES:
 - **JOIN KEY WARNING:** orders."locationId" joins to locations."squareLocationId" (NOT locations."id"!)
