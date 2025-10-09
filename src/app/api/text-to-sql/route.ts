@@ -352,6 +352,8 @@ async function executeSQL(sql: string): Promise<unknown[]> {
   console.log('[executeSQL] RPC response:', {
     hasData: !!data,
     dataType: typeof data,
+    isArray: Array.isArray(data),
+    isNull: data === null,
     hasError: !!error,
     errorMessage: error?.message,
     errorDetails: error?.details,
@@ -368,11 +370,23 @@ async function executeSQL(sql: string): Promise<unknown[]> {
   }
 
   // Parse JSON result
+  console.log('[executeSQL] Raw data:', JSON.stringify(data))
+  console.log('[executeSQL] Data type:', typeof data)
+  console.log('[executeSQL] Is array:', Array.isArray(data))
+
   const results = typeof data === 'string' ? JSON.parse(data) : data
+  console.log('[executeSQL] Parsed results:', JSON.stringify(results))
   console.log(
     '[executeSQL] Parsed results count:',
     Array.isArray(results) ? results.length : 'not an array'
   )
+
+  // Handle case where data is an object but not an array
+  if (!Array.isArray(results) && typeof results === 'object' && results !== null) {
+    console.log('[executeSQL] Converting object to array')
+    return [results]
+  }
+
   return Array.isArray(results) ? results : []
 }
 
