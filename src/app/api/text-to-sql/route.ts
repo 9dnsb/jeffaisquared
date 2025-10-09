@@ -32,8 +32,10 @@ interface TextToSQLRequest {
   question: string
   conversationId?: string
   previousResponseId?: string // OpenAI response ID for conversation continuity
-  previousQuestion?: string // Previous user question for context
-  previousAnswer?: string // Previous AI answer for context
+  conversationHistory?: Array<{ // Full conversation history for context
+    role: 'user' | 'assistant'
+    content: string
+  }>
 }
 
 interface SchemaMatch {
@@ -166,8 +168,7 @@ async function retrieveSchemaContext(
 async function generateSQL(
   question: string,
   schemaContext: SchemaMatch[],
-  previousQuestion?: string,
-  previousAnswer?: string
+  conversationHistory?: Array<{ role: 'user' | 'assistant'; content: string }>
 ): Promise<{ sql: string; explanation: string; responseId: string }> {
   // Build schema context string
   const schemaDescription = schemaContext
@@ -260,21 +261,12 @@ IMPORTANT NOTES:
 
 Generate a PostgreSQL query that accurately answers this question.`
 
-  // Build input with conversation context (if available)
-  // Note: We pass conversation history manually instead of using previous_response_id
-  // because previous_response_id is designed for multi-turn function calling chains,
-  // not for independent queries that reference previous context
+  // Build input with full conversation context (if available)
+  // This allows the AI to understand references like "compare all these"
   const input =
-    previousQuestion && previousAnswer
+    conversationHistory && conversationHistory.length > 0
       ? [
-          {
-            role: 'user' as const,
-            content: previousQuestion,
-          },
-          {
-            role: 'assistant' as const,
-            content: `I found: ${previousAnswer}`,
-          },
+          ...conversationHistory,
           {
             role: 'user' as const,
             content: question,
@@ -412,8 +404,7 @@ export async function POST(request: NextRequest): Promise<Response> {
         }
 
         const question = body.question.trim()
-        const previousQuestion = body.previousQuestion
-        const previousAnswer = body.previousAnswer
+        const conversationHistory = body.conversationHistory || []
 
         // ================================================================
         // Step 1: Embed question
@@ -457,8 +448,7 @@ export async function POST(request: NextRequest): Promise<Response> {
         const { sql, explanation, responseId } = await generateSQL(
           question,
           schemaMatches,
-          previousQuestion,
-          previousAnswer
+          conversationHistory
         )
 
         sendSSE(controller, {

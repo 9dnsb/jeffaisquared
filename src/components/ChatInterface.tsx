@@ -96,14 +96,14 @@ export default function ChatInterface({ userId }: { userId: string }) {
       responseId: undefined as string | undefined,
     }
 
-    // Get previous conversation turn for context
-    const lastUserMessage = messages.filter((m) => m.role === 'user').reverse()[0]
-    const lastAssistantMessage = messages
-      .filter((m) => m.role === 'assistant')
-      .reverse()[0]
-
-    const previousQuestion = lastUserMessage?.content
-    const previousAnswer = lastAssistantMessage?.queryState?.explanation
+    // Build conversation history for context (all messages in current chat)
+    const conversationHistory = messages.map((msg) => ({
+      role: msg.role,
+      content:
+        msg.role === 'user'
+          ? msg.content
+          : msg.queryState?.explanation || 'Query executed',
+    }))
 
     try {
       const response = await fetch('/api/text-to-sql', {
@@ -111,9 +111,7 @@ export default function ChatInterface({ userId }: { userId: string }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           question,
-          previousQuestion,
-          previousAnswer,
-          previousResponseId: lastAssistantMessage?.responseId,
+          conversationHistory,
         }),
       })
 
