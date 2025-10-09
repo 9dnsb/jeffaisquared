@@ -101,6 +101,25 @@ function sendSSE(
 }
 
 /**
+ * Log detailed RPC response information
+ */
+function logRPCResponse(
+  context: string,
+  data: unknown,
+  error: { message?: string; details?: string; hint?: string; code?: string } | null
+): void {
+  console.log(`[${context}] RPC response:`, {
+    hasData: !!data,
+    dataLength: Array.isArray(data) ? data.length : undefined,
+    hasError: !!error,
+    errorMessage: error?.message,
+    errorDetails: error?.details,
+    errorHint: error?.hint,
+    errorCode: error?.code,
+  })
+}
+
+/**
  * Step 1: Generate embedding for user question
  */
 async function embedQuestion(question: string): Promise<number[]> {
@@ -141,15 +160,7 @@ async function retrieveSchemaContext(
     match_count: SCHEMA_MATCH_COUNT,
   })
 
-  console.log('[retrieveSchemaContext] RPC response:', {
-    hasData: !!data,
-    dataLength: data?.length,
-    hasError: !!error,
-    errorMessage: error?.message,
-    errorDetails: error?.details,
-    errorHint: error?.hint,
-    errorCode: error?.code,
-  })
+  logRPCResponse('retrieveSchemaContext', data, error)
 
   if (error) {
     console.error(
@@ -188,6 +199,13 @@ async function generateSQL(
 DATABASE SCHEMA:
 ${schemaDescription}
 
+TIMEZONE HANDLING:
+- **CRITICAL: All timestamps are stored in UTC but business operates in America/Toronto timezone**
+- **CRITICAL: ALWAYS convert UTC timestamps to Toronto time before date comparisons**
+- **CRITICAL: Use AT TIME ZONE 'America/Toronto' for all date filtering and comparisons**
+- This ensures "today" means today in Toronto, not UTC
+- Database timezone: UTC (storage), Business timezone: America/Toronto (queries)
+
 GUIDELINES:
 - Generate only SELECT queries (no INSERT, UPDATE, DELETE, DROP)
 - **CRITICAL: Generate EXACTLY ONE SQL query - never multiple queries separated by semicolons**
@@ -198,7 +216,7 @@ GUIDELINES:
 - **PERFORMANCE: Leverage indexed columns for WHERE clauses (date, "locationId", "itemId", category)**
 - **PERFORMANCE: Use date range filters efficiently (indexed BRIN on date column)**
 - Convert cents to dollars for currency display (amount / 100.0)
-- Use proper date handling (date_trunc, intervals, CURRENT_DATE)
+- Use proper date handling (date_trunc, intervals, CURRENT_DATE AT TIME ZONE 'America/Toronto')
 - Return results in JSON-compatible format
 - Use proper GROUP BY for aggregations
 - Order results meaningfully (usually DESC for rankings, ASC for chronological)
@@ -213,7 +231,7 @@ GUIDELINES:
 **QUERY OPTIMIZATION RULES:**
 - **CRITICAL: ALWAYS join to orders table and filter on orders."date" for date-based queries**
 - **CRITICAL: line_items."createdAt" is database record creation time, NOT the order date**
-- **CRITICAL: For date filtering, use: JOIN orders o ON li."orderId" = o."id" WHERE DATE(o."date") >= '2025-08-01'**
+- **CRITICAL: For date filtering, use: JOIN orders o ON li."orderId" = o."id" WHERE DATE(o."date" AT TIME ZONE 'America/Toronto') >= '2025-08-01'**
 - **CRITICAL: line_items table HAS both "name" and "category" columns (denormalized from items)**
 - **CRITICAL: To query by item name, filter on line_items."name" (e.g., WHERE li."name" ILIKE 'latte')**
 - **CRITICAL: To query by category, filter on line_items."category" (e.g., WHERE li."category" ILIKE 'coffee')**
@@ -230,16 +248,16 @@ GUIDELINES:
   - Example: "compare them across all locations" should GROUP BY l."name" with separate columns for each metric
   - Return one row per location showing both periods for easy comparison (NOT a single total row)
   - For simple comparisons (e.g., "compare X to Y"), use CASE statements with SUM, not subqueries
-  - **CRITICAL: When using "last [day of week]" formulas, ALWAYS calculate from CURRENT_DATE, not from other date expressions**
+  - **CRITICAL: When using "last [day of week]" formulas, ALWAYS calculate from Toronto time, not UTC**
   - Example: "compare sales yesterday to last Tuesday" should be:
     SELECT
-      SUM(CASE WHEN DATE(o."date") = (CURRENT_DATE - INTERVAL '1 day')::date THEN o."totalAmount" ELSE 0 END)/100.0 AS "Yesterday",
-      SUM(CASE WHEN DATE(o."date") = (CURRENT_DATE - ((EXTRACT(DOW FROM CURRENT_DATE)::int - 2 + 7) % 7 + CASE WHEN EXTRACT(DOW FROM CURRENT_DATE) = 2 THEN 7 ELSE 0 END))::date THEN o."totalAmount" ELSE 0 END)/100.0 AS "LastTuesday"
+      SUM(CASE WHEN DATE(o."date" AT TIME ZONE 'America/Toronto') = DATE((CURRENT_TIMESTAMP AT TIME ZONE 'America/Toronto') - INTERVAL '1 day') THEN o."totalAmount" ELSE 0 END)/100.0 AS "Yesterday",
+      SUM(CASE WHEN DATE(o."date" AT TIME ZONE 'America/Toronto') = DATE((CURRENT_TIMESTAMP AT TIME ZONE 'America/Toronto') - ((EXTRACT(DOW FROM (CURRENT_TIMESTAMP AT TIME ZONE 'America/Toronto'))::int - 2 + 7) % 7 + CASE WHEN EXTRACT(DOW FROM (CURRENT_TIMESTAMP AT TIME ZONE 'America/Toronto')) = 2 THEN 7 ELSE 0 END) * INTERVAL '1 day') THEN o."totalAmount" ELSE 0 END)/100.0 AS "LastTuesday"
     FROM orders o
 - Example: For "Latte revenue in August", use:
   SELECT SUM(li."totalPriceAmount")/100.0 FROM line_items li
   JOIN orders o ON li."orderId" = o."id"
-  WHERE li."name" ILIKE 'latte' AND DATE(o."date") >= '2025-08-01' AND DATE(o."date") < '2025-09-01'
+  WHERE li."name" ILIKE 'latte' AND DATE(o."date" AT TIME ZONE 'America/Toronto') >= '2025-08-01' AND DATE(o."date" AT TIME ZONE 'America/Toronto') < '2025-09-01'
 
 IMPORTANT NOTES:
 - **JOIN KEY WARNING:** orders."locationId" joins to locations."squareLocationId" (NOT locations."id"!)
@@ -248,16 +266,18 @@ IMPORTANT NOTES:
 - All monetary amounts in the database are stored in CENTS (divide by 100.0 for dollars)
 - Use proper SQL syntax for PostgreSQL
 - Example: SELECT o."totalAmount" FROM orders o WHERE o."locationId" = 'xyz'
-- **CRITICAL: Always use DATE() to cast timestamp columns for day-based filtering**
+- **CRITICAL: Always convert to Toronto timezone before DATE() casting for day-based filtering**
 - **CRITICAL DATE ASSUMPTION: If user specifies a date without a year, ALWAYS assume the CURRENT YEAR (${new Date().getFullYear()})**
-- For "yesterday", use: WHERE DATE("date") = (CURRENT_DATE - INTERVAL '1 day')::date
-- For "today", use: WHERE DATE("date") = CURRENT_DATE
-- For "last 7 days", use: WHERE DATE("date") >= (CURRENT_DATE - INTERVAL '7 days')::date
-- For "last week", use: WHERE DATE("date") >= date_trunc('week', CURRENT_DATE - INTERVAL '1 week')::date AND DATE("date") < date_trunc('week', CURRENT_DATE)::date
-- For "last month", use: WHERE DATE("date") >= date_trunc('month', CURRENT_DATE - INTERVAL '1 month')::date
-- For specific date without year (e.g., "Oct 5", "January 15"), use: WHERE DATE("date") = '${new Date().getFullYear()}-MM-DD'
-- For specific date with year (e.g., "Oct 5, 2023"), use the specified year
-- Example: WHERE DATE(o."date") = (CURRENT_DATE - INTERVAL '1 day')::date
+- **CRITICAL TIMEZONE PATTERNS (use these exact patterns):**
+  - For "yesterday": WHERE DATE(o."date" AT TIME ZONE 'America/Toronto') = DATE((CURRENT_TIMESTAMP AT TIME ZONE 'America/Toronto') - INTERVAL '1 day')
+  - For "today": WHERE DATE(o."date" AT TIME ZONE 'America/Toronto') = DATE(CURRENT_TIMESTAMP AT TIME ZONE 'America/Toronto')
+  - For "last 7 days": WHERE DATE(o."date" AT TIME ZONE 'America/Toronto') >= DATE((CURRENT_TIMESTAMP AT TIME ZONE 'America/Toronto') - INTERVAL '7 days')
+  - For "last week": WHERE DATE(o."date" AT TIME ZONE 'America/Toronto') >= DATE(date_trunc('week', (CURRENT_TIMESTAMP AT TIME ZONE 'America/Toronto') - INTERVAL '1 week')) AND DATE(o."date" AT TIME ZONE 'America/Toronto') < DATE(date_trunc('week', CURRENT_TIMESTAMP AT TIME ZONE 'America/Toronto'))
+  - For "last month": WHERE DATE(o."date" AT TIME ZONE 'America/Toronto') >= DATE(date_trunc('month', (CURRENT_TIMESTAMP AT TIME ZONE 'America/Toronto') - INTERVAL '1 month'))
+  - For specific date without year (e.g., "Oct 5", "January 15"): WHERE DATE(o."date" AT TIME ZONE 'America/Toronto') = '${new Date().getFullYear()}-MM-DD'
+  - For specific date with year (e.g., "Oct 5, 2023"): WHERE DATE(o."date" AT TIME ZONE 'America/Toronto') = 'YYYY-MM-DD'
+- **ALWAYS apply AT TIME ZONE 'America/Toronto' before DATE() conversion**
+- Example: WHERE DATE(o."date" AT TIME ZONE 'America/Toronto') = DATE((CURRENT_TIMESTAMP AT TIME ZONE 'America/Toronto') - INTERVAL '1 day')
 
 Generate a PostgreSQL query that accurately answers this question.`
 
@@ -341,17 +361,10 @@ async function executeSQL(sql: string): Promise<unknown[]> {
     sql_query: cleanSQL,
   })
 
-  console.log('[executeSQL] RPC response:', {
-    hasData: !!data,
-    dataType: typeof data,
-    isArray: Array.isArray(data),
-    isNull: data === null,
-    hasError: !!error,
-    errorMessage: error?.message,
-    errorDetails: error?.details,
-    errorHint: error?.hint,
-    errorCode: error?.code,
-  })
+  logRPCResponse('executeSQL', data, error)
+  console.log('[executeSQL] Data type:', typeof data)
+  console.log('[executeSQL] Is array:', Array.isArray(data))
+  console.log('[executeSQL] Is null:', data === null)
 
   if (error) {
     console.error(
@@ -363,8 +376,6 @@ async function executeSQL(sql: string): Promise<unknown[]> {
 
   // Parse JSON result
   console.log('[executeSQL] Raw data:', JSON.stringify(data))
-  console.log('[executeSQL] Data type:', typeof data)
-  console.log('[executeSQL] Is array:', Array.isArray(data))
 
   const results = typeof data === 'string' ? JSON.parse(data) : data
   console.log('[executeSQL] Parsed results:', JSON.stringify(results))
