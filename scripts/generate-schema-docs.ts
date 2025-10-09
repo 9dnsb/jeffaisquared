@@ -510,6 +510,29 @@ export function generateSchemaDocumentation(): SchemaDoc[] {
     }
   }
 
+  // 5. Common query patterns documentation (for RAG retrieval)
+  docs.push({
+    objectName: 'query_pattern_date_calculations',
+    objectType: 'index',
+    description:
+      'Common date calculation patterns for PostgreSQL queries in sales analytics. ' +
+      'CRITICAL: For "last [day of week]" queries (e.g., "last Wednesday", "last Monday"), ' +
+      'calculate the exact date of the most recent occurrence of that weekday. ' +
+      'PostgreSQL day of week: EXTRACT(DOW FROM date) returns 0=Sunday, 1=Monday, 2=Tuesday, 3=Wednesday, 4=Thursday, 5=Friday, 6=Saturday. ' +
+      'Formula for last occurrence of a weekday: CURRENT_DATE - ((EXTRACT(DOW FROM CURRENT_DATE)::int - target_dow + 7) % 7 + CASE WHEN EXTRACT(DOW FROM CURRENT_DATE) = target_dow THEN 7 ELSE 0 END) ' +
+      'where target_dow is the target day number (0-6). ' +
+      'Examples: ' +
+      'Last Sunday: CURRENT_DATE - ((EXTRACT(DOW FROM CURRENT_DATE)::int - 0 + 7) % 7 + CASE WHEN EXTRACT(DOW FROM CURRENT_DATE) = 0 THEN 7 ELSE 0 END). ' +
+      'Last Monday: CURRENT_DATE - ((EXTRACT(DOW FROM CURRENT_DATE)::int - 1 + 7) % 7 + CASE WHEN EXTRACT(DOW FROM CURRENT_DATE) = 1 THEN 7 ELSE 0 END). ' +
+      'Last Tuesday: CURRENT_DATE - ((EXTRACT(DOW FROM CURRENT_DATE)::int - 2 + 7) % 7 + CASE WHEN EXTRACT(DOW FROM CURRENT_DATE) = 2 THEN 7 ELSE 0 END). ' +
+      'Last Wednesday: CURRENT_DATE - ((EXTRACT(DOW FROM CURRENT_DATE)::int - 3 + 7) % 7 + CASE WHEN EXTRACT(DOW FROM CURRENT_DATE) = 3 THEN 7 ELSE 0 END). ' +
+      'Last Thursday: CURRENT_DATE - ((EXTRACT(DOW FROM CURRENT_DATE)::int - 4 + 7) % 7 + CASE WHEN EXTRACT(DOW FROM CURRENT_DATE) = 4 THEN 7 ELSE 0 END). ' +
+      'Last Friday: CURRENT_DATE - ((EXTRACT(DOW FROM CURRENT_DATE)::int - 5 + 7) % 7 + CASE WHEN EXTRACT(DOW FROM CURRENT_DATE) = 5 THEN 7 ELSE 0 END). ' +
+      'Last Saturday: CURRENT_DATE - ((EXTRACT(DOW FROM CURRENT_DATE)::int - 6 + 7) % 7 + CASE WHEN EXTRACT(DOW FROM CURRENT_DATE) = 6 THEN 7 ELSE 0 END). ' +
+      'NEVER use (CURRENT_DATE - INTERVAL \'1 day\') AND EXTRACT(DOW FROM date) = X as this only works if yesterday was that day. ' +
+      'Always calculate the exact date using the formula above for accurate results.',
+  })
+
   return docs
 }
 

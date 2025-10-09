@@ -31,6 +31,9 @@ const MAX_QUERY_TIMEOUT = 20000 // 15 seconds max for SQL execution
 interface TextToSQLRequest {
   question: string
   conversationId?: string
+  previousResponseId?: string // OpenAI response ID for conversation continuity
+  previousQuestion?: string // Previous user question for context
+  previousAnswer?: string // Previous AI answer for context
 }
 
 interface SchemaMatch {
@@ -42,13 +45,21 @@ interface SchemaMatch {
 }
 
 interface SSEEvent {
-  type: 'status' | 'schema' | 'sql' | 'results' | 'error' | 'complete'
+  type:
+    | 'status'
+    | 'schema'
+    | 'sql'
+    | 'results'
+    | 'error'
+    | 'complete'
+    | 'response_id'
   message?: string
   context?: string[]
   query?: string
   explanation?: string
   data?: unknown[]
   error?: string
+  responseId?: string // OpenAI response ID for conversation continuity
 }
 
 // ============================================================================
@@ -154,8 +165,10 @@ async function retrieveSchemaContext(
  */
 async function generateSQL(
   question: string,
-  schemaContext: SchemaMatch[]
-): Promise<{ sql: string; explanation: string }> {
+  schemaContext: SchemaMatch[],
+  previousQuestion?: string,
+  previousAnswer?: string
+): Promise<{ sql: string; explanation: string; responseId: string }> {
   // Build schema context string
   const schemaDescription = schemaContext
     .map(
@@ -176,6 +189,7 @@ ${schemaDescription}
 
 GUIDELINES:
 - Generate only SELECT queries (no INSERT, UPDATE, DELETE, DROP)
+- **CRITICAL: Generate EXACTLY ONE SQL query - never multiple queries separated by semicolons**
 - Use proper table aliases for readability
 - **CRITICAL: ALWAYS quote column names with double quotes (e.g., "totalAmount", "locationId", "itemId")**
 - Column names are case-sensitive camelCase and MUST be quoted
@@ -208,6 +222,19 @@ GUIDELINES:
   - "How many orders" → Use COUNT(*) for number of transactions
   - "How many customers" → Use COUNT(DISTINCT o."customerId") if available
   - Example: "257 lattes sold" means SUM(quantity)=257, not COUNT(*)=257
+- **CRITICAL COMPARISON QUERY RULES:**
+  - When user asks to compare "by location", "at each location", "across locations", "for all locations", or "at all locations", ALWAYS GROUP BY location name to show per-location breakdown
+  - Use CASE statements or conditional aggregation to show side-by-side comparisons in a SINGLE query
+  - Example: "compare sales today vs last week by location" should GROUP BY l."name" with separate columns for each period
+  - Example: "compare them across all locations" should GROUP BY l."name" with separate columns for each metric
+  - Return one row per location showing both periods for easy comparison (NOT a single total row)
+  - For simple comparisons (e.g., "compare X to Y"), use CASE statements with SUM, not subqueries
+  - **CRITICAL: When using "last [day of week]" formulas, ALWAYS calculate from CURRENT_DATE, not from other date expressions**
+  - Example: "compare sales yesterday to last Tuesday" should be:
+    SELECT
+      SUM(CASE WHEN DATE(o."date") = (CURRENT_DATE - INTERVAL '1 day')::date THEN o."totalAmount" ELSE 0 END)/100.0 AS "Yesterday",
+      SUM(CASE WHEN DATE(o."date") = (CURRENT_DATE - ((EXTRACT(DOW FROM CURRENT_DATE)::int - 2 + 7) % 7 + CASE WHEN EXTRACT(DOW FROM CURRENT_DATE) = 2 THEN 7 ELSE 0 END))::date THEN o."totalAmount" ELSE 0 END)/100.0 AS "LastTuesday"
+    FROM orders o
 - Example: For "Latte revenue in August", use:
   SELECT SUM(li."totalPriceAmount")/100.0 FROM line_items li
   JOIN orders o ON li."orderId" = o."id"
@@ -233,11 +260,33 @@ IMPORTANT NOTES:
 
 Generate a PostgreSQL query that accurately answers this question.`
 
+  // Build input with conversation context (if available)
+  // Note: We pass conversation history manually instead of using previous_response_id
+  // because previous_response_id is designed for multi-turn function calling chains,
+  // not for independent queries that reference previous context
+  const input =
+    previousQuestion && previousAnswer
+      ? [
+          {
+            role: 'user' as const,
+            content: previousQuestion,
+          },
+          {
+            role: 'assistant' as const,
+            content: `I found: ${previousAnswer}`,
+          },
+          {
+            role: 'user' as const,
+            content: question,
+          },
+        ]
+      : question
+
   // Use function calling to structure the response
   const response = await openai.responses.create({
     model: CHAT_MODEL,
     instructions: instructions,
-    input: question,
+    input: input,
     tools: [
       {
         type: 'function',
@@ -279,7 +328,10 @@ Generate a PostgreSQL query that accurately answers this question.`
     explanation: string
   }
 
-  return result
+  return {
+    ...result,
+    responseId: response.id, // Return response ID for conversation continuity
+  }
 }
 
 /**
@@ -346,6 +398,8 @@ export async function POST(request: NextRequest): Promise<Response> {
         }
 
         const question = body.question.trim()
+        const previousQuestion = body.previousQuestion
+        const previousAnswer = body.previousAnswer
 
         // ================================================================
         // Step 1: Embed question
@@ -386,13 +440,24 @@ export async function POST(request: NextRequest): Promise<Response> {
           message: 'Generating SQL query...',
         })
 
-        const { sql, explanation } = await generateSQL(question, schemaMatches)
+        const { sql, explanation, responseId } = await generateSQL(
+          question,
+          schemaMatches,
+          previousQuestion,
+          previousAnswer
+        )
 
         sendSSE(controller, {
           type: 'sql',
           message: explanation,
           query: sql,
           explanation: explanation,
+        })
+
+        // Send response ID for conversation continuity
+        sendSSE(controller, {
+          type: 'response_id',
+          responseId: responseId,
         })
 
         // ================================================================

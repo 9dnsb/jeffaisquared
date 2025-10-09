@@ -17,6 +17,7 @@ interface Message {
     results: Record<string, unknown>[]
     error: string | null
   }
+  responseId?: string // OpenAI response ID for conversation continuity
 }
 
 interface StreamState {
@@ -30,13 +31,21 @@ interface StreamState {
 }
 
 interface SSEEvent {
-  type: 'status' | 'schema' | 'sql' | 'results' | 'error' | 'complete'
+  type:
+    | 'status'
+    | 'schema'
+    | 'sql'
+    | 'results'
+    | 'error'
+    | 'complete'
+    | 'response_id'
   message?: string
   context?: string[]
   query?: string
   explanation?: string
   data?: Record<string, unknown>[]
   error?: string
+  responseId?: string
 }
 
 // ============================================================================
@@ -84,13 +93,28 @@ export default function ChatInterface({ userId }: { userId: string }) {
       explanation: '',
       results: [] as Record<string, unknown>[],
       error: null as string | null,
+      responseId: undefined as string | undefined,
     }
+
+    // Get previous conversation turn for context
+    const lastUserMessage = messages.filter((m) => m.role === 'user').reverse()[0]
+    const lastAssistantMessage = messages
+      .filter((m) => m.role === 'assistant')
+      .reverse()[0]
+
+    const previousQuestion = lastUserMessage?.content
+    const previousAnswer = lastAssistantMessage?.queryState?.explanation
 
     try {
       const response = await fetch('/api/text-to-sql', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question }),
+        body: JSON.stringify({
+          question,
+          previousQuestion,
+          previousAnswer,
+          previousResponseId: lastAssistantMessage?.responseId,
+        }),
       })
 
       if (!response.ok) {
@@ -145,6 +169,10 @@ export default function ChatInterface({ userId }: { userId: string }) {
                     next.isStreaming = false
                     finalState.error = event.error || 'Unknown error'
                     break
+                  case 'response_id':
+                    // Store response ID for conversation continuity
+                    finalState.responseId = event.responseId
+                    break
                   case 'complete':
                     next.isStreaming = false
                     break
@@ -159,13 +187,19 @@ export default function ChatInterface({ userId }: { userId: string }) {
         }
       }
 
-      // When streaming completes, save final results to the message
+      // When streaming completes, save final results and responseId to the message
       setMessages((prev) =>
         prev.map((msg) =>
           msg.id === messageId
             ? {
                 ...msg,
-                queryState: finalState,
+                queryState: {
+                  sql: finalState.sql,
+                  explanation: finalState.explanation,
+                  results: finalState.results,
+                  error: finalState.error,
+                },
+                responseId: finalState.responseId, // Store for next conversation turn
               }
             : msg
         )

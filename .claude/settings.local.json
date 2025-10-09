@@ -4,7 +4,8 @@
       "Bash(npx tsx:*)",
       "Bash(psql:*)",
       "Bash(npx tsc:*)",
-      "Bash(npx jscpd:*)"
+      "Bash(npx jscpd:*)",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []
