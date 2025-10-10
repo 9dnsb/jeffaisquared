@@ -99,7 +99,7 @@ const SquareWebhookEventSchema = z.object({
   data: z.object({
     type: z.string(),
     id: z.string(),
-    object: z.record(z.any()).optional(),
+    object: z.record(z.string(), z.unknown()).optional(),
   }),
 })
 

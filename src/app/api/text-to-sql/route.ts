@@ -211,7 +211,9 @@ GUIDELINES:
 - **CRITICAL: Generate EXACTLY ONE SQL query - never multiple queries separated by semicolons**
 - Use proper table aliases for readability
 - **CRITICAL: ALWAYS quote column names with double quotes (e.g., "totalAmount", "locationId", "itemId")**
+- **CRITICAL: ALWAYS quote column aliases (AS "Alias Name") - especially if they contain spaces, capitals, or special characters**
 - Column names are case-sensitive camelCase and MUST be quoted
+- Example: SELECT li."name" AS "Drink Name", SUM(li."quantity") AS "July Units Sold" (NOT AS July Units Sold)
 - **CRITICAL: Use ILIKE for case-insensitive text matching (e.g., WHERE i."name" ILIKE 'latte' instead of = 'latte')**
 - **PERFORMANCE: Leverage indexed columns for WHERE clauses (date, "locationId", "itemId", category)**
 - **PERFORMANCE: Use date range filters efficiently (indexed BRIN on date column)**
@@ -241,6 +243,15 @@ GUIDELINES:
   - "How many orders" → Use COUNT(*) for number of transactions
   - "How many customers" → Use COUNT(DISTINCT o."customerId") if available
   - Example: "257 lattes sold" means SUM(quantity)=257, not COUNT(*)=257
+- **CRITICAL DOUBLE-COUNTING PREVENTION:**
+  - **NEVER use SUM(o."totalAmount") or COUNT(DISTINCT o."id") when joining to line_items**
+  - Orders with multiple items create multiple rows after JOIN line_items, causing multiplication
+  - For total revenue queries: Use SUM(o."totalAmount") FROM orders (NO line_items join)
+  - For item-specific revenue: Use SUM(li."totalPriceAmount") FROM line_items (correct per-item total)
+  - For order counts with line_items: Use COUNT(DISTINCT o."id"), NEVER COUNT(*)
+  - Example WRONG: SELECT SUM(o."totalAmount") FROM orders o JOIN line_items li ON o."id" = li."orderId" (double-counts!)
+  - Example RIGHT: SELECT SUM(o."totalAmount") FROM orders o (no join, correct total)
+  - Example RIGHT: SELECT SUM(li."totalPriceAmount") FROM line_items li JOIN orders o ON li."orderId" = o."id" (correct item total)
 - **CRITICAL COMPARISON QUERY RULES:**
   - **ALWAYS generate a SINGLE query for ALL comparisons** - NEVER generate separate queries for each period
   - Use CASE statements or conditional aggregation to show side-by-side comparisons in columns

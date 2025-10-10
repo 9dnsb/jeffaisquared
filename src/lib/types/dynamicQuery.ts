@@ -82,9 +82,9 @@ export type QueryParameters = z.infer<typeof QueryParametersSchema>
 
 // Standardized query result structure
 export const QueryResultRowSchema = z.object({
-  dimensions: z.record(z.union([z.string(), z.number(), z.date()])),
-  metrics: z.record(z.number()),
-  rawData: z.record(z.unknown()).optional()
+  dimensions: z.record(z.string(), z.union([z.string(), z.number(), z.date()])),
+  metrics: z.record(z.string(), z.number()),
+  rawData: z.record(z.string(), z.unknown()).optional()
 })
 
 export const StandardizedQueryResultSchema = z.object({

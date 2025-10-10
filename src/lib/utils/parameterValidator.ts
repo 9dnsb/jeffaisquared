@@ -105,7 +105,7 @@ export class ParameterValidator {
       return { success: true, data: validated }
     } catch (err) {
       if (err instanceof z.ZodError) {
-        const errorMessage = err.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ')
+        const errorMessage = err.issues.map(e => `${e.path.join('.')}: ${e.message}`).join(', ')
         return { success: false, error: errorMessage }
       }
       return { success: false, error: 'Unknown Zod validation error' }
