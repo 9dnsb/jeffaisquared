@@ -64,6 +64,7 @@ export default function ChatInterface({ userId }: { userId: string }) {
     error: null,
     isStreaming: false,
   })
+  const [debugInfo, setDebugInfo] = useState<string>('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   // Auto-scroll to bottom
@@ -143,6 +144,7 @@ export default function ChatInterface({ userId }: { userId: string }) {
 
             try {
               const event = JSON.parse(data) as SSEEvent
+              console.log('[ChatInterface] SSE event received:', event.type, event)
 
               setStreamState((prev) => {
                 const next = { ...prev }
@@ -164,6 +166,7 @@ export default function ChatInterface({ userId }: { userId: string }) {
                     next.results = event.data || []
                     next.isStreaming = false
                     finalState.results = event.data || []
+                    setDebugInfo(`Results received: ${JSON.stringify(event.data)}`)
                     console.log('[ChatInterface] Results received:', {
                       dataLength: event.data?.length,
                       data: event.data,
@@ -337,6 +340,15 @@ export default function ChatInterface({ userId }: { userId: string }) {
           <div ref={messagesEndRef} />
         </div>
       </div>
+
+      {/* Debug Info */}
+      {debugInfo && (
+        <div className="border-t border-yellow-200 bg-yellow-50 px-6 py-2 text-xs dark:border-yellow-800 dark:bg-yellow-900/20">
+          <div className="mx-auto max-w-3xl">
+            <strong>Debug:</strong> {debugInfo}
+          </div>
+        </div>
+      )}
 
       {/* Input */}
       <div className="border-t border-gray-200 bg-white px-6 py-4 dark:border-gray-700 dark:bg-gray-800">
