@@ -164,6 +164,11 @@ export default function ChatInterface({ userId }: { userId: string }) {
                     next.results = event.data || []
                     next.isStreaming = false
                     finalState.results = event.data || []
+                    console.log('[ChatInterface] Results received:', {
+                      dataLength: event.data?.length,
+                      data: event.data,
+                      finalStateLength: finalState.results.length,
+                    })
                     break
                   case 'error':
                     next.error = event.error || 'Unknown error'
@@ -189,6 +194,15 @@ export default function ChatInterface({ userId }: { userId: string }) {
       }
 
       // When streaming completes, save final results and responseId to the message
+      console.log('[ChatInterface] Saving final state to message:', {
+        messageId,
+        sql: finalState.sql,
+        explanation: finalState.explanation,
+        resultsLength: finalState.results.length,
+        results: finalState.results,
+        error: finalState.error,
+      })
+
       setMessages((prev) =>
         prev.map((msg) =>
           msg.id === messageId
@@ -437,7 +451,15 @@ function QueryResults({
     )
   }
 
-  if (state.results.length === 0) {
+  console.log('[QueryResults] Rendering with state:', {
+    hasResults: !!state.results,
+    resultsLength: state.results?.length,
+    resultsType: typeof state.results,
+    isArray: Array.isArray(state.results),
+    firstResult: state.results?.[0],
+  })
+
+  if (!state.results || state.results.length === 0) {
     return (
       <div className="rounded-md bg-yellow-50 p-4 dark:bg-yellow-900/20">
         <div className="flex items-center space-x-2 text-yellow-900 dark:text-yellow-300">
