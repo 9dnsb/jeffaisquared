@@ -34,6 +34,7 @@ export default function Navbar() {
   const navLinks: NavLink[] = user
     ? [
         { href: '/dashboard', label: 'Dashboard' },
+        { href: '/static-dashboard', label: 'Static Dashboard' },
         {
           label: 'Sign Out',
           onClick: handleLogout,
