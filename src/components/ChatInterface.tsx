@@ -464,7 +464,12 @@ function QueryResults({
       <div className="rounded-md bg-yellow-50 p-4 dark:bg-yellow-900/20">
         <div className="flex items-center space-x-2 text-yellow-900 dark:text-yellow-300">
           <span className="text-lg">ℹ️</span>
-          <span className="font-medium">No results found</span>
+          <div>
+            <div className="font-medium">No results found</div>
+            <div className="text-xs mt-1">
+              Debug: results={JSON.stringify(state.results)}, length={state.results?.length}, type={typeof state.results}
+            </div>
+          </div>
         </div>
       </div>
     )
