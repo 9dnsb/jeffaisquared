@@ -358,7 +358,7 @@ export default function ChatInterface({ userId }: { userId: string }) {
       </div>
 
       {/* Debug Info */}
-      {debugInfo && (
+      {false && debugInfo && (
         <div className="border-t border-yellow-200 bg-yellow-50 px-6 py-2 text-xs dark:border-yellow-800 dark:bg-yellow-900/20">
           <div className="mx-auto max-w-3xl">
             <strong>Debug:</strong> {debugInfo}
