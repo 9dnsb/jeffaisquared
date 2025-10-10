@@ -30,14 +30,14 @@ export default function TodaySalesCard({ data }: TodaySalesCardProps) {
       </div>
 
       {/* Total Overview */}
-      <div className="grid grid-cols-2 gap-4 mb-6">
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4">
-          <p className="text-sm text-blue-600 font-medium mb-1">Total Revenue</p>
-          <p className="text-3xl font-bold text-blue-900">{formatCurrency(totalSales)}</p>
+      <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-6">
+        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-3 sm:p-4">
+          <p className="text-xs sm:text-sm text-blue-600 font-medium mb-1">Total Revenue</p>
+          <p className="text-lg sm:text-2xl md:text-3xl font-bold text-blue-900">{formatCurrency(totalSales)}</p>
         </div>
-        <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4">
-          <p className="text-sm text-purple-600 font-medium mb-1">Total Orders</p>
-          <p className="text-3xl font-bold text-purple-900">{totalOrders}</p>
+        <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-3 sm:p-4">
+          <p className="text-xs sm:text-sm text-purple-600 font-medium mb-1">Total Orders</p>
+          <p className="text-lg sm:text-2xl md:text-3xl font-bold text-purple-900">{totalOrders}</p>
         </div>
       </div>
 

@@ -3,7 +3,7 @@ import { executeSQL } from '../../../../lib/api/sql-executor'
 
 export async function GET(request: NextRequest) {
   try {
-    // SQL query to get top 5 selling items per location TODAY
+    // SQL query to get top 5 selling items per location TODAY (by revenue)
     const sql = `WITH item_sales AS (
   SELECT
     l."squareLocationId",
@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     li."name" as item_name,
     SUM(li."quantity") as total_quantity,
     SUM(li."totalPriceAmount") as total_revenue,
-    ROW_NUMBER() OVER (PARTITION BY l."squareLocationId" ORDER BY SUM(li."quantity") DESC) as rank
+    ROW_NUMBER() OVER (PARTITION BY l."squareLocationId" ORDER BY SUM(li."totalPriceAmount") DESC) as rank
   FROM locations l
   INNER JOIN orders o ON l."squareLocationId" = o."locationId"
   INNER JOIN line_items li ON o."id" = li."orderId"
