@@ -66,17 +66,56 @@ export default function ChatInterface({ userId }: { userId: string }) {
   })
   const [debugInfo, setDebugInfo] = useState<string>('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const lastStreamingRef = useRef(false)
+  const currentMessageIdRef = useRef<string | null>(null)
 
   // Auto-scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, streamState])
 
+  // Save streaming results to message when streaming completes
+  useEffect(() => {
+    // Detect when streaming transitions from true to false
+    if (lastStreamingRef.current && !streamState.isStreaming && currentMessageIdRef.current) {
+      const messageId = currentMessageIdRef.current
+      console.log('[ChatInterface] Streaming completed, saving to message:', {
+        messageId,
+        sql: streamState.sql,
+        explanation: streamState.explanation,
+        resultsLength: streamState.results.length,
+        results: streamState.results,
+      })
+
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === messageId
+            ? {
+                ...msg,
+                queryState: {
+                  sql: streamState.sql,
+                  explanation: streamState.explanation,
+                  results: streamState.results,
+                  error: streamState.error,
+                },
+              }
+            : msg
+        )
+      )
+
+      currentMessageIdRef.current = null
+    }
+    lastStreamingRef.current = streamState.isStreaming
+  }, [streamState.isStreaming, streamState.sql, streamState.explanation, streamState.results, streamState.error])
+
   // ============================================================================
   // SSE Streaming Handler
   // ============================================================================
 
   const streamQuery = async (question: string, messageId: string) => {
+    // Set current message ID for useEffect to save results when streaming completes
+    currentMessageIdRef.current = messageId
+
     // Reset stream state
     setStreamState({
       status: '',
@@ -196,32 +235,9 @@ export default function ChatInterface({ userId }: { userId: string }) {
         }
       }
 
-      // When streaming completes, save final results and responseId to the message
-      console.log('[ChatInterface] Saving final state to message:', {
-        messageId,
-        sql: finalState.sql,
-        explanation: finalState.explanation,
-        resultsLength: finalState.results.length,
-        results: finalState.results,
-        error: finalState.error,
-      })
-
-      setMessages((prev) =>
-        prev.map((msg) =>
-          msg.id === messageId
-            ? {
-                ...msg,
-                queryState: {
-                  sql: finalState.sql,
-                  explanation: finalState.explanation,
-                  results: finalState.results,
-                  error: finalState.error,
-                },
-                responseId: finalState.responseId, // Store for next conversation turn
-              }
-            : msg
-        )
-      )
+      // Streaming complete - useEffect will handle saving results to message
+      // using streamState (React state) instead of finalState (local variable)
+      console.log('[ChatInterface] Stream ended, waiting for useEffect to save results')
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Stream failed'
       setStreamState((prev) => ({
