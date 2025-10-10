@@ -246,11 +246,16 @@ GUIDELINES:
   - Use CASE statements or conditional aggregation to show side-by-side comparisons in columns
   - When user says "compare this/that to [date/period]", look at the previous query structure and maintain it while adding comparison columns
   - Example: If previous query was "best sellers today" grouped by item name, "compare this to oct 1" should GROUP BY item name with columns for both periods
-  - When user asks to compare "by location", "at each location", "across locations", "for all locations", or "at all locations", ALWAYS GROUP BY location name to show per-location breakdown
-  - Example: "compare sales today vs last week by location" should GROUP BY l."name" with separate columns for each period
-  - Example: "compare them across all locations" should GROUP BY l."name" with separate columns for each metric
   - Return one row per dimension (item/location/category) showing all periods for easy comparison (NOT separate queries)
   - For simple total comparisons (e.g., "compare total sales X to Y"), use CASE statements with SUM in a single row
+- **CRITICAL LOCATION BREAKDOWN RULES:**
+  - When user mentions "by location", "at each location", "across all locations", "for all locations", "at all locations", "per location", or "location breakdown", **ALWAYS GROUP BY location name**
+  - Each location should be a separate row, NOT a single total
+  - Example: "sales today across all locations" should return one row per location with location name and sales
+  - Example: "compare sales today vs last week by location" should GROUP BY l."name" with separate columns for each period
+  - Example: "sales at all locations" should GROUP BY l."name" showing each location separately
+  - **NEVER return a single total row when user asks for location breakdown**
+  - Join pattern: JOIN locations l ON o."locationId" = l."squareLocationId" then GROUP BY l."name"
   - **CRITICAL: When using "last [day of week]" formulas, ALWAYS calculate from Toronto time, not UTC**
   - Example: "compare sales yesterday to last Tuesday" should be:
     SELECT
