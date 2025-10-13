@@ -142,17 +142,57 @@ model ChatMessage {
 }
 
 model SchemaEmbedding {
-  id          BigInt   @id @default(autoincrement())
-  objectName  String   @map("object_name")
-  objectType  String   @map("object_type")
+  id          BigInt                     @id @default(autoincrement())
+  objectName  String                     @unique @map("object_name")
+  objectType  String                     @map("object_type")
   description String
-  // Note: vector type not directly supported by Prisma
-  // The embedding column exists in DB as VECTOR(1536)
-  // Will use raw SQL via Supabase client for vector operations
-  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+  embedding   Unsupported("vector(1536)")
+  createdAt   DateTime                   @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime                   @updatedAt @map("updated_at") @db.Timestamptz
 
   @@index([objectName], name: "idx_schema_embeddings_object_name")
   @@index([objectType], name: "idx_schema_embeddings_object_type")
   @@map("schema_embeddings")
+}
+
+model AlertRule {
+  id              String           @id @default(cuid())
+  userId          String           @map("user_id")
+  name            String
+  description     String?          @db.Text
+  conditionType   String           @map("condition_type")
+  conditionData   Json             @map("condition_data")
+  isActive        Boolean          @default(true) @map("is_active")
+  frequency       String           @default("once")
+  lastTriggeredAt DateTime?        @map("last_triggered_at") @db.Timestamptz
+  createdAt       DateTime         @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime         @updatedAt @map("updated_at") @db.Timestamptz
+  notifications   Notification[]
+
+  // Optimized indexes based on Supabase best practices
+  @@index([userId, isActive, lastTriggeredAt]) // Composite for cron queries
+  @@index([isActive]) // Index for active alerts filtering
+  @@map("alert_rules")
+}
+
+model Notification {
+  id            String     @id @default(cuid())
+  userId        String     @map("user_id")
+  alertRuleId   String?    @map("alert_rule_id")
+  title         String
+  message       String     @db.Text
+  type          String     @default("milestone")
+  status        String     @default("unread")
+  metadata      Json?
+  emailSent     Boolean    @default(false) @map("email_sent")
+  emailSentAt   DateTime?  @map("email_sent_at") @db.Timestamptz
+  createdAt     DateTime   @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime   @updatedAt @map("updated_at") @db.Timestamptz
+  alertRule     AlertRule? @relation(fields: [alertRuleId], references: [id], onDelete: Cascade)
+
+  // Optimized indexes
+  @@index([userId, status, createdAt]) // For dashboard queries
+  @@index([userId, createdAt])         // For sorting
+  @@index([emailSent]) // Index for pending emails filtering
+  @@map("notifications")
 }

@@ -1,7 +1,12 @@
 import { vi, expect } from 'vitest'
-import { renderHook, screen, fireEvent, render, waitFor } from '@testing-library/react'
+import {
+  renderHook,
+  screen,
+  fireEvent,
+  render,
+  waitFor,
+} from '@testing-library/react'
 import { act } from 'react'
-import React from 'react'
 
 // Common test constants
 export const TEST_CONSTANTS = {
@@ -96,11 +101,17 @@ export const TEST_CONSTANTS = {
 export const mockSetup = {
   nextLink: () => {
     vi.mock('next/link', () => ({
-      default: ({ href, className, children }: { href: string; className?: string; children: React.ReactNode }) => (
-        React.createElement('a', { href, className }, children)
-      )
+      default: ({
+        href,
+        className,
+        children,
+      }: {
+        href: string
+        className?: string
+        children: React.ReactNode
+      }) => React.createElement('a', { href, className }, children),
     }))
-  }
+  },
 }
 
 // Common response creators
@@ -110,17 +121,17 @@ export const createResponse = {
     json: vi.fn().mockResolvedValue({
       user: { id: TEST_CONSTANTS.USER_ID },
       message: TEST_CONSTANTS.SUCCESS_MESSAGE,
-      ...data
-    })
+      ...data,
+    }),
   }),
 
   error: (error: any = {}) => ({
     ok: false,
     json: vi.fn().mockResolvedValue({
       error: TEST_CONSTANTS.ERROR_MESSAGE,
-      ...error
-    })
-  })
+      ...error,
+    }),
+  }),
 }
 
 // Common test helpers
@@ -133,7 +144,10 @@ export const testHelpers = {
     mockFetch.mockResolvedValueOnce(createResponse.error(error))
   },
 
-  setupNetworkError: (mockFetch: any, error: any = new Error('Network error')) => {
+  setupNetworkError: (
+    mockFetch: any,
+    error: any = new Error('Network error')
+  ) => {
     mockFetch.mockRejectedValueOnce(error)
   },
 
@@ -153,7 +167,7 @@ export const testHelpers = {
     expect(result.current.message).toBe(message)
     expect(result.current.error).toBe('')
     expect(result.current.loading).toBe(false)
-  }
+  },
 }
 
 // Common prop builders
@@ -162,7 +176,7 @@ export const createProps = {
     loading: false,
     loadingText: TEST_CONSTANTS.LOADING_TEXT,
     children: TEST_CONSTANTS.BUTTON_TEXT,
-    ...overrides
+    ...overrides,
   }),
 
   authInput: (overrides = {}) => ({
@@ -172,7 +186,7 @@ export const createProps = {
     placeholder: 'Enter text',
     value: '',
     onChange: vi.fn(),
-    ...overrides
+    ...overrides,
   }),
 
   authFormFooter: (overrides = {}) => ({
@@ -181,7 +195,7 @@ export const createProps = {
     buttonText: TEST_CONSTANTS.BUTTON_TEXT,
     linkHref: TEST_CONSTANTS.REGISTER_HREF,
     linkText: TEST_CONSTANTS.CREATE_ACCOUNT_LINK_TEXT,
-    ...overrides
+    ...overrides,
   }),
 
   authEmailPasswordInputs: (overrides = {}) => ({
@@ -189,8 +203,8 @@ export const createProps = {
     setEmail: vi.fn(),
     password: '',
     setPassword: vi.fn(),
-    ...overrides
-  })
+    ...overrides,
+  }),
 }
 
 // Shared test patterns for hooks
@@ -205,17 +219,27 @@ export const hookPatterns = {
     expect(mockFetch).toHaveBeenCalledWith('/api/auth/session')
   },
 
-  expectAuthFormSubmissionCall: (mockFetch: any, endpoint: string, data: any) => {
+  expectAuthFormSubmissionCall: (
+    mockFetch: any,
+    endpoint: string,
+    data: any
+  ) => {
     expect(mockFetch).toHaveBeenCalledWith(endpoint, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
   },
 
-  testAuthRedirectScenario: async (mockFetch: any, mockPush: any, useAuthRedirect: any, responseSetup: any, shouldRedirect: boolean) => {
+  testAuthRedirectScenario: async (
+    mockFetch: any,
+    mockPush: any,
+    useAuthRedirect: any,
+    responseSetup: any,
+    shouldRedirect: boolean
+  ) => {
     mockFetch.mockResolvedValueOnce(responseSetup)
 
     const { result } = renderHook(() => useAuthRedirect())
@@ -229,7 +253,7 @@ export const hookPatterns = {
     } else {
       expect(mockPush).not.toHaveBeenCalled()
     }
-  }
+  },
 }
 
 // Shared test patterns for components
@@ -272,7 +296,11 @@ export const componentPatterns = {
     expect(link).toHaveAttribute('href', href)
   },
 
-  expectInputWithAttribute: (placeholder: string, attribute: string, value: string) => {
+  expectInputWithAttribute: (
+    placeholder: string,
+    attribute: string,
+    value: string
+  ) => {
     const input = screen.getByPlaceholderText(placeholder)
     expect(input).toBeInTheDocument()
     expect(input).toHaveAttribute(attribute, value)
@@ -329,11 +357,15 @@ export const componentPatterns = {
   },
 
   expectForgotPasswordLinkNotVisible: () => {
-    expect(screen.queryByText(TEST_CONSTANTS.FORGOT_PASSWORD_LINK_TEXT)).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(TEST_CONSTANTS.FORGOT_PASSWORD_LINK_TEXT)
+    ).not.toBeInTheDocument()
   },
 
   expectForgotPasswordLinkVisible: () => {
-    const forgotPasswordLink = screen.getByRole('link', { name: TEST_CONSTANTS.FORGOT_PASSWORD_LINK_TEXT })
+    const forgotPasswordLink = screen.getByRole('link', {
+      name: TEST_CONSTANTS.FORGOT_PASSWORD_LINK_TEXT,
+    })
     expect(forgotPasswordLink).toBeInTheDocument()
     expect(forgotPasswordLink).toHaveAttribute('href', '/auth/forgot-password')
   },
@@ -348,7 +380,11 @@ export const componentPatterns = {
     expect(screen.getByDisplayValue(password)).toBeInTheDocument()
   },
 
-  expectInputChangeHandler: (placeholder: string, mockFunction: any, testValue: string) => {
+  expectInputChangeHandler: (
+    placeholder: string,
+    mockFunction: any,
+    testValue: string
+  ) => {
     const input = screen.getByPlaceholderText(placeholder)
     fireEvent.change(input, { target: { value: testValue } })
     expect(mockFunction).toHaveBeenCalledTimes(1)
@@ -356,19 +392,27 @@ export const componentPatterns = {
   },
 
   expectStackedInputsNotRendered: (container: HTMLElement) => {
-    expect(container.querySelector(TEST_CONSTANTS.STACKED_INPUT_SELECTOR)).not.toBeInTheDocument()
+    expect(
+      container.querySelector(TEST_CONSTANTS.STACKED_INPUT_SELECTOR)
+    ).not.toBeInTheDocument()
     expect(container.querySelectorAll('div')).toHaveLength(2)
   },
 
   expectStackedInputsRendered: (container: HTMLElement) => {
-    expect(container.querySelector(TEST_CONSTANTS.STACKED_INPUT_SELECTOR)).toBeInTheDocument()
-    const stackedContainer = container.querySelector(TEST_CONSTANTS.STACKED_INPUT_SELECTOR)
+    expect(
+      container.querySelector(TEST_CONSTANTS.STACKED_INPUT_SELECTOR)
+    ).toBeInTheDocument()
+    const stackedContainer = container.querySelector(
+      TEST_CONSTANTS.STACKED_INPUT_SELECTOR
+    )
     expect(stackedContainer?.querySelectorAll('div')).toHaveLength(2)
   },
 
   expectAuthLayoutWithTitle: (title: string, content: string) => {
     render(
-      React.createElement('AuthLayout', { title },
+      React.createElement(
+        'AuthLayout',
+        { title },
         React.createElement('div', {}, content)
       )
     )
@@ -376,15 +420,23 @@ export const componentPatterns = {
   },
 
   expectSpinnerWithClasses: (container: HTMLElement, ...classes: string[]) => {
-    const spinner = container.querySelector(TEST_CONSTANTS.ANIMATE_SPIN_SELECTOR)
+    const spinner = container.querySelector(
+      TEST_CONSTANTS.ANIMATE_SPIN_SELECTOR
+    )
     expect(spinner).toHaveClass(...classes)
     return spinner
-  }
+  },
 }
 
 // Shared test patterns for async form tests
 export const asyncTestPatterns = {
-  testErrorHandling: async (setupMethod: (mockFetch: any, ...args: any[]) => void, expectedError: string, mockFetch: any, useAuthForm: any, ...setupArgs: any[]) => {
+  testErrorHandling: async (
+    setupMethod: (mockFetch: any, ...args: any[]) => void,
+    expectedError: string,
+    mockFetch: any,
+    useAuthForm: any,
+    ...setupArgs: any[]
+  ) => {
     setupMethod(mockFetch, ...setupArgs)
 
     const { result } = renderHook(() =>
@@ -396,7 +448,7 @@ export const asyncTestPatterns = {
     })
 
     testHelpers.expectErrorState(result, expectedError)
-  }
+  },
 }
 
 // Auth API route test utilities
@@ -465,7 +517,7 @@ export const authApiPatterns = {
       expect.any(Object)
     )
     expect(response).toBe(mockParseError)
-  }
+  },
 }
 
 // Shared describe blocks and test structures

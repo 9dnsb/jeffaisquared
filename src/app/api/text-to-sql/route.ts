@@ -223,7 +223,7 @@ GUIDELINES:
 - Use proper GROUP BY for aggregations
 - Order results meaningfully (usually DESC for rankings, ASC for chronological)
 - Handle NULL values appropriately (use COALESCE when needed)
-- **PERFORMANCE: Limit result sets with reasonable LIMIT clauses when possible**
+- **PERFORMANCE: Use LIMIT for simple queries; use window functions (PARTITION BY) for "top X per group" queries**
 - **CRITICAL JOIN RELATIONSHIPS:**
   - orders → locations: JOIN locations l ON o."locationId" = l."squareLocationId"
   - orders → line_items: JOIN line_items li ON o."id" = li."orderId"
@@ -262,6 +262,11 @@ GUIDELINES:
 - **CRITICAL LOCATION BREAKDOWN RULES:**
   - When user mentions "by location", "at each location", "across all locations", "for all locations", "at all locations", "per location", or "location breakdown", **ALWAYS GROUP BY location name**
   - Each location should be a separate row, NOT a single total
+  - **WHEN ASKING FOR "TOP X ITEMS BY LOCATION" (e.g., "top selling items today by location"):**
+    - Use window functions with PARTITION BY to get top X items **per location**
+    - Pattern: WITH ranked AS (SELECT *, ROW_NUMBER() OVER (PARTITION BY l."name" ORDER BY metric DESC) as rank FROM ...) SELECT * FROM ranked WHERE rank <= X
+    - Do NOT use simple LIMIT with ORDER BY location name - this only returns results for the first location alphabetically
+    - Example: "top 5 items by location" should return up to 5 items for EACH location, not just 5 total
   - Example: "sales today across all locations" should return one row per location with location name and sales
   - Example: "compare sales today vs last week by location" should GROUP BY l."name" with separate columns for each period
   - Example: "sales at all locations" should GROUP BY l."name" showing each location separately
@@ -289,6 +294,24 @@ GUIDELINES:
   GROUP BY i."name"
   ORDER BY "Today" DESC
   LIMIT 10
+- Example: For "top 5 selling items today by location":
+  WITH ranked_items AS (
+    SELECT
+      l."name" AS "Location",
+      i."name" AS "Item",
+      SUM(li."quantity") AS "Units Sold",
+      ROW_NUMBER() OVER (PARTITION BY l."name" ORDER BY SUM(li."quantity") DESC) as rank
+    FROM line_items li
+    JOIN orders o ON li."orderId" = o."id"
+    JOIN locations l ON o."locationId" = l."squareLocationId"
+    JOIN items i ON li."itemId" = i."id"
+    WHERE DATE(o."date" AT TIME ZONE 'America/Toronto') = DATE(CURRENT_TIMESTAMP AT TIME ZONE 'America/Toronto')
+    GROUP BY l."name", i."name"
+  )
+  SELECT "Location", "Item", "Units Sold"
+  FROM ranked_items
+  WHERE rank <= 5
+  ORDER BY "Location", "Units Sold" DESC
 
 IMPORTANT NOTES:
 - **JOIN KEY WARNING:** orders."locationId" joins to locations."squareLocationId" (NOT locations."id"!)

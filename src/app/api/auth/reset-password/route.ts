@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
 import { createSupabaseServerClient } from '../../../../../lib/supabase-server'
-import { parseRequestBody, handleSupabaseError, createSuccessResponse, validateSession } from '@/lib/auth-api-utils'
+import { parseRequestBody, handleSupabaseError, createSuccessResponse, authenticateUser } from '@/lib/auth-api-utils'
 
 const MIN_PASSWORD_LENGTH = 6
 const PASSWORD_UPDATED_MESSAGE = 'Password updated successfully!'
@@ -32,14 +32,11 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  const { session, error } = await validateSession()
-
-  if (error) {
-    return error
-  }
+  const authResult = await authenticateUser()
+  if (authResult.error) return authResult.error
 
   return createSuccessResponse({
     isValid: true,
-    session: session,
+    session: { user: { id: authResult.userId } },
   })
 }

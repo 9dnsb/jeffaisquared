@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '../../../lib/utils/logger'
 import { validateConversationCreation } from '../../../lib/validation/schemas'
-import { validateSession } from '../../../lib/auth-api-utils'
+import { authenticateUser } from '../../../lib/auth-api-utils'
 import {
   createConversation,
   getUserConversations,
@@ -18,23 +18,20 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     logger.conversationFlow('GET conversations request received', 'list')
 
-    // Validate session
-    const sessionResult = await validateSession(true)
-    if (sessionResult.error || !sessionResult.session) {
+    // Authenticate user
+    const authResult = await authenticateUser()
+    if (authResult.error) {
       const duration = timer()
       logger.error('Get conversations - invalid session', undefined, {
         processingTime: duration
       })
-      return sessionResult.error || NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      )
+      return authResult.error
     }
 
-    const userId = sessionResult.session.user.id
+    const userId = authResult.userId
 
     // Get query parameters
-    const { searchParams } = new URL(request.url)
+    const { searchParams } = request.nextUrl
     const includeStats = searchParams.get('includeStats') === 'true'
 
     logger.conversationFlow('Loading user conversations', 'list', userId, {
@@ -112,20 +109,17 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     logger.conversationFlow('POST conversation request received', 'new')
 
-    // Validate session
-    const sessionResult = await validateSession(true)
-    if (sessionResult.error || !sessionResult.session) {
+    // Authenticate user
+    const authResult = await authenticateUser()
+    if (authResult.error) {
       const duration = timer()
       logger.error('Create conversation - invalid session', undefined, {
         processingTime: duration
       })
-      return sessionResult.error || NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      )
+      return authResult.error
     }
 
-    const userId = sessionResult.session.user.id
+    const userId = authResult.userId
 
     // Parse and validate request body
     const requestBody = await request.json() as Record<string, string | number | boolean | null>

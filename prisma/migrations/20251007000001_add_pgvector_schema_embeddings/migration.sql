@@ -1,5 +1,5 @@
 -- Enable pgvector extension
-CREATE EXTENSION IF NOT EXISTS vector WITH SCHEMA extensions;
+CREATE EXTENSION IF NOT EXISTS vector;
 
 -- Create schema embeddings table
 CREATE TABLE IF NOT EXISTS schema_embeddings (

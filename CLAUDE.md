@@ -55,6 +55,45 @@ An AI-powered web platform for sales data analytics with natural language queryi
 - **Reusable Prisma Client:** Instantiate once in lib/prisma.ts and reuse (avoid exhausting connections)
 - **Environment Management:** .env.production and .env.development files for DB URLs, Supabase keys, and API keys. Use dotenv -e for running migrations/seeds/tests against the right DB
 - **🚨 CRITICAL: API/UI Separation:** ALL business logic, database operations, and external API calls MUST be in `app/api/*/route.ts` files. Client components should ONLY handle UI state and make fetch calls to API routes. NEVER put auth logic, Supabase calls, or business logic directly in client components.
+- **Next.js API Routes Best Practices:**
+  - **ALWAYS use `request.nextUrl.searchParams`** to access URL query parameters in API routes, NOT `new URL(request.url).searchParams`
+  - `request.nextUrl` is the Next.js-specific convenience method that extends the native URL API (see `docs/nextjs/NextRequest.md`)
+  - **ALWAYS use `NextResponse.json()`** for returning JSON responses with proper status codes
+  - **OpenAI Responses API:** Use `openai.responses.create()` (recommended for new projects) instead of `openai.chat.completions.create()` per `docs/openaidocs/responsesmigrate.md`
+- **🔐 Supabase Authentication Pattern (Next.js 15 App Router):**
+  - **Server-Side Client:** Use `createSupabaseServerClient()` from `@/root-lib/supabase-server`
+  - **Authentication Utilities in `src/lib/auth-api-utils.ts`:**
+    - **`authenticateUser()`** - Simple auth for GET/POST handlers:
+      ```typescript
+      const authResult = await authenticateUser()
+      if (authResult.error) return authResult.error
+      const userId = authResult.userId
+      ```
+    - **`authenticateAndVerifyResource()`** - Combined auth + ownership verification for PATCH/DELETE handlers:
+      ```typescript
+      const result = await authenticateAndVerifyResource(request, 'alert', 'Alert')
+      if (result.error) return result.error
+      const { resourceId, userId } = result
+      ```
+  - **ALWAYS use `supabase.auth.getUser()`** for authentication (NEVER `getSession()` in server code per Supabase docs)
+  - **Middleware handles token refresh** and cookie management automatically (see `src/middleware.ts`)
+  - **Deprecated:** `validateSession()` is deprecated - only kept for test compatibility
+- **React Hooks Best Practices (see https://react.dev):**
+  - **useState:**
+    - Use updater functions for state based on previous state: `setState(prev => newValue)` NOT `setState(value)`
+    - State updates are batched and asynchronous - don't rely on immediate state changes
+    - Keep state updates pure and avoid mutations - use spread operators for objects/arrays
+  - **useEffect:**
+    - **ONLY use for synchronizing with external systems** (network, browser APIs, third-party libraries)
+    - **DO NOT use for:** data transformations, event handlers, or initializing app state
+    - **Dependency array rules:**
+      - Include ALL reactive values (props, state, functions) used inside the effect
+      - If a function is used in effect, either: (1) Move it inside the effect, (2) Wrap with useCallback, or (3) Move it outside component
+      - Use empty array `[]` only if effect truly has no dependencies
+    - **Always provide cleanup functions** for subscriptions, timers, and external connections
+    - **Data fetching pattern:** Move fetch function inside useEffect to avoid dependency issues
+    - **Avoid infinite loops:** Never update state that's in the dependency array without conditions
+  - **Optimistic Updates:** Update UI immediately, revert on API error for better UX (see `src/app/dashboard/notifications/page.tsx`)
 
 ## >� Testing
 
@@ -75,19 +114,21 @@ Before tests, run:
 
 ## Key Features
 
-1. **AI Chat Interface** - Open-ended query handling with dynamic data aggregation
+1. **AI Chat Interface** - Text-to-SQL RAG for natural language querying with dynamic data aggregation
 2. **Square Integration** - Webhook-ready endpoints for real-time data sync
-3. **User-Driven Alerts** - Alert configuration through AI chat
-4. **Real-time Dashboard** - Live updates via Supabase Realtime
-5. **Type-Safe Architecture** - End-to-end TypeScript with Prisma and Zod validation
+3. **AI-Powered Notifications** - User creates milestone alerts through AI chat, receives email notifications when triggered
+4. **Notifications Dashboard** - Dedicated page to view and manage all notifications
+5. **Real-time Dashboard** - Live updates via Supabase Realtime
+6. **Type-Safe Architecture** - End-to-end TypeScript with Prisma and Zod validation
 
 ## Architecture Priorities
 
 1. Database foundation - Prisma schema + seed script from Excel data
-2. AI chat system - Dynamic query processing + OpenAI integration
+2. AI chat system - Text-to-SQL RAG implementation with pgvector + OpenAI
 3. Webhook infrastructure - Ready for Square when credentials arrive
-4. Alert framework - User-configurable through chat
-5. Real-time dashboard - Supabase Realtime integration
+4. AI-powered notification system - Milestone tracking + email alerts via Resend
+5. Notifications dashboard - View and manage triggered alerts
+6. Real-time dashboard - Supabase Realtime integration
 
 ## Development Commands
 

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '../../../../lib/utils/logger'
 import { validateConversationUpdate } from '../../../../lib/validation/schemas'
-import { validateSession } from '../../../../lib/auth-api-utils'
+import { authenticateUser } from '../../../../lib/auth-api-utils'
 import {
   getConversation,
   updateConversationTitle,
@@ -21,21 +21,18 @@ async function validateConversationAccess(
   conversationId: string,
   timer: () => number
 ): Promise<{ userId: string } | NextResponse> {
-  // Validate session
-  const sessionResult = await validateSession(true)
-  if (sessionResult.error || !sessionResult.session) {
+  // Authenticate user
+  const authResult = await authenticateUser()
+  if (authResult.error) {
     const duration = timer()
     logger.error('Conversation access - invalid session', undefined, {
       processingTime: duration,
       conversationId
     })
-    return sessionResult.error || NextResponse.json(
-      { error: AUTHENTICATION_REQUIRED_ERROR },
-      { status: 401 }
-    )
+    return authResult.error
   }
 
-  const userId = sessionResult.session.user.id
+  const userId = authResult.userId
 
   // Validate conversation ownership
   const ownershipResult = await validateConversationOwnership(conversationId, userId)
@@ -78,7 +75,7 @@ export async function GET(
     const { userId } = accessResult
 
     // Get query parameters
-    const { searchParams } = new URL(request.url)
+    const { searchParams } = request.nextUrl
     const includeMessages = searchParams.get('includeMessages') !== 'false'
     const messageLimit = searchParams.get('messageLimit')
 
