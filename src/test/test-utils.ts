@@ -6,7 +6,7 @@ import {
   render,
   waitFor,
 } from '@testing-library/react'
-import { act } from 'react'
+import React, { act } from 'react'
 
 // Common test constants
 export const TEST_CONSTANTS = {
